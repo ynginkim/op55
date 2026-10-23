@@ -147,24 +147,30 @@ def card(meta, wav, dur, title, L, tmp):
     secs = sorted(meta.get("sections") or [], key=lambda s: s["t"])
     lf = font("mono", 19 * u, " ".join(str(s.get("name", "")) for s in secs), weight=500)
     rows_end = [-1e9, -1e9, -1e9]
-    placed = []
+    placed = []                                                       # [sx, row, label, flipped, left edge, width]
     for i, s in enumerate(secs):
         sx = x(s["t"])
         lab = f"{i + 1:02d} {str(s.get('name', '')).upper()}"
-        r = next((k for k, e in enumerate(rows_end) if sx >= e + 8 * u), min(range(3), key=lambda k: rows_end[k]))
-        placed.append([sx, r, lab])
-        rows_end[r] = sx + 14 * u + text_w(lf, lab)
-    for j, (sx, r, lab) in enumerate(placed):
-        nxt = next((q[0] for q in placed[j + 1:] if q[1] == r), L.sx1 + L.pad)       # the next label in the same row
-        room = min(nxt, L.W - 4 * u) - sx - 16 * u
-        while len(lab) > 4 and text_w(lf, lab) > room:
-            lab = lab[:-2] + "…"
-        ly = L.label_y + r * L.row_h
         lw = text_w(lf, lab)
-        lx = sx + 7 * u if sx + 10 * u + lw <= L.sx1 + L.pad / 2 else sx - 7 * u - lw     # flip left at the right edge
+        flip = sx + 10 * u + lw > L.sx1 + L.pad / 2                    # flip left at the right edge
+        left = sx - 7 * u - lw if flip else sx + 7 * u
+        r = next((k for k, e in enumerate(rows_end) if left >= e + 8 * u), min(range(3), key=lambda k: rows_end[k]))
+        placed.append([sx, r, lab, flip, left, lw])
+        rows_end[r] = left + lw
+    for j, (sx, r, lab, flip, lx, lw) in enumerate(placed):
+        if not flip:                                                   # trim to the next label's left edge in the same row
+            nxt = next((q[4] for q in placed[j + 1:] if q[1] == r), L.W - 4 * u)
+            room = min(nxt, L.W - 4 * u) - lx - 8 * u
+            while len(lab) > 4 and text_w(lf, lab) > room:
+                lab = lab[:-2] + "…"
+            lw = text_w(lf, lab)
+            if lw > room or (lab.endswith("…") and len(lab) < 8):      # unreadable even trimmed: line only
+                lab = ""
+        ly = L.label_y + r * L.row_h
         d.line([(sx, ly), (sx, L.sy1)], fill=IVORY + (140,), width=max(1, round(u)))
-        d.rectangle([lx - 3 * u, ly, lx + lw + 3 * u, ly + 26 * u], fill=INK + (150,))
-        d.text((lx, ly + 2 * u), lab, font=lf, fill=IVORY)
+        if lab:
+            d.rectangle([lx - 3 * u, ly, lx + lw + 3 * u, ly + 26 * u], fill=INK + (150,))
+            d.text((lx, ly + 2 * u), lab, font=lf, fill=IVORY)
     # accents
     for a in meta.get("accents") or []:
         ax, s = x(a["t"]), 8 * u
