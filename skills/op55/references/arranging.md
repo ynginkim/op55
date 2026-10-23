@@ -12,7 +12,7 @@
 ## Sections and energy
 
 - Sections follow the picture's acts. When the picture changes material (a paper desk, a subway map, a printer), the sound changes material too. pstack-harness: split-flap board → clock ticks and flap clicks; paper desk → hesitant plucks and pencil taps; thermal printer → 32nd-note stepper chirps.
-- Energy (0-1) decides how many layers play and how loud. Plan contrast: peak (>= 0.85) for at most a quarter of the cue, one breather of 0.3-0.45 near the middle, and an instrument change a listener notices at every boundary.
+- Energy (0-1) decides how many layers play and how loud. Plan contrast: peak (>= 0.85) for at most a quarter of the cue, one breather of 0.3-0.45 near the middle (when a hit sits at the middle, put the breather right before it as the dip into the hit), and an instrument change a listener notices at every boundary.
 - Section starts sit on downbeats. If a picture cut already sits on a downbeat near the planned start, follow the cut.
 - Make each section its own harmonic world: change the progression (I-vi-IV-V families, sus chords, pedal points, deceptive cadences), add or drop layers on section downbeats, and put a fill (tick roll, a dropped kick, a timpani roll) at the end of every 8 bars. Swing and humanize only where the picture hesitates; machine-like scenes stay exactly on the grid.
 - Quiet sections: a sub drone at gain 0.5-0.65. At 1.0 the 55 Hz region swallows everything.
@@ -43,7 +43,7 @@ showreel's `mix.py` ducks music under speech (700-4500 Hz deep, about -17 dB; th
 
 - **Build:** step up one thing per downbeat: the bass climbs (D-E-F#-G#-A), the pad's top note climbs with it, the filter opens, a layer joins, `levels` +1 dB per bar. A riser ends exactly on the hit.
 - **Arrival:** the hit comes with a harmonic resolution (V → I). Dip 3-3.5 dB for the eighth note before it (`automation`), come back on the hit. Layers: low boom + bright chord stab (or a sampled tutti) + bell + shimmer.
-- **Keep the limiter off the hit:** booms, kicks, timpani and saw stabs are peaky; keep them small (boom gain 0.2-0.4, kick vel 0.35-0.6 under a sampled tutti). If verify reports more than 4 dB of limiting, find the peaky stem (`--stems`) and lower it. Do not lower the loudness target to hide it.
+- **Keep the limiter off the hit:** booms, kicks, timpani, saw stabs and stacked sampled-piano chords are peaky; keep them small (boom gain 0.2-0.4, kick vel 0.35-0.6 under a sampled tutti). If verify reports more than 4 dB of limiting, find the peaky stem (`--stems`) and lower it. Do not lower the loudness target to hide it.
 - **Resolve:** in the end card take the pulse out (one last kick), bring back the opening's sound as a bookend, end on IV/I → I (add9) or a plain tonic with a soft bell. Size tails to die before `fadeOut`. The final still frame should be nearly silent.
 - **Numbers:** the strongest accent's bar is the loudest bar of the cue and at least 2 dB above the bar before it.
 

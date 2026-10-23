@@ -43,9 +43,9 @@ You decide genre, palette, tempo, key, form and length of sections yourself. Sta
    About 5 s for a minute of orchestra, 35 s for five minutes of dense synth. Add `--stems a,b --stems-dir DIR` to inspect layers, `--mute a,b` to isolate a problem.
 5. **Verify, then fix and re-render** until every line passes. Details and fixes: `references/verify.md`.
    ```bash
-   python3 $S/verify.py audio/music/music.wav --analysis audio/music/analysis.json --waveform-png --spec 0,30
+   python3 $S/verify.py audio/music/music.wav --analysis audio/music/analysis.json --waveform-png --spec 0,30     # --spec starts must be inside the cue (a 30 s cue: --spec 0)
    ```
-   Read the PNGs with the Read tool. Required: loudness ✓, grid ✓, every kick/accent onset ✓, section rank correlation ✓ (>= 0.8), limiter gain reduction < 4 dB, clean spectrogram (no stripes, clicks, holes; speech band 1.3-4 kHz quiet under narration).
+   Read the PNGs with the Read tool. Required: loudness ✓, grid ✓, every kick/accent onset ✓, section rank correlation ✓ (>= 0.8), limiter gain reduction < 4 dB (verify prints ✓ or ✗), clean spectrogram (no stripes, clicks, holes; speech band 1.3-4 kHz quiet under narration).
 6. **Deliver.** Report: the files, the one-line choices (genre, palette, tempo/key, form), the verify numbers, the credit line if `music.meta.json` lists one, and ask the user to listen once on speakers or earphones. You verified it by numbers; a human has not heard it yet. Make a preview video only if the user asks for one (`references/preview.md`).
 
 ## 3. Palette: synth, sampled, or both

@@ -24,6 +24,7 @@ import re
 import struct
 import subprocess
 import sys
+import time
 import zlib
 from pathlib import Path
 
@@ -89,8 +90,12 @@ def loudness(wav, meta):
     lim = (meta.get("master") or {}).get("limiterOver1_5dB") or []
     if lim:
         worst = sorted(lim, key=lambda v: v[1])[:6]
+        ok_lim = worst[0][1] >= -4
         print("[loudness] limiter gain reduction > 1.5 dB at (s:dB): " + " ".join(f"{s}:{g}" for s, g in worst)
-              + ("  <- the biggest hit is being flattened; lower its peaky layers (boom/kick/stab) rather than the target" if worst[0][1] < -4 else ""))
+              + f" (max {-worst[0][1]:.2f} dB) " + ("✓" if ok_lim else "✗ (> 4 dB)")
+              + ("" if ok_lim else "  <- the biggest hit is being flattened; lower its peaky layers (boom/kick/stab, stacked sampled-piano chords) or narrow the `levels` spread, rather than the target"))
+    else:
+        print("[loudness] limiter: never more than 1.5 dB of gain reduction ✓")
     return I, M, x
 
 
@@ -311,11 +316,15 @@ def waveform_png(x, meta, G, results, path):
 
 # ---------------------------------------------------------------- spectrograms, test mix
 def spectrograms(wav, times, out):
+    t0 = time.time() - 1
     for x in times:
         p = out / f"spec_{x:g}.png"
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(x), "-t", "20", "-i", str(wav), "-lavfi",
                         "showspectrumpic=s=1600x600:legend=1:fscale=log:start=20:stop=20000", str(p)], check=True)
-        print(f"[spec] {p}")
+        if p.exists() and p.stat().st_mtime > t0:
+            print(f"[spec] {p}")
+        else:
+            print(f"[spec] {x:g} s: skipped (the cue is shorter; no file written)")
 
 
 def find_mix_py(timeline, given):

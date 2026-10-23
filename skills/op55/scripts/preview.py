@@ -2,7 +2,7 @@
 """op55 preview.py: a shareable preview video of a rendered cue. Make one only when the user asks for it.
 
   python3 preview.py <music.wav> [--meta music.meta.json] [--out music.preview.mp4] [--title "..."]
-                     [--size 1920x1080] [--fps 30] [--check]
+                     [--size 1920x1080] [--fps 24] [--check]
 
 The frame is the cue's spectrogram with its sections, accents, narration gaps and bar ruler (all from <wav>.meta.json,
 written by render.mjs). While the sound plays, a playhead sweeps across: what has played is in colour, what is still to
