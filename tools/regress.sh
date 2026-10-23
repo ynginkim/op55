@@ -2,9 +2,9 @@
 # Render every example score and compare the WAVs byte for byte with tools/regress.sha256.
 #   tools/regress.sh            # check
 #   tools/regress.sh --update   # rewrite tools/regress.sha256 (only for an intended sound change; say why in the commit)
-# Sampled examples need the gm + upright banks (node skills/op55/scripts/setup.mjs). Hashes are for Node 22 on macOS arm64.
+# Sampled examples need the gm + upright banks (node skills/resolve-op55-tools/scripts/setup.mjs). Hashes are for Node 22 on macOS arm64.
 set -eu
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"; S="$ROOT/skills/op55/scripts"; OUT="$ROOT/.regress"; LIST="$ROOT/tools/regress.sha256"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"; S="$ROOT/skills/resolve-op55-tools/scripts"; OUT="$ROOT/.regress"; LIST="$ROOT/tools/regress.sha256"
 mkdir -p "$OUT"
 fail=0; new=""
 for score in "$S"/examples/*.score.mjs; do
