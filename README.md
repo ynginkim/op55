@@ -46,8 +46,8 @@ It is also free. On a narrated five-minute explainer, generating four candidate 
 
 | | |
 | --- | --- |
-| ▶ **[Op. 55 in 55 seconds](assets/demo/eroica-55s.mp3)** | **Sampled orchestra:** strings, horns, brass, timpani, flute and upright piano, over a synth sub, kick and riser.<br>**Form:** two hammer chords, then the E♭ cello theme that slips to C♯, a hemiola that fights the bar line, and a horn finale.<br>**Measured:** −14.5 LUFS · limiter ≤ 3.7 dB · 6/6 accents within 3.4 ms of the grid · energy rank correlation +0.96 |
-| ▶ **[pstack-harness finale](assets/demo/pstack-finale-synth.mp3)** | **All synth:** the last 38 s of a 300-s narrated explainer. A motorik pulse, printer-stepper ticks and a five-step climb into the LOCK chord.<br>It replaced a generated track without moving a single frame of the video |
+| ▶ **[Op. 55 in 55 seconds](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/eroica-55s.mp3)** | **Sampled orchestra:** strings, horns, brass, timpani, flute and upright piano, over a synth sub, kick and riser.<br>**Form:** two hammer chords, then the E♭ cello theme that slips to C♯, a hemiola that fights the bar line, and a horn finale.<br>**Measured:** −14.5 LUFS · limiter ≤ 3.7 dB · 6/6 accents within 3.4 ms of the grid · energy rank correlation +0.96 |
+| ▶ **[pstack-harness finale](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/pstack-finale-synth.mp3)** | **All synth:** the last 38 s of a 300-s narrated explainer. A motorik pulse, printer-stepper ticks and a five-step climb into the LOCK chord.<br>It replaced a generated track without moving a single frame of the video |
 
 <p align="center"><img src="assets/art/headphones.jpg" alt="A marble bust wearing unplugged studio headphones, lit by a spectrogram" width="70%"><br>
 <sub>Headphones recommended. Claude has not heard either of them.</sub></p>
@@ -141,7 +141,7 @@ skills/op55/
     lib/                      dsp, grid, synth voices, sampler, engine, analysis
     examples/                 starter (synth), eroica (sampled + synth), pstack-harness (300 s, synth)
     vendor/                   spessasynth_core 4.3.22, bundled (Apache-2.0)
-tools/                        regress.sh (approved hashes), art/ (README art: prompts + compositor)
+tools/                        regress.sh (approved hashes), art/ (README art: prompts, compositor, demo video)
 ```
 
 ## Roadmap

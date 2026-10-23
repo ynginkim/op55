@@ -54,8 +54,8 @@ Claude는 아예 듣지 못한다. 그래서 op55는 베토벤이 점점 그래�
 
 | | |
 | --- | --- |
-| ▶ **[Op. 55 in 55 seconds](assets/demo/eroica-55s.mp3)** | **샘플 오케스트라:** 현, 호른, 금관, 팀파니, 플루트, 업라이트 피아노. 그 밑에 합성 서브, 킥, 라이저.<br>**구성:** 망치로 내리치는 화음 두 번, C♯로 미끄러지는 E♭ 첼로 테마, 마디선과 싸우는 헤미올라, 호른 피날레.<br>**측정값:** −14.5 LUFS · 리미터 ≤ 3.7dB · 악센트 6/6이 격자 3.4ms 안 · 에너지 순위 상관 +0.96 |
-| ▶ **[pstack-harness 피날레](assets/demo/pstack-finale-synth.mp3)** | **전부 합성음:** 나레이션이 있는 300초 설명 영상의 마지막 38초. 모토릭 펄스, 프린터 스테퍼 틱, LOCK 화음까지 다섯 계단으로 오르는 빌드업.<br>영상 프레임을 하나도 바꾸지 않고 생성 음악을 대체했다 |
+| ▶ **[Op. 55 in 55 seconds](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/eroica-55s.mp3)** | **샘플 오케스트라:** 현, 호른, 금관, 팀파니, 플루트, 업라이트 피아노. 그 밑에 합성 서브, 킥, 라이저.<br>**구성:** 망치로 내리치는 화음 두 번, C♯로 미끄러지는 E♭ 첼로 테마, 마디선과 싸우는 헤미올라, 호른 피날레.<br>**측정값:** −14.5 LUFS · 리미터 ≤ 3.7dB · 악센트 6/6이 격자 3.4ms 안 · 에너지 순위 상관 +0.96 |
+| ▶ **[pstack-harness 피날레](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/pstack-finale-synth.mp3)** | **전부 합성음:** 나레이션이 있는 300초 설명 영상의 마지막 38초. 모토릭 펄스, 프린터 스테퍼 틱, LOCK 화음까지 다섯 계단으로 오르는 빌드업.<br>영상 프레임을 하나도 바꾸지 않고 생성 음악을 대체했다 |
 
 <p align="center"><img src="assets/art/headphones.jpg" alt="플러그가 빠진 스튜디오 헤드폰을 쓴 대리석 흉상, 스펙트로그램 빛" width="70%"><br>
 <sub>헤드폰을 권한다. Claude는 두 곡 모두 들어 본 적이 없다.</sub></p>
@@ -152,7 +152,7 @@ skills/op55/
     lib/                      dsp, 격자, 합성 악기, 샘플러, 엔진, 분석
     examples/                 starter(합성), eroica(샘플 + 합성), pstack-harness(300초, 합성)
     vendor/                   spessasynth_core 4.3.22 번들(Apache-2.0)
-tools/                        regress.sh(승인 해시), art/(README 그림: 프롬프트와 합성기)
+tools/                        regress.sh(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
 ```
 
 ## 로드맵
