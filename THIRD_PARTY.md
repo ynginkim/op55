@@ -15,7 +15,7 @@ The bundle is an unmodified esbuild bundle of the npm package (see `skills/op55/
 
 | Bank | Author | License | Use in your videos |
 | --- | --- | --- | --- |
-| GeneralUser GS 2.0.3 | S. Christian Collins | GeneralUser GS License v2.0 | Free for private and commercial music. The author asks redistributors to serve their own copy, which is why op55's release hosts one |
+| GeneralUser GS 2.0.3 | S. Christian Collins | GeneralUser GS License v2.0 | Free for private and commercial music. The author asks redistributors to serve their own copy, which is why op55's release hosts one (with the CC0 upright) |
 | Upright Piano KW (2022-02-21) | FreePats project | CC0 1.0 | Free, no attribution needed |
 | Salamander Grand Piano V3 (2020-06-02) | Alexander Holm | CC BY 3.0 | Free, **credit required**: "Salamander Grand Piano by Alexander Holm (CC BY 3.0)". `music.meta.json` lists it when a cue uses it |
 

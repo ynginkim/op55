@@ -5,8 +5,9 @@ import { existsSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 
-// Primary source: a copy in this repo's GitHub release (gzip, so Node can unpack it without system tools; GeneralUser's
-// author asks redistributors to serve their own copy). Fallback: the author's original archive, unpacked with `tar`.
+// Primary source for gm and upright: a copy in this repo's GitHub release (gzip, so Node unpacks it without system tools;
+// GeneralUser's author asks redistributors to serve their own copy). Fallback, and the only source for the 1.2 GB grand:
+// the original archive, unpacked with `tar`.
 const RELEASE = 'https://github.com/ynginkim/op55/releases/download/banks-v1';
 
 export const BANKS = {
@@ -44,7 +45,6 @@ export const BANKS = {
     license: 'CC BY 3.0: credit required.',
     credit: 'Salamander Grand Piano by Alexander Holm (CC BY 3.0)',
     sources: [
-      { url: `${RELEASE}/SalamanderGrandPiano-V3-20200602.sf2.gz`, unpack: 'gzip' },
       { url: 'https://freepats.zenvoid.org/Piano/SalamanderGrandPiano/SalamanderGrandPiano-SF2-V3%2B20200602.tar.xz', unpack: 'tar', member: /\.sf2$/i },
     ],
     default: false,
