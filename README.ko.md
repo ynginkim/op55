@@ -60,6 +60,8 @@ https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 <p align="center"><img src="assets/art/headphones.jpg" alt="플러그가 빠진 스튜디오 헤드폰을 쓴 대리석 흉상, 스펙트로그램 빛" width="70%"><br>
 <sub>헤드폰을 권한다. Claude는 두 곡 모두 들어 본 적이 없다.</sub></p>
 
+요청하면 op55는 어떤 큐든 위와 같은 영상으로 만든다(`preview.py`). 재생되는 동안 스펙트로그램이 흑백에서 컬러로 바뀌고, 지금 섹션과 시간이 함께 나온다. 선택 기능이고, 납품물은 음악 자체다.
+
 ## 설치
 
 ```bash
@@ -148,10 +150,12 @@ skills/op55/
   references/                 악보 API, 영상용 편곡, 검증, showreel 연결
   scripts/
     render.mjs  verify.py     악보 렌더, 측정
+    preview.py                요청할 때만: 음악과 함께 재생되는 스펙트로그램 영상
     setup.mjs   banks.mjs     뱅크 받기(SHA-256 확인), 프리셋 찾기
     lib/                      dsp, 격자, 합성 악기, 샘플러, 엔진, 분석
     examples/                 starter(합성), eroica(샘플 + 합성), pstack-harness(300초, 합성)
     vendor/                   spessasynth_core 4.3.22 번들(Apache-2.0)
+  assets/fonts/               미리보기용 Instrument Serif, JetBrains Mono(OFL)
 tools/                        regress.sh(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
 ```
 

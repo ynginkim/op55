@@ -11,6 +11,13 @@ The op55 code is MIT (see `LICENSE`). These parts come from elsewhere.
 
 The bundle is an unmodified esbuild bundle of the npm package (see `skills/op55/scripts/vendor/README.md`).
 
+## Fonts (used by `preview.py`)
+
+| Font | License | Where |
+| --- | --- | --- |
+| [Instrument Serif](https://github.com/Instrument/instrument-serif) Italic | SIL Open Font License 1.1 | `skills/op55/assets/fonts/InstrumentSerif-Italic.ttf`, `OFL-InstrumentSerif.txt` |
+| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) (variable weight) | SIL Open Font License 1.1 | `skills/op55/assets/fonts/JetBrainsMono-wght.ttf`, `OFL-JetBrainsMono.txt` |
+
 ## SoundFont banks (downloaded by `setup.mjs`, never committed)
 
 | Bank | Author | License | Use in your videos |

@@ -52,6 +52,8 @@ https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 <p align="center"><img src="assets/art/headphones.jpg" alt="A marble bust wearing unplugged studio headphones, lit by a spectrogram" width="70%"><br>
 <sub>Headphones recommended. Claude has not heard either of them.</sub></p>
 
+Ask for it and op55 turns any cue into a video like the one above (`preview.py`): the spectrogram turns from grey to colour as it plays, with the current section and a timecode. It is optional; the music itself is the deliverable.
+
 ## Install
 
 ```bash
@@ -137,10 +139,12 @@ skills/op55/
   references/                 score API, arranging for picture, verification, showreel
   scripts/
     render.mjs  verify.py     render a score, measure it
+    preview.py                on request: a spectrogram video that plays with the cue
     setup.mjs   banks.mjs     fetch banks (SHA-256 checked), browse presets
     lib/                      dsp, grid, synth voices, sampler, engine, analysis
     examples/                 starter (synth), eroica (sampled + synth), pstack-harness (300 s, synth)
     vendor/                   spessasynth_core 4.3.22, bundled (Apache-2.0)
+  assets/fonts/               Instrument Serif, JetBrains Mono (OFL) for previews
 tools/                        regress.sh (approved hashes), art/ (README art: prompts, compositor, demo video)
 ```
 

@@ -46,7 +46,7 @@ You decide genre, palette, tempo, key, form and length of sections yourself. Sta
    python3 $S/verify.py audio/music/music.wav --analysis audio/music/analysis.json --waveform-png --spec 0,30
    ```
    Read the PNGs with the Read tool. Required: loudness ✓, grid ✓, every kick/accent onset ✓, section rank correlation ✓ (>= 0.8), limiter gain reduction < 4 dB, clean spectrogram (no stripes, clicks, holes; speech band 1.3-4 kHz quiet under narration).
-6. **Deliver.** Report: the files, the one-line choices (genre, palette, tempo/key, form), the verify numbers, the credit line if `music.meta.json` lists one, and ask the user to listen once on speakers or earphones. You verified it by numbers; a human has not heard it yet.
+6. **Deliver.** Report: the files, the one-line choices (genre, palette, tempo/key, form), the verify numbers, the credit line if `music.meta.json` lists one, and ask the user to listen once on speakers or earphones. You verified it by numbers; a human has not heard it yet. Make a preview video only if the user asks for one (`references/preview.md`).
 
 ## 3. Palette: synth, sampled, or both
 
@@ -80,3 +80,4 @@ op55 plugs into [showreel](https://github.com/revfactory/showreel) through two f
 | `references/arranging.md` | Sections and energy, writing under narration, hits and finales, sampled-instrument idioms, GM preset picks |
 | `references/verify.md` | Reading verify.py output, the pass criteria, common problems and fixes, regression test |
 | `references/showreel.md` | Using op55 as showreel's music step |
+| `references/preview.md` | Only when the user asks for a video or preview of the track: `preview.py`, a spectrogram video that turns from grey to colour as it plays |
