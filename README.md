@@ -44,15 +44,20 @@ It is also free. On a narrated five-minute explainer, generating four candidate 
 
 https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 
+https://github.com/user-attachments/assets/f5d87391-0df5-403e-9617-0ddefba3a5d3
+
+https://github.com/user-attachments/assets/992f9691-623d-4c90-a416-3d7a09acf8e4
+
 | | |
 | --- | --- |
 | ▶ **[Op. 55 in 55 seconds](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/eroica-55s.mp3)** | **Sampled orchestra:** strings, horns, brass, timpani, flute and upright piano, over a synth sub, kick and riser.<br>**Form:** two hammer chords, then the E♭ cello theme that slips to C♯, a hemiola that fights the bar line, and a horn finale.<br>**Measured:** −14.5 LUFS · limiter ≤ 3.7 dB · 6/6 accents within 3.4 ms of the grid · energy rank correlation +0.96 |
-| ▶ **[pstack-harness finale](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/pstack-finale-synth.mp3)** | **All synth:** the last 38 s of a 300-s narrated explainer. A motorik pulse, printer-stepper ticks and a five-step climb into the LOCK chord.<br>It replaced a generated track without moving a single frame of the video |
+| ▶ **[Product teaser, 40 s](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/product-teaser-40s.mp3)** | **Asked for:** a 40-second product-teaser bed: warm, piano and strings, a hit at 0:20, a gentle end, no narration.<br>**Sampled + synth:** upright piano and GM strings (slow strings, cello, fast strings), with a synth kick, boom and bell on the logo hit.<br>**Form:** Intro, Rise, Hush, Logo, Settle, Close · D major, 4/4, 98 BPM · the hit lands on 20.000 s.<br>**Measured:** −13.0 LUFS · limiter ≤ 3.5 dB · logo hit +1.0 ms from the grid · energy rank correlation +1.00 |
+| ▶ **[Lo-fi study beat, 30 s](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/lofi-study-30s.mp3)** | **Asked for:** a 30-second lo-fi study beat for a vlog intro (in Korean).<br>**Sampled + synth:** upright piano, Tine electric piano and a Room drum kit, over a synth bass and kick.<br>**Form:** Intro, Groove, Breath, Full, Outro · C major, 4/4, 84 BPM, swung.<br>**Measured:** −13.0 LUFS · limiter ≤ 3.3 dB · 13 synth kicks and 2 accents within 3 ms of the grid · energy rank correlation +0.90 |
 
 <p align="center"><img src="assets/art/headphones.jpg" alt="A marble bust wearing unplugged studio headphones, lit by a spectrogram" width="70%"><br>
-<sub>Headphones recommended. Claude has not heard either of them.</sub></p>
+<sub>Headphones recommended. Claude has not heard any of them.</sub></p>
 
-Ask for it and op55 turns any cue into a video like the one above (`preview.py`): the spectrogram turns from grey to colour as it plays, with the current section and a timecode. It is optional; the music itself is the deliverable.
+Ask for it and op55 turns any cue into a video like these (`preview.py`): the spectrogram turns from grey to colour as it plays, with the current section and a timecode. It is optional; the music itself is the deliverable.
 
 ## Install
 

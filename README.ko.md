@@ -52,13 +52,18 @@ Claude는 아예 듣지 못한다. 그래서 op55는 베토벤이 점점 그래�
 
 https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 
+https://github.com/user-attachments/assets/f5d87391-0df5-403e-9617-0ddefba3a5d3
+
+https://github.com/user-attachments/assets/992f9691-623d-4c90-a416-3d7a09acf8e4
+
 | | |
 | --- | --- |
 | ▶ **[Op. 55 in 55 seconds](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/eroica-55s.mp3)** | **샘플 오케스트라:** 현, 호른, 금관, 팀파니, 플루트, 업라이트 피아노. 그 밑에 합성 서브, 킥, 라이저.<br>**구성:** 망치로 내리치는 화음 두 번, C♯로 미끄러지는 E♭ 첼로 테마, 마디선과 싸우는 헤미올라, 호른 피날레.<br>**측정값:** −14.5 LUFS · 리미터 ≤ 3.7dB · 악센트 6/6이 격자 3.4ms 안 · 에너지 순위 상관 +0.96 |
-| ▶ **[pstack-harness 피날레](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/pstack-finale-synth.mp3)** | **전부 합성음:** 나레이션이 있는 300초 설명 영상의 마지막 38초. 모토릭 펄스, 프린터 스테퍼 틱, LOCK 화음까지 다섯 계단으로 오르는 빌드업.<br>영상 프레임을 하나도 바꾸지 않고 생성 음악을 대체했다 |
+| ▶ **[제품 티저, 40초](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/product-teaser-40s.mp3)** | **요청:** 제품 티저용 40초 BGM. 따뜻하게, 피아노와 스트링, 0:20에 히트, 부드러운 끝, 나레이션 없음.<br>**샘플 + 합성:** 업라이트 피아노와 GM 스트링(슬로 스트링, 첼로, 패스트 스트링), 로고 히트에 합성 킥·붐·벨.<br>**구성:** Intro, Rise, Hush, Logo, Settle, Close · D장조, 4/4, 98 BPM · 히트가 20.000초에 떨어진다.<br>**측정값:** −13.0 LUFS · 리미터 ≤ 3.5dB · 로고 히트 격자 +1.0ms · 에너지 순위 상관 +1.00 |
+| ▶ **[로파이 스터디 비트, 30초](https://cdn.jsdelivr.net/gh/ynginkim/op55@main/assets/demo/lofi-study-30s.mp3)** | **요청:** 브이로그 인트로용 30초 로파이 스터디 비트(한국어로 요청).<br>**샘플 + 합성:** 업라이트 피아노, 타인 일렉트릭 피아노, 룸 드럼 킷. 그 밑에 합성 베이스와 킥.<br>**구성:** Intro, Groove, Breath, Full, Outro · C장조, 4/4, 84 BPM, 스윙.<br>**측정값:** −13.0 LUFS · 리미터 ≤ 3.3dB · 합성 킥 13개와 악센트 2개가 격자 3ms 안 · 에너지 순위 상관 +0.90 |
 
 <p align="center"><img src="assets/art/headphones.jpg" alt="플러그가 빠진 스튜디오 헤드폰을 쓴 대리석 흉상, 스펙트로그램 빛" width="70%"><br>
-<sub>헤드폰을 권한다. Claude는 두 곡 모두 들어 본 적이 없다.</sub></p>
+<sub>헤드폰을 권한다. Claude는 이 곡들을 하나도 들어 본 적이 없다.</sub></p>
 
 요청하면 op55는 어떤 큐든 위와 같은 영상으로 만든다(`preview.py`). 재생되는 동안 스펙트로그램이 흑백에서 컬러로 바뀌고, 지금 섹션과 시간이 함께 나온다. 선택 기능이고, 납품물은 음악 자체다.
 
