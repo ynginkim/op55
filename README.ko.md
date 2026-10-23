@@ -50,7 +50,7 @@ Claude는 아예 듣지 못한다. 그래서 op55는 베토벤이 점점 그래�
 
 ## 들어보기
 
-<p align="center"><img src="assets/eroica-spectrogram.jpg" alt="섹션과 악센트를 표시한 Op. 55 in 55 seconds 스펙트로그램" width="100%"></p>
+https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 
 | | |
 | --- | --- |

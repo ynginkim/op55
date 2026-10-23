@@ -42,7 +42,7 @@ It is also free. On a narrated five-minute explainer, generating four candidate 
 
 ## Listen
 
-<p align="center"><img src="assets/eroica-spectrogram.jpg" alt="Spectrogram of Op. 55 in 55 seconds with sections and accents marked" width="100%"></p>
+https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 
 | | |
 | --- | --- |
