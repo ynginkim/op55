@@ -1,0 +1,167 @@
+<p align="center"><img src="assets/banner.jpg" alt="op55: background music, composed in code by a model that cannot hear" width="100%"></p>
+
+<p align="center">
+<b>Background music for video, composed in code by Claude, rendered offline, verified by numbers.</b><br>
+A Claude skill. No music APIs, no loops, no stock tracks. Same score, same bytes.
+</p>
+
+<p align="center">
+<img alt="npx skills add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
+<img alt="Claude Opus 5.5" src="https://img.shields.io/badge/composed%20by-Claude%20Opus%205.5-efe6d6?style=for-the-badge&labelColor=0a0908">
+<img alt="license MIT" src="https://img.shields.io/badge/license-MIT-a99d8a?style=for-the-badge&labelColor=0a0908">
+</p>
+
+<p align="center"><a href="#listen">Listen</a> · <a href="#install">Install</a> · <a href="#why-op55">Why op55</a> · <a href="#how-it-works">How it works</a> · <a href="README.ko.md">한국어</a></p>
+
+---
+
+## Why "op55"
+
+**Opus 5.5 → Op. 55.**
+
+Op. 55 is Beethoven's Symphony No. 3 in E-flat, the *Eroica*. He wrote it in 1803 and 1804, months after the Heiligenstadt Testament, the letter of October 1802 in which he admitted he was going deaf and resolved to keep composing anyway. It is the first great work of a composer who was losing his hearing.
+
+Claude cannot hear at all. So op55 composes the way Beethoven increasingly had to: know exactly what every note will do, write it down, and check the page instead of the sound.
+
+> The title page once read *Sinfonia grande, intitolata Bonaparte*. When Napoleon crowned himself emperor in 1804, Beethoven scratched the name out so hard that he tore a hole through the paper. The banner is that hole, with a beat grid shining through.
+
+<p align="center"><img src="assets/art/maelzel.jpg" alt="An ear trumpet and a metronome on a red beat grid" width="82%"></p>
+
+Two more things from Beethoven's desk made it into the code. Both were built by the same man, Johann Nepomuk Mälzel.
+
+- **The metronome.** Mälzel patented it in 1815, and Beethoven was among the first composers to publish metronome marks (1817). For the *Eroica*'s first movement he wrote *dotted half = 60*: one bar of 3/4 per second. op55's grid is exact to the sample. Its *Eroica* demo is 55 bars at Beethoven's own tempo, so it lasts 55 seconds.
+- **The ear trumpet.** Mälzel also built Beethoven's ear trumpets. op55's ear trumpet is `verify.py`. It checks loudness and true peak, times every hit against the grid, compares each section's loudness with the planned energy, and draws waveforms and spectrograms that Claude reads as images.
+
+## Why now
+
+To write a five-minute score as code, you have to hold the whole arrangement in your head: 150 bars, eleven sections, the narrator's pauses, and a grid accurate to the sample. Then you write about 450 lines in one sitting, read your own numbers and spectrograms, and fix what they show.
+
+With **Claude Opus 5.5** that loop closes end to end. Opus 5.5 planned, wrote, rendered and verified the *Eroica* cue in this repo in one session, starting from an empty file and ending with the numbers below. It also wrote the engine's sampled-instrument layer and this repo around it.
+
+It is also free. On a narrated five-minute explainer, generating four candidate tracks with a music API cost about $7 to keep one. op55 costs nothing, renders that cue in 35 seconds, and gives you the source.
+
+## Listen
+
+<p align="center"><img src="assets/eroica-spectrogram.jpg" alt="Spectrogram of Op. 55 in 55 seconds with sections and accents marked" width="100%"></p>
+
+| | |
+| --- | --- |
+| ▶ **[Op. 55 in 55 seconds](assets/demo/eroica-55s.mp3)** | **Sampled orchestra:** strings, horns, brass, timpani, flute and upright piano, over a synth sub, kick and riser.<br>**Form:** two hammer chords, then the E♭ cello theme that slips to C♯, a hemiola that fights the bar line, and a horn finale.<br>**Measured:** −14.5 LUFS · limiter ≤ 3.7 dB · 6/6 accents within 3.4 ms of the grid · energy rank correlation +0.96 |
+| ▶ **[pstack-harness finale](assets/demo/pstack-finale-synth.mp3)** | **All synth:** the last 38 s of a 300-s narrated explainer. A motorik pulse, printer-stepper ticks and a five-step climb into the LOCK chord.<br>It replaced a generated track without moving a single frame of the video |
+
+<p align="center"><img src="assets/art/headphones.jpg" alt="A marble bust wearing unplugged studio headphones, lit by a spectrogram" width="70%"><br>
+<sub>Headphones recommended. Claude has not heard either of them.</sub></p>
+
+## Install
+
+```bash
+npx skills add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
+```
+
+Then ask:
+
+> Make a 60-second background track for this product video. Warm, piano and strings, hits at 0:12 and 0:48, narration from 0:05 to 0:40.
+
+On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg.
+
+## How it works
+
+```
+ brief ──▶ cue sheet ──▶ grid ──▶ score.mjs ──▶ render ──────▶ verify ──────────▶ music.wav
+           sections      bars     Claude        synth voices    LUFS, true peak     analysis.json
+           energy        are      writes it     + SoundFont     onsets vs grid      music.meta.json
+           accents       sync                   samples         energy vs plan      (credits)
+           gaps          points                 + mastering     spectrograms
+```
+
+- **Score as code.** A cue is one ES module: a grid, sections and accents, and a `compose()` that returns note events. Claude places everything with `bar(k, beat)`, never with raw seconds.
+- **Two orchestras, one mixer.**
+  - **Synth voices** for weight and precision: `pad bass kick tick pluck arp glass bell piano fx`.
+  - **Sampled parts** for realism: any General MIDI/GS preset or drum kit, plus two real pianos. They are played by a vendored [spessasynth_core](https://github.com/spessasus/spessasynth_core), offline, with every event on its exact sample.
+  - Both feed the same sends (plate, hall, tempo-synced delay), loudness shaping, bus glue and true-peak limiter.
+- **The grid is the contract.** `analysis.json` has the same shape as a beat tracker's output, but it is written from the score, so it is exact. Picture cuts and hits sit on downbeats with no drift.
+- **Deterministic.**
+  - Every random choice comes from a named, seeded stream.
+  - The same score, seed and banks give the same WAV byte for byte.
+  - `tools/regress.sh` holds the approved hashes.
+- **Verified, then heard.** `verify.py` writes the numbers and pictures, Claude fixes what they show, and a human listens last.
+
+### The orchestra
+
+| Bank | What | License | Size |
+| --- | --- | --- | --- |
+| `gm` | [GeneralUser GS 2.0.3](https://github.com/mrbumpy409/GeneralUser-GS): the full GM/GS set, 13 drum kits | Free for private and commercial music | 32 MB |
+| `upright` | [Upright Piano KW](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html) (FreePats): a Kawai upright in a living room | CC0 | 56 MB |
+| `grand` | [Salamander Grand Piano V3](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html): Yamaha C5, 16 velocity layers (optional) | CC BY 3.0, credit required | 1.2 GB |
+
+op55 never uses audio whose license it has not checked. When a cue needs a credit line, `music.meta.json` says so.
+
+### A score, abridged
+
+```js
+export const grid = { bpm: 180, t0: 0.5, beatsPerBar: 3 };          // dotted half = 60: one bar per second
+export const sections = [{ bar: 0, name: 'Hammer', energy: 0.9 }, { bar: 2, name: 'Theme', energy: 0.4 } /* … */];
+export const ensemble = {
+  celli: { bank: 'gm', preset: 'Cello', pan: 0.3 },
+  horns: { bank: 'gm', preset: 'French Horns', sends: { hall: 0.42 } },
+};
+export function compose({ bar, BEAT, ccRamp }) {
+  const celli = [[0, 2, 51], [2, 1, 55]].map(([b, len, midi]) => ({ t: bar(2, b), dur: len * BEAT, midi, vel: 0.62 }));
+  const horns = ccRamp('expression', bar(14), bar(22), 0.5, 1);    // a swell, not a step
+  return { events: { celli, horns, kick: [{ t: bar(0), vel: 0.35 }] } };
+}
+```
+
+Full example: [`eroica.score.mjs`](skills/op55/scripts/examples/eroica.score.mjs). API: [`references/score.md`](skills/op55/references/score.md).
+
+### Verify
+
+```
+[loudness] integrated -14.5 LUFS (target -14.5) ✓ · true peak -1.3 dBTP ✓ · LRA 9.2 LU · clipped samples 0
+[grid] analysis.json: 180 BPM, 171 beats (max |beat - grid| 0.33 ms), 57 downbeats (max 0.00 ms) ✓
+[onsets] kick: 52 hits, offset vs grid median +0.87 ms, max |1.17| ms ✓
+[onsets] accent Hammer 1        bar  0.00  onset +2.60 ms ✓
+[onsets] accent Finale          bar 38.00  onset +0.54 ms ✓
+  rank correlation energy vs loudness: +0.96 ✓
+```
+
+## With showreel
+
+op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. showreel already reads both files op55 writes: `music.file` and `timeline.py --music-analysis`. See [`references/showreel.md`](skills/op55/references/showreel.md).
+
+## Repo
+
+```
+skills/op55/
+  SKILL.md                    the skill: workflow, palette, rules
+  references/                 score API, arranging for picture, verification, showreel
+  scripts/
+    render.mjs  verify.py     render a score, measure it
+    setup.mjs   banks.mjs     fetch banks (SHA-256 checked), browse presets
+    lib/                      dsp, grid, synth voices, sampler, engine, analysis
+    examples/                 starter (synth), eroica (sampled + synth), pstack-harness (300 s, synth)
+    vendor/                   spessasynth_core 4.3.22, bundled (Apache-2.0)
+tools/                        regress.sh (approved hashes), art/ (README art: prompts + compositor)
+```
+
+## Roadmap
+
+- **More instruments:** an SFZ player for CC0 orchestral libraries (VSCO 2 CE, VCSL), for articulations beyond General MIDI.
+- **A learned ear:**
+  - Audiobox Aesthetics scores to rank alternate takes.
+  - Genre reference profiles, so "cinematic" and "lo-fi" have numbers too.
+- **Checks before rendering:** score-level structure checks, such as corpus percentiles for phrase length and harmonic rhythm.
+- **Handoff:** MIDI and stem export for a DAW.
+
+## Credits
+
+- **Engine:** written for the [showreel fork](https://github.com/ynginkim/showreel) and moved here. The code is MIT.
+- **Sampler:** [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus, Apache-2.0. It is vendored, with its license, in `scripts/vendor/`.
+- **Banks:**
+  - GeneralUser GS by S. Christian Collins
+  - Upright Piano KW by FreePats (CC0)
+  - Salamander Grand Piano by Alexander Holm (CC BY 3.0)
+- **Art:**
+  - Generated with Codex's imagegen. The prompts are in `tools/art/prompts`.
+  - Typography is composited in code (`tools/art/compose.mjs`).
+- **Music:** Ludwig van Beethoven, Symphony No. 3 in E-flat, Op. 55 (1804), public domain. Dedicated, eventually, to the memory of a great man.

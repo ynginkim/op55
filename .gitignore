@@ -1,0 +1,5 @@
+.regress/
+.DS_Store
+node_modules/
+assets/art/.logs/
+assets/art/*.png
