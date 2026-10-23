@@ -270,8 +270,8 @@ def main():
              f"color=c=black:s={W}x{H}:r={f},format=gbrp[m0]", f"color=c=white:s={L.sw}x{b1 - b0}:r={f},format=gbrp[w]",
              f"[m0][w]overlay=x='{X}-{L.sw}':y={b0}:eval=frame:format=gbrp[mask]",
              f"[g][c][mask]maskedmerge[mm]",
-             f"color=c=white@0.95:s={max(2, round(2 * L.u))}x{b1 - b0}:r={f},format=rgba[bar]",
-             f"[mm][bar]overlay=x='{X}':y={b0}:eval=frame[v0]",
+             f"color=c=white@0.95:s={max(2, round(2 * L.u))}x{b1 - L.sy0}:r={f},format=rgba[bar]",     # starts below the label rows
+             f"[mm][bar]overlay=x='{X}':y={L.sy0}:eval=frame[v0]",
              f"[v0][3:v]overlay=x={tcx}:y={tcy}:eof_action=repeat[v1]"]
         cur = "v1"
         for i, (_, t0, t1) in enumerate(strips):
