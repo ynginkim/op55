@@ -15,7 +15,7 @@ python3 $S/preview.py audio/music/music.wav --check [--title "Product launch BGM
 ```
 
 - Reads `music.meta.json` next to the WAV (written by `render.mjs`). Without it, there are no sections, accents or bars.
-- Default 1920×1080, 24 fps, AAC 160 kbps. A one-minute cue is about 3 MB and takes about 20 s.
+- Default 1920 px wide, 24 fps, AAC 160 kbps. The height follows the content (about 800 px; about 860 px when the sections need three label rows). `--size 1920x1080` fixes the height. A one-minute cue is about 2.5 MB and takes about 20 s.
 - `--check` writes stills at 25, 50 and 75 % next to the MP4. Read them. You cannot watch the video, so check these stills:
   - Colour stops exactly at the playhead.
   - The NOW label names the section that contains that moment.
@@ -26,5 +26,5 @@ python3 $S/preview.py audio/music/music.wav --check [--title "Product launch BGM
 ## Sharing
 
 - GitHub plays an MP4 inline only when it is uploaded as an attachment. Dragging the file into an issue, PR or comment box gives a `https://github.com/user-attachments/assets/...` URL. Put that URL on its own line in Markdown and GitHub draws a player. A video file committed to a repo does not play inline.
-- The attachment limit is 10 MB on free plans. The script warns when the file is bigger. Long cues fit with `--size 1280x720 --fps 12 --abr 128k` (300 s comes to about 7 MB).
+- The attachment limit is 10 MB on free plans. The script warns when the file is bigger. Long cues fit with `--size 1280 --fps 12 --abr 128k` (300 s comes to 6.6 MB).
 - Audio files (MP3/WAV) do not play on GitHub's file page, and raw links download them. To make a plain audio link play in the browser, use a CDN URL: `https://cdn.jsdelivr.net/gh/<owner>/<repo>@<branch>/<path>`.

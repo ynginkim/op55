@@ -2,7 +2,7 @@
 """op55 preview.py: a shareable preview video of a rendered cue. Make one only when the user asks for it.
 
   python3 preview.py <music.wav> [--meta music.meta.json] [--out music.preview.mp4] [--title "..."]
-                     [--size 1920x1080] [--fps 24] [--check]
+                     [--size 1920] [--fps 24] [--check]
 
 The frame is the cue's spectrogram with its sections, accents, narration gaps and bar ruler (all from <wav>.meta.json,
 written by render.mjs). While the sound plays, a playhead sweeps across: what has played is in colour, what is still to
@@ -80,22 +80,53 @@ def probe_duration(wav):
 
 
 class Layout:
-    def __init__(self, W, H):
-        self.W, self.H, self.u = W, H, min(W / 1920, H / 1080)
+    """Width-driven (u = W / 1920). The height follows the content: the number of label rows and a spectrogram
+    0.2 W tall (about 380 px at 1920), unless the caller fixes H."""
+
+    def __init__(self, W):
+        self.W, self.u = W, W / 1920
         u = self.u
         self.pad = round(80 * u)
         self.sx0, self.sx1 = self.pad, W - self.pad
         self.sw = self.sx1 - self.sx0
-        self.title_y = round(0.055 * H)
-        self.now_y = round(0.165 * H)
-        self.label_y = round(0.232 * H)
-        self.row_h = round(30 * self.u)
-        self.sy0, self.sy1 = round(0.33 * H), round(0.78 * H)
+        self.row_h = round(30 * u)
+
+    def vertical(self, rows, H=None):
+        u = self.u
+        self.title_y, self.now_y, self.label_y = round(36 * u), round(155 * u), round(227 * u)
+        self.sy0 = self.label_y + (max(1, rows) - 1) * self.row_h + round(38 * u)
+        self.sy1 = self.sy0 + round(0.2 * self.W) if H is None else H - round(155 * u)
         self.tri_y = self.sy1 + round(10 * u)
         self.gap_y = self.sy1 + round(34 * u)
         self.rule_y = self.sy1 + round(52 * u)
-        self.cap_y = round(0.925 * H)
+        self.cap_y = self.sy1 + round(105 * u)
+        self.H = (self.cap_y + round(49 * u)) if H is None else H
+        self.H -= self.H % 2
+        if self.sy1 - self.sy0 < 80 * u:
+            sys.exit(f"! --size {self.W}x{self.H} leaves no room for the spectrogram; use a taller frame or just --size {self.W}")
         self.band = (self.label_y - round(8 * u), self.rule_y + round(14 * u))   # rows that turn from grey to colour
+
+
+def pack_labels(secs, dur, L, lf):
+    """section labels packed into up to three rows (first row with room; else the least-used row).
+    -> [[line x, row, text, flipped at the right edge, left edge, width]]"""
+    u = L.u
+    rows_end = [-1e9, -1e9, -1e9]
+    placed = []
+    for i, s in enumerate(secs):
+        sx = L.sx0 + s["t"] / dur * L.sw
+        lab = f"{i + 1:02d} {str(s.get('name', '')).upper()}"
+        lw = text_w(lf, lab)
+        flip = sx + 10 * u + lw > L.sx1 + L.pad / 2                    # flip left at the right edge
+        left = sx - 7 * u - lw if flip else sx + 7 * u
+        r = next((k for k, e in enumerate(rows_end) if left >= e + 8 * u), min(range(3), key=lambda k: rows_end[k]))
+        placed.append([sx, r, lab, flip, left, lw])
+        rows_end[r] = left + lw
+    return placed
+
+
+def label_font(u, secs):
+    return font("mono", 19 * u, " ".join(str(s.get("name", "")) for s in secs), weight=500)
 
 
 def bar_ticks(grid, dur):
@@ -143,20 +174,10 @@ def card(meta, wav, dur, title, L, tmp):
     ff = font("mono", 22 * u, fs)
     d.text((W - L.pad - text_w(ff, fs), L.title_y + round(26 * u)), fs, font=ff, fill=DIM)
 
-    # sections: a line each, labels packed into up to three rows (first row with room; else trimmed with an ellipsis)
+    # sections: a line each; labels trimmed with an ellipsis when the next label in the row is too close
     secs = sorted(meta.get("sections") or [], key=lambda s: s["t"])
-    lf = font("mono", 19 * u, " ".join(str(s.get("name", "")) for s in secs), weight=500)
-    rows_end = [-1e9, -1e9, -1e9]
-    placed = []                                                       # [sx, row, label, flipped, left edge, width]
-    for i, s in enumerate(secs):
-        sx = x(s["t"])
-        lab = f"{i + 1:02d} {str(s.get('name', '')).upper()}"
-        lw = text_w(lf, lab)
-        flip = sx + 10 * u + lw > L.sx1 + L.pad / 2                    # flip left at the right edge
-        left = sx - 7 * u - lw if flip else sx + 7 * u
-        r = next((k for k, e in enumerate(rows_end) if left >= e + 8 * u), min(range(3), key=lambda k: rows_end[k]))
-        placed.append([sx, r, lab, flip, left, lw])
-        rows_end[r] = left + lw
+    lf = label_font(u, secs)
+    placed = pack_labels(secs, dur, L, lf)
     for j, (sx, r, lab, flip, lx, lw) in enumerate(placed):
         if not flip:                                                   # trim to the next label's left edge in the same row
             nxt = next((q[4] for q in placed[j + 1:] if q[1] == r), L.W - 4 * u)
@@ -235,7 +256,7 @@ def main():
     ap.add_argument("--meta")
     ap.add_argument("--out")
     ap.add_argument("--title")
-    ap.add_argument("--size", default="1920x1080")
+    ap.add_argument("--size", default="1920", help="WIDTH (height follows the content, about 760-860 px at 1920) or WIDTHxHEIGHT")
     ap.add_argument("--fps", type=int, default=24)
     ap.add_argument("--abr", default="160k", help="AAC bitrate (default 160k)")
     ap.add_argument("--check", action="store_true", help="also write stills at 25/50/75 %% next to the video")
@@ -247,11 +268,14 @@ def main():
         print(f"! {meta_p} not found: no sections, accents or bar ruler (render with render.mjs to get them)", file=sys.stderr)
     out = Path(a.out).resolve() if a.out else wav.with_name(wav.stem + ".preview.mp4")
     out.parent.mkdir(parents=True, exist_ok=True)
-    W, H = (int(v) for v in a.size.lower().split("x"))
-    W, H = W - W % 2, H - H % 2
+    wh = a.size.lower().split("x")
+    W, H = int(wh[0]) - int(wh[0]) % 2, (int(wh[1]) if len(wh) > 1 and wh[1] else None)
     dur = probe_duration(wav)
     title = a.title or meta.get("title") or wav.stem
-    L = Layout(W, H)
+    L = Layout(W)
+    secs = sorted(meta.get("sections") or [], key=lambda s: s["t"])
+    L.vertical(max((q[1] for q in pack_labels(secs, dur, L, label_font(L.u, secs))), default=0) + 1, H)
+    W, H = L.W, L.H
 
     with tempfile.TemporaryDirectory(dir=out.parent, prefix=".preview-") as td:
         tmp = Path(td)
@@ -285,7 +309,7 @@ def main():
     size = out.stat().st_size / 1048576
     print(f"{out}  ({W}x{H}, {dur:.1f} s, {size:.1f} MB)")
     if size > 10:
-        print("  over GitHub's 10 MB attachment limit: try --size 1280x720 --fps 12 --abr 128k")
+        print("  over GitHub's 10 MB attachment limit: try --size 1280 --fps 12 --abr 128k")
     if a.check:
         for frac in (0.25, 0.5, 0.75):
             p = out.with_name(f"{out.stem}.check{int(frac * 100)}.jpg")
