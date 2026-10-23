@@ -1,6 +1,6 @@
 # op55 skillset 설계
 
-Status: implemented, verification in progress. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다.
+Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션의 진입 경로와 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다.
 
 ## 목표와 범위
 
@@ -150,7 +150,72 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 �
 
 ## 검증 기록
 
-검증은 진행 중이다. 결과는 같은 커밋 범위에서 이 절에 채운다.
+2026-10-23, macOS (Darwin arm64), Node v22.22.2, Python 3.15.0, ffmpeg 8.1, numpy 2.5.4, Pillow 13.0.0, npx 10.9.7, skills CLI 1.7.4. skill 파일은 커밋 0666f70 이후 바뀌지 않았다. 증거 파일은 작업 세션의 임시 폴더에 있고 저장소에 넣지 않았다.
+
+### 구조
+
+| 명령 | 결과 |
+| --- | --- |
+| `python3 scripts/check.py .` | exit 0. 8 skills, 1 mode, 2 playbooks, 4 leaves, 3 principles, 경고 0 |
+| `python3 scripts/selftest.py` | exit 0. 49 tests OK(일반 오류 주입) |
+| op55 전용 오류 주입 5건(HEAD를 git archive로 뽑은 사본마다 하나씩) | 모두 exit 1. README에 예전 경로 → PORTABILITY, REF_MISSING. preview.md의 형제 폰트 경로 오타 → REF_MISSING. op55-verify의 adapter 포인터 제거 → ADAPTER_POINTER. op55-verify 자동 호출 켬 → POLICY. mode 색인의 principle 이름 오타 → UNKNOWN_PRINCIPLE, PRINCIPLE_INDEX. 바꾸지 않은 사본은 exit 0 |
+
+### 설치
+
+| 확인 | 결과 |
+| --- | --- |
+| `npx skills add <worktree> -l` | 8개만 나열. worktree 디스크에 git 제외 meta-harness 설치본(.agents/skills)이 있어도 섞이지 않음 |
+| `python3 scripts/install_smoke.py <worktree> --dest <새 빈 폴더>` | exit 0. `npx --yes skills add <worktree> -a claude-code -a codex -y` 성공. .agents/skills에 8개 복사, .claude/skills에 8개 링크. 두 경로에서 playbook 4건, 참조 114건 열림. 원본 바이트 불변 |
+| `diff -r skills/ <설치본>/.agents/skills/` | 같음 |
+| 형제 경로 실행 | `.claude/skills/op55-render/../resolve-op55-tools/scripts/setup.mjs --check`와 `.agents/skills/op55-verify/../resolve-op55-tools/scripts/setup.mjs --check` 모두 exit 0(gm, upright 설치됨). 설치본 preview.py가 형제 assets/fonts(4개 파일)를 찾음 |
+
+GitHub 원격 형식(`ynginkim/op55`)은 main 반영 전이라 확인하지 않았다.
+
+### 회귀
+
+| 시점 | 결과 |
+| --- | --- |
+| 이동 직후(ba4be7e) | `tools/regress.sh` exit 0. eroica, pstack-harness, starter 모두 ✓ |
+| 문서·검사 추가 후(d89e10a) | exit 0. 세 예제 모두 ✓. SHA-256이 tools/regress.sha256과 같음 |
+| 설치본 scripts로 `--analysis`까지 렌더 | starter, eroica WAV가 승인 hash와 같음 |
+
+### 동작
+
+설치본의 scripts 경로로 세 사례를 렌더하고 verify.py 출력과 PNG를 직접 읽었다. 합성은 starter, sampled와 3/4는 eroica다. 홀수 박자는 starter를 7/8(eighth 210 BPM, kick 2+2+3)로 바꾼 임시 fixture로 확인했다. fixture는 저장소에 넣지 않았다.
+
+| 항목 | 합성(starter, 33 s) | sampled·3/4(eroica, 57 s) | 7/8 fixture(33 s) |
+| --- | --- | --- | --- |
+| 렌더 | 5.1 s, 9,504,044 bytes | 10.6 s, 16,416,044 bytes | 4.1 s, 9,504,044 bytes |
+| loudness, true peak | -13.0(목표 -13) ✓, -1.3 dBTP ✓ | -14.5(목표 -14.5) ✓, -1.3 ✓ | -13.0 ✓, -1.3 ✓ |
+| clipping, DC, fade 뒤 | 0, 2.0e-05 이하, 0 → 통과 | 0, 4.4e-05 이하, 0 → 통과 | 0, 1.0e-05 이하, 0 → 통과 |
+| limiter | 최대 4.20 dB ✗ → **미달** | 3.70 dB ✓ | 3.60 dB ✓ |
+| grid | 0.00 / 0.00 ms ✓ | 0.33 / 0.00 ms ✓ | 0.43 / 0.00 ms ✓ |
+| kick onset | 31개, 최대 1.84 ms ✓ | 52개, 최대 1.17 ms ✓ | 23개, 최대 1.62 ms ✓ |
+| accent onset | Main hit +3.27 ms ✓. Final chord는 soft. score가 작은 bell과 피아노로 쓴 끝 화음이라 의도로 판정 | 6개 모두 ✓, 최대 +3.40 ms | Main hit +1.23 ms ✓. Final chord soft, starter와 같은 근거 |
+| 섹션 순위 상관 | +1.00 ✓ | +0.96 ✓ | +1.00 ✓ |
+| 가장 강한 강세 마디 | bar 8이 곡에서 가장 큼(-10.0), 직전보다 +3.4 dB → 통과 | bar 38(-11.6)이 직전보다 +2.4 dB지만 bar 41과 49(-10.9)가 더 큼 → **미달** | bar 8이 가장 큼, +3.4 dB → 통과 |
+| 파형 PNG | 두 패널, 빨강·초록 일치 | 여섯 패널 모두 일치 | 두 패널 일치 |
+| 스펙트로그램 | spec_0: 구멍·앨리어싱 줄무늬 없음. 세로선은 악보의 clock tick과 hat 위치(0.5 s, 0.25 s 간격) | spec_0, spec_30: 구멍·줄무늬 없음. 세로선은 강세와 Finale의 kick | spec_0: 같음, kick 2+2+3 보임 |
+| mix margin | N/A(나레이션 없음, 대체 확인 없음) | N/A | N/A |
+| 나레이션 아래 1.3-4 kHz | N/A | N/A | N/A |
+| credits | 없음 | gm, upright. credit 줄 없음 | 없음 |
+
+미측정 분기도 실제 출력으로 확인했다. meta 없이 WAV만 검사하면 "! ... music.meta.json not found ... only loudness and the analysis grid are checked"가 나오고 onset·energy 줄이 빠진다. 33초 cue에 `--spec 40`을 주면 "[spec] 40 s: skipped"가 나온다. 둘 다 verify.py는 exit 0이었다. exit code로 통과를 판정하지 않는 이유다.
+
+preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 1920×802, 33.0 s, 1.4 MB, 32.5 s 걸림. 세 스틸을 열어 확인한 것: 색이 playhead에서 멈춤, NOW 라벨이 01 INTRO·03 MAIN·04 RESOLVE로 그 순간의 섹션과 맞음, 라벨 겹침과 화면 밖 넘침 없음, 한글 제목이 그려짐. 동영상 재생과 소리는 확인하지 않았다.
+
+### 재구성 전부터 있던 미달
+
+위 두 미달은 이번 변경이 만든 것이 아니다. 세 예제의 WAV가 828990b의 승인 hash와 바이트까지 같고 verify.py도 같으므로, 기준점에서도 같은 출력이 나온다. verify.py가 limiter 4 dB 초과를 ✗로 표시하기 시작한 것은 bdb958b다(그 전에는 SKILL.md의 문장 기준만 있었다). 예제를 고치면 승인 hash가 바뀌므로 이번 범위에서 고치지 않았다.
+
+| 예제 | 미달 | 고칠 때 |
+| --- | --- | --- |
+| starter | limiter 최대 4.20 dB(16 s, Main hit) | references/verify.md의 처방대로 boom·stab 같은 뾰족한 층을 낮추고, 소리 변경으로 승인 hash를 갱신 |
+| eroica | 가장 강한 강세 bar 38이 곡에서 가장 큰 마디가 아님(bar 41·49보다 0.7 dB 작음) | Finale 진입을 키우거나 뒤 마디의 `levels`를 낮추고 hash 갱신. 또는 강세 strength 설계를 다시 정함 |
+
+### 새 세션 경로
+
+headless Claude Code·Codex 세션으로 자연어·명시 진입을 확인하는 시험은 실행하지 않았다. 실행 횟수를 사용자에게 먼저 묻는다.
 
 ## 확인하지 못한 것
 
@@ -162,5 +227,7 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 �
 | 원격 CI | unverified | push한 커밋에서 GitHub Actions check 워크플로 결과 확인 |
 | SessionStart 훅 링크 | unverified | video-creator 훅 변경 뒤 사본에서 훅을 실행해 모든 skill 링크와 setup 안내 확인 |
 | showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
+| starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태) | 예제를 고치는 별도 작업에서 소리를 바꾸고 승인 hash를 갱신 |
+| vendor/README.md의 재빌드 출력 경로 | 예전 경로 | 다음 vendor 갱신 커밋에서 resolve-op55-tools 경로로 고치고 portability transition 삭제 |
 | 다른 환경의 회귀 hash | unverified | Node 22, macOS arm64 밖의 환경에서 tools/regress.sh를 돌려 같은지 기록 |
 | bank 라이선스 최신성 | unverified | 결과물 배포 직전 공식 원문과 배포 hash 재확인 |
