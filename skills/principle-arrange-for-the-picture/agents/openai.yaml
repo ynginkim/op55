@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-arrange-for-the-picture"
+  short_description: "영상의 막과 재질, 서사에 맞춰 palette와 섹션, 강세를 고른다"
+  default_prompt: "$principle-arrange-for-the-picture를 적용해 palette와 강세를 골라 주세요."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "op55-render"
+  short_description: "op55 악보를 WAV·analysis·meta로 렌더하고 요청 시 preview를 만든다"
+  default_prompt: "$op55-render로 audio/music/score.mjs를 렌더해 주세요."
+policy:
+  allow_implicit_invocation: false

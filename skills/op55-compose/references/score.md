@@ -40,7 +40,7 @@ export const grid = { bpm: 120, t0: 0.5, beatsPerBar: 4, firstDownbeat: 0 };
 - Put the first beat 0.3-0.5 s in (`t0`): a downbeat at 0 s drowns in the 60 ms fade-in.
 - Pickups: `firstDownbeat > 0` makes beats 0..firstDownbeat-1 a pickup (negative bars).
 - Odd meters work: `beatsPerBar: 3` (see `eroica.score.mjs`, 180 BPM in 3/4 = one bar per second), 6/8 as `beatsPerBar: 6` at the eighth-note rate.
-- **Matching existing picture:** copy the grid the video already uses (a previous `analysis.json`, or the cue list). Give `beat` in seconds instead of `bpm` to avoid rounding. If the new `analysis.json` beats match the old ones within 1 ms, the picture does not need re-rendering.
+- **Matching existing picture:** copy the grid the video already uses (a previous `analysis.json`, or the cue list). Give `beat` in seconds instead of `bpm` to avoid rounding. If the new `analysis.json` beats match the old ones within 1 ms, the grid contract held. Scenes that use `music.hitN` or the music envelope still need checking: `../resolve-op55-tools/references/showreel-contract.md`.
 - Plan sections in 4- or 8-bar units. At 120 BPM in 4/4 a bar is 2 s.
 
 ## The `bgm` toolkit passed to `compose`

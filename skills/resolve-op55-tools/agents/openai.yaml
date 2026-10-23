@@ -1,0 +1,6 @@
+interface:
+  display_name: "resolve-op55-tools"
+  short_description: "op55의 scripts 경로와 도구, SoundFont bank, 그대로 쓸 명령을 확인한다"
+  default_prompt: "$resolve-op55-tools로 op55 도구와 bank 상태를 확인해 주세요."
+policy:
+  allow_implicit_invocation: false

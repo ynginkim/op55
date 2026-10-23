@@ -1,0 +1,6 @@
+interface:
+  display_name: "principle-protect-the-voice"
+  short_description: "나레이션 구간의 음역·선율·밀도를 비우고 공백에서 풀어 주는 판단"
+  default_prompt: "$principle-protect-the-voice를 적용해 나레이션 아래 편곡을 점검해 주세요."
+policy:
+  allow_implicit_invocation: false
