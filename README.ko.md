@@ -52,9 +52,9 @@ Claude는 아예 듣지 못한다. 그래서 op55는 베토벤이 점점 그래�
 
 https://github.com/user-attachments/assets/9f1348a2-a305-417e-9d26-2ca237933841
 
-https://github.com/user-attachments/assets/f5d87391-0df5-403e-9617-0ddefba3a5d3
+https://github.com/user-attachments/assets/09cd4678-fe6a-4c5c-b131-3ec5dcf73012
 
-https://github.com/user-attachments/assets/992f9691-623d-4c90-a416-3d7a09acf8e4
+https://github.com/user-attachments/assets/cb2ac109-c193-44be-9398-9627b86ca8a6
 
 | | |
 | --- | --- |
