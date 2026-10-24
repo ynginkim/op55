@@ -4,7 +4,7 @@ Before a change, read the README, relevant local guidance, and the current issue
 
 ## Development and checks
 
-Use Python 3.12 for standard-library checks. Node.js 22 and Git are needed where JavaScript or installation smoke tests are used. op55 rendering also needs its documented banks; audio analysis needs Python packages and ffmpeg described in its README. Do not install dependencies or download banks just to edit prose.
+Use Python 3.12 for standard-library checks. The pinned `skills@1.7.4` installer requires Node.js >= 22.20.0; use that version or newer, plus Git, for installation smoke tests. The op55 renderer itself requires Node.js >= 18. op55 rendering also needs its documented banks; audio analysis needs Python packages and ffmpeg described in its README. Do not install dependencies or download banks just to edit prose.
 
 From the repository root:
 
