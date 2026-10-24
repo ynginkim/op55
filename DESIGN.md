@@ -1,6 +1,6 @@
 # op55 skillset 설계
 
-Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션의 진입 경로와 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다.
+Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다.
 
 ## 목표와 범위
 
@@ -150,7 +150,7 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 �
 
 ## 검증 기록
 
-2026-10-23, macOS (Darwin arm64), Node v22.22.2, Python 3.15.0, ffmpeg 8.1, numpy 2.5.4, Pillow 13.0.0, npx 10.9.7, skills CLI 1.7.4. skill 파일은 커밋 0666f70 이후 바뀌지 않았다. 증거 파일은 작업 세션의 임시 폴더에 있고 저장소에 넣지 않았다.
+2026-10-23, macOS (Darwin arm64), Node v22.22.2, Python 3.15.0, ffmpeg 8.1, numpy 2.5.4, Pillow 13.0.0, npx 10.9.7, skills CLI 1.7.4. skill 파일은 커밋 f405457 이후 바뀌지 않았다. 증거 파일은 작업 세션의 임시 폴더에 있고 저장소에 넣지 않았다.
 
 ### 구조
 
@@ -175,8 +175,8 @@ GitHub 원격 형식(`ynginkim/op55`)은 main 반영 전이라 확인하지 않�
 
 | 시점 | 결과 |
 | --- | --- |
-| 이동 직후(ba4be7e) | `tools/regress.sh` exit 0. eroica, pstack-harness, starter 모두 ✓ |
-| 문서·검사 추가 후(d89e10a) | exit 0. 세 예제 모두 ✓. SHA-256이 tools/regress.sha256과 같음 |
+| 이동 직후(4b62721) | `tools/regress.sh` exit 0. eroica, pstack-harness, starter 모두 ✓ |
+| 문서·검사 추가 후(d52f2b7) | exit 0. 세 예제 모두 ✓. SHA-256이 tools/regress.sha256과 같음 |
 | 설치본 scripts로 `--analysis`까지 렌더 | starter, eroica WAV가 승인 hash와 같음 |
 
 ### 동작
@@ -206,7 +206,7 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 
 ### 재구성 전부터 있던 미달
 
-위 두 미달은 이번 변경이 만든 것이 아니다. 세 예제의 WAV가 828990b의 승인 hash와 바이트까지 같고 verify.py도 같으므로, 기준점에서도 같은 출력이 나온다. verify.py가 limiter 4 dB 초과를 ✗로 표시하기 시작한 것은 bdb958b다(그 전에는 SKILL.md의 문장 기준만 있었다). 예제를 고치면 승인 hash가 바뀌므로 이번 범위에서 고치지 않았다.
+위 두 미달은 이번 변경이 만든 것이 아니다. 세 예제의 WAV가 828990b의 승인 hash와 바이트까지 같고 verify.py도 같으므로, 기준점에서도 같은 출력이 나온다. verify.py가 limiter 4 dB 초과를 ✗로 표시하기 시작한 것은 bdb958b(재작성 뒤 f151990)다(그 전에는 SKILL.md의 문장 기준만 있었다). 예제를 고치면 승인 hash가 바뀌므로 이번 범위에서 고치지 않았다.
 
 | 예제 | 미달 | 고칠 때 |
 | --- | --- | --- |
