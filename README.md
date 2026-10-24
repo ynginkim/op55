@@ -151,7 +151,7 @@ Full example: [`eroica.score.mjs`](skills/resolve-op55-tools/scripts/examples/er
 
 ## With showreel
 
-op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. showreel already reads both files op55 writes: `music.file` and `timeline.py --music-analysis`. Its music step reads `op55-compose`, `op55-render` and `op55-verify` directly and passes the scripts path as `OP55_SCRIPTS`. See [`showreel-contract.md`](skills/resolve-op55-tools/references/showreel-contract.md).
+op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. The files op55 writes and their shapes are in [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md). How showreel calls op55 and uses those files is documented in showreel, in [`references/op55.md`](https://github.com/ynginkim/showreel/blob/main/references/op55.md) of the [ynginkim/showreel](https://github.com/ynginkim/showreel) fork.
 
 ## Repo
 
@@ -162,7 +162,7 @@ skills/
   op55-compose/               cue sheet, grid, score.mjs; references/ score API, arranging for picture
   op55-render/                render the WAV, analysis and meta; on request a preview video (references/preview.md)
   op55-verify/                read verify.py's numbers and pictures (references/verify.md)
-  resolve-op55-tools/         paths, tools, banks, exact commands, licenses; references/showreel-contract.md
+  resolve-op55-tools/         paths, tools, banks, exact commands, licenses; references/output-contract.md
     scripts/
       render.mjs  verify.py   render a score, measure it
       preview.py              on request: a spectrogram video that plays with the cue

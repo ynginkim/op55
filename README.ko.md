@@ -161,9 +161,8 @@ export function compose({ bar, BEAT, ccRamp }) {
 ## showreel과 함께
 
 - op55는 [showreel](https://github.com/revfactory/showreel)의 음악 단계에서 출발했다. showreel은 한국어 모션그래픽 영상을 처음부터 끝까지 만드는 Claude 스킬이다.
-- showreel은 op55가 쓰는 두 파일을 이미 읽는다: `music.file`과 `timeline.py --music-analysis`.
-- showreel의 음악 단계는 `op55-compose`, `op55-render`, `op55-verify`를 직접 읽고 스크립트 경로를 `OP55_SCRIPTS`로 넘긴다.
-- 자세한 파일 계약은 [`showreel-contract.md`](skills/resolve-op55-tools/references/showreel-contract.md)에 있다.
+- op55가 쓰는 파일과 형식은 [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md)에 있다.
+- showreel이 op55를 부르고 그 파일을 쓰는 방법은 showreel 쪽 문서에 있다: [ynginkim/showreel](https://github.com/ynginkim/showreel) 포크의 [`references/op55.md`](https://github.com/ynginkim/showreel/blob/main/references/op55.md).
 
 ## 레포 구성
 
@@ -174,7 +173,7 @@ skills/
   op55-compose/               큐 시트, 격자, score.mjs. references/에 악보 API, 영상용 편곡
   op55-render/                WAV·분석·메타 렌더, 요청할 때만 미리보기 영상(references/preview.md)
   op55-verify/                verify.py의 숫자와 그림 판독(references/verify.md)
-  resolve-op55-tools/         경로, 도구, 뱅크, 실행 명령, 라이선스. references/showreel-contract.md
+  resolve-op55-tools/         경로, 도구, 뱅크, 실행 명령, 라이선스. references/output-contract.md
     scripts/
       render.mjs  verify.py   악보 렌더, 측정
       preview.py              요청할 때만: 음악과 함께 재생되는 스펙트로그램 영상
