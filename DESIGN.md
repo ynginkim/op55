@@ -1,6 +1,6 @@
 # op55 skillset 설계
 
-Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다. 같은 날 main에 들어온 PR #3(공개 준비 문서, CI, 회귀 테스트)을 이 브랜치에 merge했다(5ccd582). 공개 커밋 이메일은 이후 ynginkim@gmail.com으로 통일하기로 했다.
+Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다. 같은 날 main에 들어온 PR #3(공개 준비 문서, CI, 회귀 테스트)을 이 브랜치에 merge했다(5ccd582). 공개 커밋 이메일은 이후 ynginkim@gmail.com으로 통일하기로 했다. 2026-10-25에 showreel 연동 지식을 showreel로 옮기고, 이 저장소에는 op55가 쓰는 파일의 계약만 남겼다(아래 "연동 지식의 위치").
 
 ## 목표와 범위
 
@@ -8,7 +8,7 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 
 바꾸지 않은 것: 렌더 엔진(scripts/lib, scripts/vendor, DSP)의 바이트, score module API, 세 예제와 승인 hash(tools/regress.sha256), verify.py와 preview.py의 동작과 출력 형식. 파일은 위치만 옮겼다.
 
-이 저장소 밖의 소비자(video-creator의 SessionStart 훅과 CLAUDE.md, showreel의 preflight와 문서)는 이 저장소의 변경에 들어 있지 않다. video-creator는 같은 작업에서 그 저장소에 따로 반영하고, showreel은 후속 작업이다. 상태는 아래 이전 장부에 적는다.
+이 저장소 밖의 소비자(video-creator의 SessionStart 훅과 CLAUDE.md, showreel의 preflight와 문서)는 이 저장소의 변경에 들어 있지 않다. video-creator는 같은 작업에서 그 저장소에 따로 반영했다. showreel은 그 저장소의 브랜치에서 따로 정렬한다. 상태는 아래 이전 장부에 적는다.
 
 ## 판정 기준
 
@@ -40,13 +40,25 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 
 | 후보 | 처리와 이유 |
 | --- | --- |
-| bank 설치, score API, 편곡 기준, showreel 계약을 각각 별도 skill | resolve-op55-tools와 각 skill의 references로 충분. 따로 부를 일이 없다 |
+| bank 설치, score API, 편곡 기준, 출력 계약을 각각 별도 skill | resolve-op55-tools와 각 skill의 references로 충분. 따로 부를 일이 없다 |
 | 장르별 playbook | 장르는 편곡 기준이다. 단계가 같다 |
 | 검수용 두 번째 mode | 사람의 역할이 바뀌지 않는다. 사람은 마지막에 듣는 사람 한 역할이다 |
 | 음량·라이선스·결정성 규칙을 principle로 | 강제력이 낮아진다. 수행 skill의 필수 제약과 스크립트에 둔다 |
 | 운영 adapter(subagent, session lookup 등) | 필요한 운영 어휘가 셋 미만이다. render/verify/bank는 도메인 동작이라 세지 않는다 |
 | scripts를 skill마다 복사 | 정본이 갈라진다. resolve-op55-tools 한 곳에 두고 형제 경로로 읽는다 |
 | 이름을 `op55`로 유지(Q8 A안) | 사용자가 B안(`op55-mode`, `resolve-op55-tools/scripts`)을 골랐다 |
+
+### 연동 지식의 위치
+
+showreel이 op55를 쓴다. 쓰는 쪽이 연동 방법을 알고, 제공하는 쪽은 자기 출력만 정한다. 처음 옮길 때 showreel-contract.md에 showreel 내부 동작(preflight가 찾는 경로, timeline.py의 큐 이름, envelope 재계산, mix.py의 정규화)과 showreel 제작 순서를 같이 두었다. 그런데 showreel 정렬로 preflight를 고치자 그 설명이 곧바로 틀렸고, 제작 순서는 showreel SKILL.md 5단계와 두 곳에 있었다. 그래서 다음처럼 나눴다.
+
+| 내용 | 정본 |
+| --- | --- |
+| op55가 쓰는 파일과 형식, 경로 전달, meta 없는 격자 복구, 경계의 수락 기준 | 이 저장소의 `resolve-op55-tools/references/output-contract.md` |
+| showreel이 그 파일을 읽는 방식, preflight, 큐 이름, mix·finish, 작업 순서, 완성 영상의 음악 교체에서 화면 쪽 확인 | showreel의 `references/op55.md` |
+| `verify.py --mix`(showreel의 mix.py를 실행해 줄마다 목소리 대 배경을 잰다) | 이 저장소에 그대로 둔다. op55 코드가 showreel을 아는 유일한 곳이다. 동작과 검증이 끝났고, 옮기려면 두 저장소의 코드를 모두 바꿔야 한다. 이 측정이 showreel 변경으로 깨지면 showreel 쪽으로 옮긴다 |
+
+merge 순서는 showreel 먼저, 이 저장소 나중이다. 이 저장소가 먼저 들어가면 연동 지식이 어디에도 없는 구간이 생긴다. video-creator 훅이 op55 main을 바로 당겨 오기 때문이다.
 
 ## 원본 SKILL.md 대응표
 
@@ -83,10 +95,10 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 | references/score.md, arranging.md | skills/op55-compose/references/ | arranging.md 같음. score.md는 43줄의 그림 재사용 문장만 고침 |
 | references/preview.md | skills/op55-render/references/ | 폰트 경로 한 곳만 고침 |
 | references/verify.md | skills/op55-verify/references/ | 같음 |
-| references/showreel.md | skills/resolve-op55-tools/references/showreel-contract.md | 다시 씀: 경로 전달(OP55_SCRIPTS, --mix-py), 필드 표, 소비 hit·envelope 확인, meta 없는 교체 |
+| references/showreel.md | skills/resolve-op55-tools/references/output-contract.md | 다시 씀: op55가 쓰는 파일과 형식, 경로 전달, meta 없는 격자 복구. 처음에는 showreel-contract.md로 옮겼다가 2026-10-25에 showreel 쪽 내용을 showreel의 references/op55.md로 넘기고 이름을 바꿨다 |
 | skills/op55/SKILL.md | 위 대응표의 여러 SKILL.md | 지움 |
 
-score.md:43은 "격자가 1 ms 안에서 같으면 그림을 다시 렌더할 필요가 없다"고 했다. showreel의 timeline.py는 WAV에서 envelope를 다시 계산하고, hit가 추가되면 `music.hitN` 번호가 바뀐다. 그래서 격자 일치는 필요조건으로만 남기고 계약 문서를 가리키게 했다.
+score.md:43은 "격자가 1 ms 안에서 같으면 그림을 다시 렌더할 필요가 없다"고 했다. showreel의 timeline.py는 WAV에서 envelope를 다시 계산하고, hit가 추가되면 `music.hitN` 번호가 바뀐다. 그래서 격자 일치는 필요조건으로만 남기고 출력 계약 문서를 가리키게 했다. 화면이 무엇을 소비하는지는 영상 skillset이 확인한다.
 
 ## 보존 목록
 
@@ -124,8 +136,9 @@ leaf skill과 principle의 자동 호출은 `false`다.
 | video-creator tools/session-start.sh | skills/op55 한 폴더만 .claude/skills/op55로 링크, setup 경로 고정 | 배치와 무관한 훅으로 바꿈: 원본에서 사라진 스킬 링크를 지우고, op55/skills/*마다 링크하고, setup.mjs를 찾아 bank를 확인한다. merge 전에 반영 |
 | video-creator .claude/settings.json | 없음 | env `OP55_SCRIPTS`에 .claude/skills/resolve-op55-tools/scripts를 넣어 showreel preflight가 새 경로를 먼저 찾게 함. merge 전에 반영 |
 | video-creator CLAUDE.md, .gitignore | O=.claude/skills/op55/scripts, 예제 경로, 링크 한 개 | O를 .claude/skills/resolve-op55-tools/scripts로, 링크 여덟 개. 그 checkout을 새 main에 맞춘 뒤 반영 |
-| showreel scripts/preflight.py | 예전 이름의 scripts 후보 | 후속 작업(showreel 정렬). 그 전까지 op55를 부를 때 OP55_SCRIPTS 전달 |
-| showreel SKILL.md, references/audio.md, CUSTOM.md | "op55 스킬을 불러" | 후속 작업(showreel 정렬) |
+| showreel scripts/preflight.py | 예전 이름의 scripts 후보 | showreel 저장소의 fix/op55-eight-skills 브랜치에서 고침. 새 이름을 찾고, 예전 사본은 쓰지 않고 이전 방법을 안내한다. push·PR은 사용자 확인 뒤 |
+| showreel SKILL.md, README 두 개, references/audio.md, CUSTOM.md | "op55 스킬을 불러", 예전 설치·경로 | 같은 브랜치에서 고침. 새 references/op55.md가 showreel 쪽 op55 연동의 정본 |
+| 이 저장소의 showreel-contract.md와 showreel 내부를 설명하던 문장 | showreel의 preflight·큐 이름·mix·작업 순서 설명 | output-contract.md로 줄이고, 나머지 문서는 그 파일이나 showreel의 references/op55.md를 가리킴. showreel PR이 먼저 merge된 뒤 merge한다 |
 | 공개 설치자 | `npx skills add ynginkim/op55`로 skill 하나 | 같은 명령으로 여덟 개. 예전 사본은 `npx skills remove op55`(전역이면 `-g`) |
 
 video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 `pull --ff-only`로 당겨 온다. 훅과 CLAUDE.md 변경이 준비되기 전에 이 변경이 main에 들어가면, 다음 세션부터 .claude/skills/op55 링크가 끊어지고 showreel preflight가 사용자 전역의 예전 사본을 잡을 수 있다. 그래서 merge는 훅 변경 뒤에 한다. 2026-10-24 현재 그 checkout은 이메일 재작성 전 history(828990b)에 있어 fast-forward가 되지 않으므로, 훅이 저절로 새 main을 받지는 않는다. 트리는 재작성 뒤 커밋과 11개 모두 같아서 새 main에 맞춰도 잃는 내용이 없다.
@@ -139,7 +152,7 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 `p
 | S1 참조·frontmatter·색인·언어·오류 주입 | 적용 |
 | S2 설치 경계·등록된 사본 diff | 설치 경계 적용. 등록 사본 없음(copies 빔). checker 사본은 외부 원본이라 CHECKER-SOURCE.md의 hash로 관리 |
 | S3 adapter 소비 leaf의 제목 직후 포인터 | 적용: op55-compose, op55-render, op55-verify → resolve-op55-tools |
-| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, CONTRIBUTING, tools의 sh·py, workflow에서 금지. transition 2건(둘 다 showreel preflight 설명) |
+| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, CONTRIBUTING, tools의 sh·py, workflow에서 금지. transition 0건. 처음에는 showreel preflight 설명 2건이 있었고, showreel 정렬과 출력 계약 분리로 닫았다 |
 | S5 이전 장부 prune 검사 | 적용: rewritten 12건, pending 0건. 저장소 밖 소비자는 위 표 |
 | S6 CLI 스냅샷 대조 | 쓰지 않음. 명령은 resolve-op55-tools 표가 정본이고 실제 실행으로 확인 |
 | S7 install smoke | 적용 |
@@ -252,10 +265,10 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 | 실제 음악 품질 | unverified | 사용자가 렌더된 WAV를 전체 청취하고 질감·흐름·영상/대사 적합성을 판정 |
 | 새 세션 진입의 나머지 조합 | 일부 확인(사용자 결정으로 추가 시험 안 함) | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. 진입 문제가 보고되면 같은 설치본으로 각 1회 시험 |
 | op55-verify 위생 문장의 효과 | 문장만 넣음 | 다음 실제 제작 세션에서 verify 로그와 dbg/가 프로젝트 안에 남고 삭제 전에 묻는지 확인 |
-| GitHub 원격 설치 형식 | unverified | main 반영 뒤 `npx skills add ynginkim/op55`로 빈 프로젝트에 설치해 여덟 skill과 형제 참조 확인 |
+| GitHub 원격 설치 형식 | 확인함(cd7f370) | 빈 Git 프로젝트에 `npx skills@1.7.4 add ynginkim/op55 -a claude-code -a codex -y`: 여덟 skill과 링크 여덟 개, 형제 경로의 setup --check 통과, 설치본이 main의 skills/와 같고 meta-harness skill이 섞이지 않음. 기록은 PR #2 코멘트 |
 | 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. main merge 뒤(aa54639)에는 세 job을 로그로 확인했다. skillset(ubuntu): check 경고 0, selftest 49 tests, install smoke 8개·참조 114건. structural: 문법 검사와 test_regress. audio-regression(macos-15-arm64, Node 22.23.2, bank cache 복원 뒤 크기·SHA-256 확인): eroica, pstack-harness, starter 모두 ✓ |
-| SessionStart 훅 링크 | 모의 실행 확인 | 실제 video-creator에서 checkout을 새 main에 맞춘 뒤 훅을 돌려 여덟 링크, 예전 링크 삭제, showreel preflight의 OP55_SCRIPTS 선택 확인 |
-| showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
+| SessionStart 훅 링크 | 확인함(cd7f370) | 실제 video-creator에서 checkout을 새 main에 맞춘 뒤 훅을 돌림: 예전 op55 링크를 지우고 여덟 개를 링크, 모두 열림. CLAUDE.md의 O로 setup --check 통과, starter 렌더가 승인 hash와 같음. showreel preflight는 OP55_SCRIPTS가 있을 때만 새 경로를 찾았다(정렬 전). 기록은 PR #2 코멘트 |
+| showreel 경계 end-to-end | unverified | showreel 정렬이 merge된 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 showreel 쪽에서 확인 |
 | starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태, 사용자 결정으로 고치지 않음) | 예제를 고치기로 하면 소리를 바꾸고 승인 hash를 갱신한 뒤 사람이 청취 |
 | 다른 환경의 회귀 hash | unverified | Node 22, macOS arm64 밖의 환경에서 tools/regress.sh를 돌려 같은지 기록 |
 | bank 라이선스 최신성 | unverified | 결과물 배포 직전 공식 원문과 배포 hash 재확인 |
