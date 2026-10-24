@@ -45,7 +45,7 @@ jobs:
         run: |
           test "$(uname -m)" = arm64
           node -e 'if (process.platform !== "darwin" || process.arch !== "arm64" || process.versions.node.split(".")[0] !== "22") process.exit(1)'
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ${{ env.OP55_BANKS }}
           key: op55-banks-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('skills/resolve-op55-tools/scripts/lib/banks.mjs') }}
