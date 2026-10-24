@@ -215,16 +215,27 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 
 ### 새 세션 경로
 
-headless Claude Code·Codex 세션으로 자연어·명시 진입을 확인하는 시험은 실행하지 않았다. 실행 횟수를 사용자에게 먼저 묻는다.
+사용자가 경로 시험 2회와 실제 제작 1회를 승인했다. 세 세션 모두 install smoke로 만든 설치 프로젝트의 복사본에서 새로 시작했다. 프롬프트에는 skill 이름(명시 호출 시험 제외)이나 기대 playbook을 넣지 않았다. 사용자 전역과 프로필 skill 폴더에 예전 `op55` 사본은 없었다. 프로필에는 다른 skill 81개가 있었다.
+
+| 시험 | 요청 | 결과 |
+| --- | --- | --- |
+| Claude Code 자연어(`claude -p`, Claude Code 2.1.309, 요청 effort low, 실제 모델 claude-opus-5-5, 실제 effort는 기록에 없음) | 30초 제품 소개 BGM, 0:15 히트, 나레이션 없음. 단계 목록만 적고 멈추고 파일을 바꾸지 말 것 | 통과. Skill 도구로 `op55-mode`에 자동 진입했고 `playbooks/create-cue.md`를 도구(cat)로 읽었다. 원문 5단계를 그대로 적고 멈췄다. 파일 변경 없음. 4 turns, 24 s, 0.22 USD. todo 도구(TaskCreate)가 있었지만 쓰지 않고 텍스트 fallback(`단계 0/5:`)을 썼다. 도구 todo와 fallback은 같은 증거가 아니다 |
+| Codex 명시(`codex exec -s read-only`, CLI 0.160.1, 실제 모델 gpt-6.1-sol, effort low) | `$op55-mode` 완성된 홍보 영상의 음악 교체, 컷과 장면 유지. 단계 목록만 적고 멈추고 파일을 바꾸지 말 것 | 통과. mode 본문이 주입됐고 `playbooks/revise-cue.md`를 골라 cat으로 읽었다. 원문 5단계를 그대로 적고 시간 계약·장면 재렌더 승인 조건을 덧붙인 뒤 멈췄다. 파일 변경 없음. todo 도구는 쓰지 않고 텍스트 fallback |
+| Claude Code 실제 제작(`claude -p --permission-mode acceptEdits`, 실제 모델 claude-opus-5-5, effort 지정 없음) | 20초 앱 소개 BGM, 밝고 가벼운 전자음, 0:10 로고 히트, 나레이션 없음, 결과는 audio/music/ | 통과(에이전트 단계). 자연어로 `op55-mode` 진입, create-cue.md를 Read, TaskCreate에 원문 5단계를 그대로 넣었다. resolve-op55-tools → op55-compose(+principle-arrange-for-the-picture) → op55-render → op55-verify 순서로 SKILL.md를 읽었다. 1차 검수에서 Logo hit onset +20.38 ms ✗를 찾고 `--mute` 진단 렌더(dbg/)로 pad를 원인으로 지목해 score를 고친 뒤 재렌더했다. preview는 요청이 없어 `skip`. 최종 보고에 파일, 선택, 수치, N/A, credits, principle과 바뀐 결정, 납품 요청 문장이 있다. 59 turns, 11분 55초, 3.02 USD, 출력 59,137 tokens, cache read 3,070,512 tokens(사전 견적 0.5~1M보다 많음) |
+
+제작 결과는 세션의 보고를 그대로 쓰지 않고 따로 확인했다. 같은 score를 다시 렌더하면 SHA-256이 같다(313887e7…). verify.py를 다시 돌린 결과: -13.0 LUFS ✓, -1.3 dBTP ✓, clipping 0, DC 1e-6 미만, fade 뒤 무음, limiter 최대 2.00 dB ✓, grid 0.00 ms ✓, kick 20개 최대 1.31 ms ✓, Logo hit +2.21 ms ✓, Final chord +0.08 ms ✓, 순위 상관 +1.00 ✓, Logo 마디(bar 4)가 곡에서 가장 크고 직전보다 +8.6 dB. 파형과 스펙트로그램도 직접 열어 문제를 찾지 못했다. score에는 `Math.random`과 시계가 없고 `makeRng`를 쓴다. bank는 gm(drum kit 25)뿐이라 credit 줄이 없다. mix margin은 N/A다.
+
+제작 세션에서 본 위생 문제 두 가지가 있다. verify 출력을 프로젝트 밖 /tmp에 tee했다가 verify/로 복사했다. 끝에 자기가 만든 dbg/ 진단 폴더를 지웠다. 사용자 자산은 건드리지 않았지만 op55-verify에 "진단 출력과 로그는 프로젝트 안에 쓰고, 진단 폴더는 보고 뒤 사용자에게 지울지 묻는다" 같은 문장을 넣을지는 사용자가 정할 일로 남긴다. 사람 청취는 하지 않았다.
 
 ## 확인하지 못한 것
 
 | 항목 | 상태 | 닫을 조건 |
 | --- | --- | --- |
 | 실제 음악 품질 | unverified | 사용자가 렌더된 WAV를 전체 청취하고 질감·흐름·영상/대사 적합성을 판정 |
-| 새 세션의 자연어·명시 진입 | unverified | 설치본을 새 Claude Code와 Codex 세션에서 열어 op55-mode 진입, playbook Read, 원문 todo를 확인. 실행 횟수는 사용자 승인 |
+| 새 세션 진입의 나머지 조합 | 일부 확인 | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. todo 도구는 제작 세션에서만 썼고 경로 시험 두 번은 텍스트 fallback. 같은 설치본으로 각 1회 |
+| 제작 세션의 진단 파일 위생 | 관찰함 | /tmp 쓰기와 dbg/ 삭제를 막을 문장을 op55-verify에 넣을지 사용자가 결정 |
 | GitHub 원격 설치 형식 | unverified | main 반영 뒤 `npx skills add ynginkim/op55`로 빈 프로젝트에 설치해 여덟 skill과 형제 참조 확인 |
-| 원격 CI | unverified | push한 커밋에서 GitHub Actions check 워크플로 결과 확인 |
+| 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. ubuntu에서 check, selftest 49 tests, install smoke(8개, 참조 114건)가 실제로 돌았다 |
 | SessionStart 훅 링크 | unverified | video-creator 훅 변경 뒤 사본에서 훅을 실행해 모든 skill 링크와 setup 안내 확인 |
 | showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
 | starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태) | 예제를 고치는 별도 작업에서 소리를 바꾸고 승인 hash를 갱신 |
