@@ -1,6 +1,6 @@
 # Version and release policy
 
-`VERSION` is the repository version source. The current `0.1.0-dev` is unreleased. Do not interpret a document or a draft PR as a published release.
+`VERSION` is the repository version source. A version string alone does not publish a Git tag or release. Do not interpret a document or a draft PR as a published release.
 
 Use `vMAJOR.MINOR.PATCH` tags. Before 1.0, a breaking contract change increments MINOR; compatible additions increment MINOR and compatible fixes increment PATCH. Breaking changes include renamed/removed skills or playbooks, changed input/output formats, installation paths, required resources, or command/file contracts. Document migrations explicitly.
 
