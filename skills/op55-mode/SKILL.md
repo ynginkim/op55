@@ -55,7 +55,7 @@ WAV는 48 kHz, 24-bit, stereo다. 기본 master는 -13 LUFS이고 다이내믹�
 
 hard constraint는 각 수행 skill에 있다. 음악 생성 API·loop·라이선스 미확인 오디오 금지, `makeRng`를 쓰는 결정성, credits 전달이다. 이 mode가 그 제약을 완화하지 않는다. 유료 VO·SFX나 기존 영상 파일을 지우지 않는다. 외부 업로드와 게시는 별도 권한이다.
 
-showreel 같은 영상 skillset은 이 mode를 중첩해서 부르지 않는다. 그쪽 playbook이 음악 단계에서 세 작업 skill을 직접 읽고 scripts 경로를 `OP55_SCRIPTS`로 넘긴다. 파일 계약은 `../resolve-op55-tools/references/showreel-contract.md`에 있다.
+다른 영상 skillset은 이 mode를 중첩해서 부르지 않는다. 그쪽이 음악 단계에서 세 작업 skill을 직접 읽고 확인한 scripts 경로를 넘긴다. op55가 약속하는 공개 인터페이스와 출력 형식은 `../resolve-op55-tools/references/output-contract.md`에 있다. 그 파일을 영상에서 어떻게 쓰는지는 부르는 skillset의 문서가 정한다.
 
 ## 경험 남기기
 

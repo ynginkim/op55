@@ -32,12 +32,12 @@ pstack-harness (300 s, 120 BPM, A major) as a worked plan:
 
 ## Under narration
 
-showreel's `mix.py` ducks music under speech (700-4500 Hz deep, about -17 dB; the rest about -6.5 dB) and re-normalises it to -16 LUFS. Clear the speech band in the score anyway.
+A video's mix stage may duck the music under speech. Clear the speech band in the score anyway.
 
 - Under a voice: no busy lead between 300 and 4000 Hz. Drive with bass, sub, kick and ticks above 4 kHz. Pads low-passed at 500-1200 Hz; bells and glass rare and quiet. Sampled strings: low register (celli, violas, low violins) at expression 0.3-0.5, `Slow Strings` rather than `Fast Strings`.
 - In the gaps (`gaps`, pauses >= 1.2 s): open the pad cutoff 2x, `automation` +1.6 dB, a bell motif or a piano phrase. Even a 1.2 s pause should visibly rise in the numbers.
 - Music-only stretches (cold open, finale, end card) are the face of the cue: melody, brightness and layers are free.
-- Target: `verify.py --mix` shows every line ✓ (voice over bed >= 9 dB). pstack-harness: 41/41 ✓, minimum 13.0 dB.
+- Target: in the video's mix, the voice is at least 9 dB over the bed on every narration line. op55 does not measure this itself. pstack-harness: 41/41 lines, minimum 13.0 dB.
 
 ## Big hits and finales
 

@@ -16,7 +16,7 @@ export const key = 'D major';
 export const grid = { bpm: 120, t0: 0.5, beatsPerBar: 4, firstDownbeat: 0 };
 export const duration = 33.0;              // file length (s): 16 bars = 32 s + 0.5 s lead-in + tail
 
-// ---- 2) Sections and accents: analysis.json's hits (showreel's music.hitN cues) and verify.py's tables come from these ----
+// ---- 2) Sections and accents: analysis.json's hits (a video's hit cues) and verify.py's tables come from these ----
 export const sections = [
   { bar: 0, name: 'Intro', energy: 0.3 },
   { bar: 4, name: 'Build', energy: 0.55 },

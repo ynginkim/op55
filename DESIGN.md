@@ -1,14 +1,14 @@
 # op55 skillset 설계
 
-Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다. 같은 날 main에 들어온 PR #3(공개 준비 문서, CI, 회귀 테스트)을 이 브랜치에 merge했다(5ccd582). 공개 커밋 이메일은 이후 ynginkim@gmail.com으로 통일하기로 했다.
+Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 기준점 828990b는 history 재작성 전 hash이고 지금 main의 1aece78과 트리가 같다. 이 문서의 다른 커밋 hash는 재작성 뒤 값이다. 2026-10-24에 main에 들어온 PR #3(공개 준비 문서, CI, 회귀 테스트)을 이 브랜치에 merge했다(5ccd582). 2026-10-25에 op55를 특정 소비자를 모르는 독립 skillset으로 정리했다(아래 "공개 인터페이스와 소비자").
 
 ## 목표와 범위
 
 영상 BGM을 코드로 작곡하고 렌더·마스터링·검수까지 끝내는 기존 기능을 그대로 두고, 흐름(playbook), 수행(skill), 판단(principle), 이를 운용하는 mode로 나눈다. 공개 설치 명령 `npx skills add ynginkim/op55`는 바뀌지 않으며 여덟 skill이 한 벌로 설치된다.
 
-바꾸지 않은 것: 렌더 엔진(scripts/lib, scripts/vendor, DSP)의 바이트, score module API, 세 예제와 승인 hash(tools/regress.sha256), verify.py와 preview.py의 동작과 출력 형식. 파일은 위치만 옮겼다.
+바꾸지 않은 것: 렌더 엔진(scripts/lib, scripts/vendor, DSP)의 바이트, score module API, 세 예제와 승인 hash(tools/regress.sha256), verify.py와 preview.py의 동작과 출력 형식. 파일은 위치만 옮겼다. 그 뒤 2026-10-25에 verify.py의 `--mix`를 뺐다(아래 "공개 인터페이스와 소비자").
 
-이 저장소 밖의 소비자(video-creator의 SessionStart 훅과 CLAUDE.md, showreel의 preflight와 문서)는 이 저장소의 변경에 들어 있지 않다. video-creator는 같은 작업에서 그 저장소에 따로 반영하고, showreel은 후속 작업이다. 상태는 아래 이전 장부에 적는다.
+이 저장소 밖의 소비자는 이 저장소의 변경에 들어 있지 않다. 각 소비자가 자기 저장소에서 맞춘다.
 
 ## 판정 기준
 
@@ -29,8 +29,8 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 | playbook | `create-cue` | SKILL.md:34-49 | 새 cue는 그래프 전체를 지난다. 시작 파일이 브리프다 |
 | playbook | `revise-cue` | references/showreel.md:24-30, verify.md:27-43 | 기존 score·meta·영상 소비값에서 시작하고 재사용 범위를 먼저 정한다. 시작 파일과 무효화 범위가 create-cue와 다르다 |
 | skill | `resolve-op55-tools` | SKILL.md:10-21, scripts/, assets/, lib/banks.mjs | 경로·도구·bank·명령·비용·라이선스의 한 곳. scripts와 fonts를 원래 상대 배치로 한 벌 둔다 |
-| skill | `op55-compose` | SKILL.md:23-38, 51-69, references/score.md, arranging.md | cue sheet·격자·편곡·score 작성. showreel이 직접 읽는다 |
-| skill | `op55-render` | SKILL.md:39-43, 49, render.mjs, preview.py, references/preview.md | WAV·analysis·meta와 요청 시 preview. showreel이 직접 읽는다 |
+| skill | `op55-compose` | SKILL.md:23-38, 51-69, references/score.md, arranging.md | cue sheet·격자·편곡·score 작성. 다른 skillset이 직접 읽는다 |
+| skill | `op55-render` | SKILL.md:39-43, 49, render.mjs, preview.py, references/preview.md | WAV·analysis·meta와 요청 시 preview. 다른 skillset이 직접 읽는다 |
 | skill | `op55-verify` | SKILL.md:44-48, references/verify.md, verify.py | 출력 판독과 통과·미달·미측정·N/A 분류. 반복 결정은 playbook에 넘긴다 |
 | principle | `principle-protect-the-voice` | SKILL.md:65, arranging.md:33-40 | 나레이션 아래 음역·선율·밀도의 판단 |
 | principle | `principle-freeze-the-grid` | SKILL.md:37, score.md:43, showreel.md:25-30 | 기존 영상의 시간 계약을 바꿀지의 판단 |
@@ -40,7 +40,7 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 
 | 후보 | 처리와 이유 |
 | --- | --- |
-| bank 설치, score API, 편곡 기준, showreel 계약을 각각 별도 skill | resolve-op55-tools와 각 skill의 references로 충분. 따로 부를 일이 없다 |
+| bank 설치, score API, 편곡 기준, 출력 계약을 각각 별도 skill | resolve-op55-tools와 각 skill의 references로 충분. 따로 부를 일이 없다 |
 | 장르별 playbook | 장르는 편곡 기준이다. 단계가 같다 |
 | 검수용 두 번째 mode | 사람의 역할이 바뀌지 않는다. 사람은 마지막에 듣는 사람 한 역할이다 |
 | 음량·라이선스·결정성 규칙을 principle로 | 강제력이 낮아진다. 수행 skill의 필수 제약과 스크립트에 둔다 |
@@ -48,13 +48,27 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 | scripts를 skill마다 복사 | 정본이 갈라진다. resolve-op55-tools 한 곳에 두고 형제 경로로 읽는다 |
 | 이름을 `op55`로 유지(Q8 A안) | 사용자가 B안(`op55-mode`, `resolve-op55-tools/scripts`)을 골랐다 |
 
+### 공개 인터페이스와 소비자
+
+op55는 누가 자기를 쓰는지 모르는 공개 skillset이다. 약속하는 것은 `resolve-op55-tools/references/output-contract.md`의 공개 인터페이스뿐이다. 스킬 이름, 도구 경로와 `OP55_SCRIPTS`라는 이름, 명령 인자, 출력 파일, 버전이다. 소비자가 op55를 어떻게 쓰는지는 그 소비자의 저장소가 정한다.
+
+처음 옮길 때는 showreel-contract.md에 한 소비자의 내부 동작과 제작 순서를 같이 두었다. 그 소비자의 코드가 바뀌자 설명이 곧바로 틀렸고, 제작 순서는 두 저장소에 같이 적혀 있었다. 그래서 2026-10-25에 다음처럼 바꿨다.
+
+| 결정 | 이유 |
+| --- | --- |
+| output-contract.md에는 op55 쪽 약속만 둔다 | 제공하는 쪽이 소비자 내부를 설명하면 소비자가 바뀔 때마다 틀린다 |
+| `verify.py --mix`와 `--mix-py`를 뺐다 | 외부 영상 믹서를 실행해 그 줄별 표를 다시 요약했을 뿐이다. 믹서가 같은 표를 이미 출력한다. op55 코드가 특정 소비자를 아는 유일한 곳이었다 |
+| `metadata.version`과 `render.mjs --version`을 더했다 | 저장소의 VERSION은 설치본에 들어가지 않는다. 소비자가 실행할 때 쓴 버전을 기록할 수 있어야 한다. `tools/test_version.mjs`가 세 값이 같은지 본다 |
+| 기본 seed 문자열 `'showreel'`과 lib 주석은 그대로 둔다 | seed를 바꾸면 모든 렌더의 바이트가 달라져 승인 hash와 청취를 다시 해야 한다. lib 파일은 엔진 바이트를 건드리지 않으려고 주석도 그대로 둔다 |
+| README에서 showreel은 크레딧의 출처 설명에만 둔다 | op55가 시작된 계기라서 원본 저장소를 링크한다 |
+
 ## 원본 SKILL.md 대응표
 
 원본은 828990b의 skills/op55/SKILL.md(83줄)다. 줄마다 새 위치가 하나 이상 있다.
 
 | 원본 줄 | 내용 | 새 위치 |
 | --- | --- | --- |
-| 1-4 | name, description, 트리거 문구 | op55-mode description. 영어·한국어 트리거를 그대로 두고, showreel 음악 단계 트리거는 뺐다(showreel은 작업 skill을 직접 읽는다) |
+| 1-4 | name, description, 트리거 문구 | op55-mode description. 영어·한국어 트리거를 그대로 두고, 영상 skillset의 음악 단계 트리거는 뺐다(그쪽은 작업 skill을 직접 읽는다) |
 | 6-8 | 들을 수 없는 작곡가라는 역할 | op55-mode 첫 문단, op55-compose 첫 문단 |
 | 10 | `S` 정의 | resolve-op55-tools 경로 절 |
 | 12-21 | setup, bank, cache | resolve-op55-tools 도구·bank 절 |
@@ -71,7 +85,7 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 | 67 | sampled 싱크 지점 | op55-compose 지켜야 할 것, op55-verify onset |
 | 68 | credits | op55-compose, op55-render·op55-verify 반환, op55-mode 완료 |
 | 69 | 같은 문제가 두 번이면 기록 | op55-mode 경험 남기기, op55-compose와 op55-verify의 기록 문장 |
-| 71-73 | showreel 연결 | resolve-op55-tools/references/showreel-contract.md, op55-mode 경계 |
+| 71-73 | 영상 skillset 연결 | resolve-op55-tools/references/output-contract.md, op55-mode 경계 |
 | 75-83 | references 색인 | 각 reference를 소유한 skill의 본문 |
 
 ## 옮긴 파일과 바뀐 문서
@@ -83,10 +97,10 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 | references/score.md, arranging.md | skills/op55-compose/references/ | arranging.md 같음. score.md는 43줄의 그림 재사용 문장만 고침 |
 | references/preview.md | skills/op55-render/references/ | 폰트 경로 한 곳만 고침 |
 | references/verify.md | skills/op55-verify/references/ | 같음 |
-| references/showreel.md | skills/resolve-op55-tools/references/showreel-contract.md | 다시 씀: 경로 전달(OP55_SCRIPTS, --mix-py), 필드 표, 소비 hit·envelope 확인, meta 없는 교체 |
+| references/showreel.md | skills/resolve-op55-tools/references/output-contract.md | 다시 씀: 공개 인터페이스, op55가 쓰는 파일과 형식, 경로 전달, meta 없는 격자 복구. 처음에는 showreel-contract.md로 옮겼다가 2026-10-25에 소비자 내부 설명을 빼고 이름을 바꿨다 |
 | skills/op55/SKILL.md | 위 대응표의 여러 SKILL.md | 지움 |
 
-score.md:43은 "격자가 1 ms 안에서 같으면 그림을 다시 렌더할 필요가 없다"고 했다. showreel의 timeline.py는 WAV에서 envelope를 다시 계산하고, hit가 추가되면 `music.hitN` 번호가 바뀐다. 그래서 격자 일치는 필요조건으로만 남기고 계약 문서를 가리키게 했다.
+score.md:43은 "격자가 1 ms 안에서 같으면 그림을 다시 렌더할 필요가 없다"고 했다. 영상 쪽은 WAV에서 envelope를 다시 계산하거나 hit 번호에 장면을 걸 수 있고, hit가 추가되면 번호가 밀린다. 그래서 격자 일치는 필요조건으로만 남기고 출력 계약 문서를 가리키게 했다. 화면이 무엇을 소비하는지는 영상 skillset이 확인한다.
 
 ## 보존 목록
 
@@ -111,7 +125,7 @@ leaf skill과 principle의 자동 호출은 `false`다.
 
 ## 이전 장부
 
-예전 경로 skills/op55/와 진입 이름 `op55`를 가정하던 소비자다. 이 저장소 안의 것은 이번에 고쳤고 `skillset.json`의 migration.rewritten에 올렸다. 저장소 밖 소비자는 checker가 경로로 다룰 수 없어 이 표가 정본이다.
+예전 경로 skills/op55/와 진입 이름 `op55`를 가정하던 소비자다. 이 저장소 안의 것은 이번에 고쳤고 `skillset.json`의 migration.rewritten에 올렸다. 저장소 밖 소비자는 각자 자기 저장소에서 맞추므로, 이 표에는 공개 설치자만 적는다.
 
 | 소비자 | 가정하던 것 | 상태 |
 | --- | --- | --- |
@@ -121,14 +135,8 @@ leaf skill과 principle의 자동 호출은 `false`다.
 | skills/resolve-op55-tools/scripts/vendor/README.md | 재빌드 예시의 출력 경로 | 고침. 문서만 바꾸고 vendor 바이트는 그대로다. PR #3도 이 파일에 fflate 문장을 더했다 |
 | PR #3이 더한 CONTRIBUTING.md, tools/test_regress.py, .github/workflows/check.yml | skills/op55/scripts | 고침. check.yml은 main의 문법 검사·macOS 음질 회귀 job에 skillset job을 더한 한 파일이다. CONTRIBUTING.md에 skillset 검사 두 줄을 더했다 |
 | CHANGELOG.md | 없음(main에서 새로 생김) | Unreleased에 breaking 변경과 이전 방법을 적음. VERSION과 릴리스는 바꾸지 않음 |
-| video-creator tools/session-start.sh | skills/op55 한 폴더만 .claude/skills/op55로 링크, setup 경로 고정 | 배치와 무관한 훅으로 바꿈: 원본에서 사라진 스킬 링크를 지우고, op55/skills/*마다 링크하고, setup.mjs를 찾아 bank를 확인한다. merge 전에 반영 |
-| video-creator .claude/settings.json | 없음 | env `OP55_SCRIPTS`에 .claude/skills/resolve-op55-tools/scripts를 넣어 showreel preflight가 새 경로를 먼저 찾게 함. merge 전에 반영 |
-| video-creator CLAUDE.md, .gitignore | O=.claude/skills/op55/scripts, 예제 경로, 링크 한 개 | O를 .claude/skills/resolve-op55-tools/scripts로, 링크 여덟 개. 그 checkout을 새 main에 맞춘 뒤 반영 |
-| showreel scripts/preflight.py | 예전 이름의 scripts 후보 | 후속 작업(showreel 정렬). 그 전까지 op55를 부를 때 OP55_SCRIPTS 전달 |
-| showreel SKILL.md, references/audio.md, CUSTOM.md | "op55 스킬을 불러" | 후속 작업(showreel 정렬) |
+| `verify.py --mix`를 쓰던 호출 | 외부 믹서 실행과 줄별 요약 | 2026-10-25에 뺌. 호출하던 쪽은 자기 믹서의 줄별 표를 읽는다(CHANGELOG의 이전 방법) |
 | 공개 설치자 | `npx skills add ynginkim/op55`로 skill 하나 | 같은 명령으로 여덟 개. 예전 사본은 `npx skills remove op55`(전역이면 `-g`) |
-
-video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 `pull --ff-only`로 당겨 온다. 훅과 CLAUDE.md 변경이 준비되기 전에 이 변경이 main에 들어가면, 다음 세션부터 .claude/skills/op55 링크가 끊어지고 showreel preflight가 사용자 전역의 예전 사본을 잡을 수 있다. 그래서 merge는 훅 변경 뒤에 한다. 2026-10-24 현재 그 checkout은 이메일 재작성 전 history(828990b)에 있어 fast-forward가 되지 않으므로, 훅이 저절로 새 main을 받지는 않는다. 트리는 재작성 뒤 커밋과 11개 모두 같아서 새 main에 맞춰도 잃는 내용이 없다.
 
 ## 구조 검사 적용
 
@@ -139,7 +147,7 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 `p
 | S1 참조·frontmatter·색인·언어·오류 주입 | 적용 |
 | S2 설치 경계·등록된 사본 diff | 설치 경계 적용. 등록 사본 없음(copies 빔). checker 사본은 외부 원본이라 CHECKER-SOURCE.md의 hash로 관리 |
 | S3 adapter 소비 leaf의 제목 직후 포인터 | 적용: op55-compose, op55-render, op55-verify → resolve-op55-tools |
-| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, CONTRIBUTING, tools의 sh·py, workflow에서 금지. transition 2건(둘 다 showreel preflight 설명) |
+| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, CONTRIBUTING, tools의 sh·py, workflow에서 금지. transition 0건. 처음에는 한 소비자의 preflight를 설명하던 문장 2건이 있었고, 2026-10-25에 그 설명을 빼면서 닫았다 |
 | S5 이전 장부 prune 검사 | 적용: rewritten 12건, pending 0건. 저장소 밖 소비자는 위 표 |
 | S6 CLI 스냅샷 대조 | 쓰지 않음. 명령은 resolve-op55-tools 표가 정본이고 실제 실행으로 확인 |
 | S7 install smoke | 적용 |
@@ -243,7 +251,21 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 | CI structural 단계의 명령 | `node --check`(scripts의 모든 .mjs), `bash -n` 두 개, Python AST 검사 모두 통과 |
 | `tools/regress.sh` | exit 0. eroica, pstack-harness, starter 모두 ✓(Node v22.22.2, 69 s) |
 | `python3 scripts/install_smoke.py . --dest <새 폴더>` | exit 0. 8개 설치, playbook 4건과 참조 114건 열림. `diff -r skills/ <설치본>/.agents/skills/` 같음(fflate.LICENSE 포함) |
-| video-creator 훅 모의 실행 | 임시 폴더에 훅 사본, 가짜 showreel, op55 clone을 두고 돌림. 예전 배치(1aece78): 링크 변화 없음. 새 배치(PR head): 끊어진 op55 링크를 지우고 여덟 개를 링크, 모두 SKILL.md가 열림. 재실행: 출력 없음. bank가 없으면 새 setup 경로로 안내. 예전 배치로 되돌리면 다시 op55 하나. 모든 경우 exit 0 |
+
+### 공개 인터페이스 정리 뒤 재검증
+
+2026-10-25, 같은 기기, Node v22.22.2. main의 62ebdb8(#10, levels 검증)을 merge한 작업 트리에서 돌렸다.
+
+| 확인 | 결과 |
+| --- | --- |
+| `python3 scripts/check.py .` | 8 skills, 경고 0, transition 0 |
+| `python3 scripts/selftest.py`, `python3 tools/test_regress.py` | 모두 OK |
+| `node --test tools/test_engine.mjs tools/test_version.mjs` | 10 pass, 0 fail. VERSION, `metadata.version`, `render.mjs --version`이 같음 |
+| CI structural 단계의 문법 검사 | `node --check`(모든 .mjs), Python AST 모두 통과 |
+| `tools/regress.sh` | eroica, pstack-harness, starter 모두 ✓(44 s) |
+| `python3 scripts/install_smoke.py . --dest <새 폴더>` | 8개 설치, playbook 4건과 참조 114건 열림. 두 설치 경로 모두 `render.mjs --version`이 `op55 0.1.0` |
+| starter 렌더 뒤 verify.py | loudness, grid, onset, energy 줄이 전과 같이 나옴. `--mix`는 알 수 없는 인자로 거부됨 |
+| skills/ 안 소비자 이름 | 문서에는 없음. 남은 곳은 lib 주석과 기본 seed 문자열 |
 
 ## 확인하지 못한 것
 
@@ -252,10 +274,9 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 | 실제 음악 품질 | unverified | 사용자가 렌더된 WAV를 전체 청취하고 질감·흐름·영상/대사 적합성을 판정 |
 | 새 세션 진입의 나머지 조합 | 일부 확인(사용자 결정으로 추가 시험 안 함) | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. 진입 문제가 보고되면 같은 설치본으로 각 1회 시험 |
 | op55-verify 위생 문장의 효과 | 문장만 넣음 | 다음 실제 제작 세션에서 verify 로그와 dbg/가 프로젝트 안에 남고 삭제 전에 묻는지 확인 |
-| GitHub 원격 설치 형식 | unverified | main 반영 뒤 `npx skills add ynginkim/op55`로 빈 프로젝트에 설치해 여덟 skill과 형제 참조 확인 |
+| GitHub 원격 설치 형식 | 확인함(cd7f370) | 빈 Git 프로젝트에 `npx skills@1.7.4 add ynginkim/op55 -a claude-code -a codex -y`: 여덟 skill과 링크 여덟 개, 형제 경로의 setup --check 통과, 설치본이 main의 skills/와 같고 meta-harness skill이 섞이지 않음. 기록은 PR #2 코멘트 |
 | 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. main merge 뒤(aa54639)에는 세 job을 로그로 확인했다. skillset(ubuntu): check 경고 0, selftest 49 tests, install smoke 8개·참조 114건. structural: 문법 검사와 test_regress. audio-regression(macos-15-arm64, Node 22.23.2, bank cache 복원 뒤 크기·SHA-256 확인): eroica, pstack-harness, starter 모두 ✓ |
-| SessionStart 훅 링크 | 모의 실행 확인 | 실제 video-creator에서 checkout을 새 main에 맞춘 뒤 훅을 돌려 여덟 링크, 예전 링크 삭제, showreel preflight의 OP55_SCRIPTS 선택 확인 |
-| showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
+| 소비자 경계 end-to-end | unverified(이 저장소 밖) | 소비자 skillset이 자기 쪽에서 신규 제작과 기존 음악 교체를 화면이 소비하는 값까지 확인 |
 | starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태, 사용자 결정으로 고치지 않음) | 예제를 고치기로 하면 소리를 바꾸고 승인 hash를 갱신한 뒤 사람이 청취 |
 | 다른 환경의 회귀 hash | unverified | Node 22, macOS arm64 밖의 환경에서 tools/regress.sh를 돌려 같은지 기록 |
 | bank 라이선스 최신성 | unverified | 결과물 배포 직전 공식 원문과 배포 hash 재확인 |

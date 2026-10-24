@@ -1,6 +1,6 @@
 # Version and release policy
 
-`VERSION` is the repository version source. A version string alone does not publish a Git tag or release. Do not interpret a document or a draft PR as a published release.
+`VERSION` is the repository version source. Installs do not include it, so `skills/resolve-op55-tools/SKILL.md` carries the same number as `metadata.version`, and `render.mjs --version` prints it; `tools/test_version.mjs` checks that the three agree. Change them together. A version string alone does not publish a Git tag or release. Do not interpret a document or a draft PR as a published release.
 
 Use `vMAJOR.MINOR.PATCH` tags. Before 1.0, a breaking contract change increments MINOR; compatible additions increment MINOR and compatible fixes increment PATCH. Breaking changes include renamed/removed skills or playbooks, changed input/output formats, installation paths, required resources, or command/file contracts. Document migrations explicitly.
 
@@ -10,7 +10,7 @@ Use `vMAJOR.MINOR.PATCH` tags. Before 1.0, a breaking contract change increments
 - [ ] Check source notices, bundled resources, secrets, and third-party redistribution terms.
 - [ ] Verify clean installation at the intended ref and record runtime/tool versions.
 - [ ] Verify cross-repository compatibility at exact commit SHAs, including optional integrations.
-- [ ] Change VERSION to the release number and move Unreleased entries to a dated changelog section.
+- [ ] Change VERSION and `metadata.version` to the release number and move Unreleased entries to a dated changelog section.
 - [ ] Review release notes and obtain maintainer approval to publish.
 - [ ] Create the tag and GitHub release at the verified commit; do not move published tags.
 - [ ] Reinstall using the published tag and record the result.

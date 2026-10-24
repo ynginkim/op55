@@ -2,6 +2,8 @@
 name: resolve-op55-tools
 description: "op55 음악 작업의 실행 사실을 한 곳에서 확인한다. scripts 절대 경로, Node·Python·ffmpeg·Pillow, SoundFont bank 설치 상태, 그대로 쓸 명령, 비용·라이선스·오류 처리를 돌려준다. op55-compose, op55-render, op55-verify가 먼저 읽는다."
 disable-model-invocation: true
+metadata:
+  version: "0.1.0"
 ---
 
 # op55 도구 확인
@@ -19,7 +21,7 @@ test -f "$S/render.mjs" && test -f "$S/verify.py" && echo "$S"
 
 설치본 안의 배치를 바꾸지 않는다. `scripts/render.mjs`, `scripts/verify.py`, `scripts/preview.py`, `scripts/setup.mjs`, `scripts/banks.mjs`, `scripts/lib/`, `scripts/vendor/`, `scripts/examples/`, 그리고 preview용 `assets/fonts/`가 한 벌이다. preview.py는 scripts 폴더 옆의 assets/fonts를 읽으므로 두 폴더는 형제로 남아야 한다. 이 자원을 다른 skill에 복사하지 않는다.
 
-showreel 같은 다른 skillset이 op55를 부를 때는 확인한 `$S`를 `OP55_SCRIPTS="$S"`로 넘긴다. 이 값이 없으면 showreel preflight가 예전 폴더 이름(skills/op55/scripts)으로 후보를 찾다가 사용자 전역에 남은 이전 사본을 잡을 수 있다. 그러면 다른 버전의 엔진으로 렌더된다. 파일 계약은 `references/showreel-contract.md`에 있다.
+다른 skillset이 op55를 부를 때는 확인한 `$S`를 넘긴다(환경 변수로 넘기면 이름은 `OP55_SCRIPTS`다). 부르는 쪽이 scripts를 따로 찾으면 다른 곳에 남은 이전 사본을 잡아 다른 버전의 엔진으로 렌더할 수 있다. op55가 쓰는 파일과 형식은 `references/output-contract.md`에 있다. 그 파일을 영상에서 어떻게 쓰는지는 부르는 skillset의 문서에 있다.
 
 ## 도구
 
@@ -62,7 +64,6 @@ setup은 새로 받은 파일의 SHA-256을 확인한다. 이미 있는 파일�
 | 층 확인 | 렌더 명령 뒤에 `--stems a,b --stems-dir audio/music/stems` | stem마다 WAV 하나만큼 디스크 |
 | 원인 층 진단 | `node "$S/render.mjs" --score audio/music/score.mjs --mute <name> --no-analysis --out dbg/<name>.wav` | 진단 렌더마다 WAV 하나. 납품 폴더에 쓰지 않는다 |
 | 검수 | `python3 "$S/verify.py" audio/music/music.wav --analysis audio/music/analysis.json --waveform-png --spec 0,30` | 미측정. 실제 작업에서 시간을 기록 |
-| showreel test mix | 검수 명령 뒤에 `--mix timeline.json --mix-py "<showreel scripts>/mix.py"` | verify/mix_test.wav 하나 |
 | preview(요청 시만) | `python3 "$S/preview.py" audio/music/music.wav --check` | 1분 약 2.5 MB, 약 20초 |
 
 render.mjs는 score 모듈을 import해서 실행한다. 이번 작업에서 쓰지 않았거나 사용자가 주지 않은 score는 코드로 보고 먼저 읽는다.
