@@ -4,6 +4,8 @@ Changes are grouped using [Keep a Changelog](https://keepachangelog.com/en/1.1.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-24
+
 ### Added
 - Contribution, conduct, security, support, and release-readiness documentation.
 - A development version source and explicit release verification checklist.
@@ -11,4 +13,4 @@ Changes are grouped using [Keep a Changelog](https://keepachangelog.com/en/1.1.0
 ### Changed
 - README installation and third-party license guidance reviewed for reproducibility and scope.
 
-No `v0.1.0` code release is recorded here yet. `0.1.0-dev` is an unreleased preparation version, not a published release or compatibility guarantee. Existing history remains available in Git.
+This is the first versioned code release. Earlier development history remains available in Git. Cross-repository integration and model/media quality are not guaranteed by structural or installation checks.
