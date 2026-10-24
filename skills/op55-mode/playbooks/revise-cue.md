@@ -8,7 +8,7 @@
 4. 수치·그림·영상 경계와 mix를 다시 검수한다.
 5. 바뀐 것과 재사용 근거를 전달하고 청취를 요청한다.
 
-**1.** Read ../resolve-op55-tools/SKILL.md. 기존 score.mjs, music.meta.json, analysis.json, cue.md를 읽는다. 영상이 있으면 그 영상을 만든 skillset의 op55 연동 문서(showreel이면 `showreel/references/op55.md`)를 읽고 영상이 실제로 소비하는 값을 찾는다. 박·마디 큐, hit 번호, 음악 시작 시각, 음악 envelope에 반응하는 장면, 화면에 나오는 credits다. meta가 없는 기존 음악이면 Read ../resolve-op55-tools/references/output-contract.md 다음에 analysis.json이나 cue list에서 grid를 복구한다. meter가 자료에 없고 원본도 말하지 않으면 사용자에게 묻는다. 4/4를 가정하지 않는다.
+**1.** Read ../resolve-op55-tools/SKILL.md. 기존 score.mjs, music.meta.json, analysis.json, cue.md를 읽는다. 영상이 있으면 그 영상을 만든 skillset의 문서를 읽고 영상이 실제로 소비하는 값을 찾는다. 박·마디 큐, hit 번호, 음악 시작 시각, 음악 envelope에 반응하는 장면, 화면에 나오는 credits다. meta가 없는 기존 음악이면 Read ../resolve-op55-tools/references/output-contract.md 다음에 analysis.json이나 cue list에서 grid를 복구한다. meter가 자료에 없고 원본도 말하지 않으면 사용자에게 묻는다. 4/4를 가정하지 않는다.
 
 **2.** **principle-freeze-the-grid**를 적용한다. 피드백을 다음으로 나눈다.
 
@@ -22,7 +22,7 @@
 
 **3.** Read ../op55-compose/SKILL.md. 악보를 고친다. 나레이션이 바뀌었으면 **principle-protect-the-voice**, 화면 재질에 맞춘 변경이면 **principle-arrange-for-the-picture**를 적용한다. 이어서 Read ../op55-render/SKILL.md. 음악 파일을 다시 만든다. 유료 VO·SFX와 기존 영상 파일은 지우지 않는다.
 
-**4.** Read ../op55-verify/SKILL.md. 미달·미측정·N/A는 `playbooks/create-cue.md` 4단계와 같은 방법으로 다룬다. 영상이 있으면 새 analysis의 beats와 downbeats가 기존 큐와 1 ms 안에서 맞는지 본다. 바뀐 hit 번호와 그것을 쓰는 장면, 새 WAV의 envelope를 쓰는 장면을 대조한다. 나레이션이 있으면 `--mix`로 모든 줄을 다시 본다.
+**4.** Read ../op55-verify/SKILL.md. 미달·미측정·N/A는 `playbooks/create-cue.md` 4단계와 같은 방법으로 다룬다. 영상이 있으면 새 analysis의 beats와 downbeats가 기존 큐와 1 ms 안에서 맞는지 본다. 바뀐 hit 번호와 그것을 쓰는 장면, 새 WAV의 envelope를 쓰는 장면을 대조한다. 나레이션이 있으면 줄별 목소리 대 배경을 영상 쪽 mix에서 다시 재야 한다고 5단계 보고의 영상 쪽 할 일에 넣는다.
 
 **5.** 바뀐 파일, 다시 만든 것과 이유, 재사용한 것과 근거(같은 grid, 같은 hit 번호, envelope를 소비하지 않는 장면 등), 영상 쪽에서 다시 할 일(장면 렌더, mix, finish), verify 수치와 credits를 보고한다. 적용한 principle과 바뀐 결정 하나를 남기고 mode의 납품 요청 문장으로 청취를 요청한다.
 

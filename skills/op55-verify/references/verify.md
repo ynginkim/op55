@@ -4,7 +4,7 @@ You cannot hear the music, so you prove it. `verify.py` measures the WAV against
 
 ```bash
 python3 $S/verify.py audio/music/music.wav --analysis audio/music/analysis.json \
-  --waveform-png --spec 0,30,60 [--bars 36-44] [--mix timeline.json] [--out-dir audio/music/verify]
+  --waveform-png --spec 0,30,60 [--bars 36-44] [--out-dir audio/music/verify]
 ```
 
 ## Pass criteria
@@ -20,7 +20,6 @@ python3 $S/verify.py audio/music/music.wav --analysis audio/music/analysis.json 
 | `[energy]` bar table | The strongest accent's bar is the loudest and >= 2 dB above the bar before |
 | `--waveform-png` | One panel per accent: red = grid time, green = measured attack, blue = downbeats, grey = beats. Red and green coincide. All panels share one vertical scale, so hit sizes compare |
 | `--spec` | 20-s spectrograms from each listed second (a start at or past the end of a short cue is skipped with a note; use `--spec 0` for a cue under 30 s) (Read them): no vertical stripes (aliasing), no clicks, no holes; under narration 1.3-4 kHz stays dark |
-| `--mix` (showreel) | Every narration line ✓ (voice over bed >= 9 dB) |
 
 Example: `eroica.score.mjs` passes with -14.5 LUFS, -1.3 dBTP, LRA 9.2 LU, limiter max 3.7 dB, 52 kicks within 1.2 ms, 6 accents within 3.4 ms, rank correlation +0.96.
 
@@ -40,7 +39,7 @@ Example: `eroica.score.mjs` passes with -14.5 LUFS, -1.3 dBTP, LRA 9.2 LU, limit
 | A long tail of broadband hiss on the last chord | The `shimmer` fx through a long hall. Lower its gain (0.02-0.03) and `dec` |
 | `bank "x" is not installed` | `node $S/setup.mjs x` |
 | A narration line is △ or ✗ | Reduce 300-4000 Hz layers under it (plucks, arps, bells, sampled leads) or lower the pad cutoff; then nearby sound effects |
-| Beat analysis of the WAV drifts (showreel `music_tools.py analyze`) | Do not re-detect beats on op55 renders. Use the `analysis.json` op55 wrote; it is exact |
+| Beats re-detected from the WAV by another tool drift | Do not re-detect beats on op55 renders. Use the `analysis.json` op55 wrote; it is exact |
 
 ## Regression test (when changing `lib/`)
 

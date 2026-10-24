@@ -2,7 +2,7 @@
 """op55 verify.py: measure a rendered BGM (render.mjs output) against its own score.
 
   python3 verify.py <music.wav> [--analysis analysis.json] [--meta music.meta.json] [--out-dir DIR]
-                    [--bars 136-148] [--waveform-png [PNG]] [--spec 0,40,120] [--mix timeline.json]
+                    [--bars 136-148] [--waveform-png [PNG]] [--spec 0,40,120]
 
 Reads <wav-stem>.meta.json (written by render.mjs: grid, sections, accents, narration gaps, kick/boom onsets, master
 report) and prints:
@@ -14,8 +14,6 @@ report) and prints:
               the declared energy (rank correlation), and a per-bar table around the strongest accent (or --bars)
   --waveform-png  one panel per accent: waveform, beats (grey), downbeats (blue), accent (red), measured attack (green)
   --spec      spectrogram PNGs (20 s from each listed second)
-  --mix       (showreel projects) runs showreel's mix.py on the timeline into DIR/mix_test.wav and summarises
-              narration-over-bed per line. mix.py is found via --mix-py, $SHOWREEL_SCRIPTS, or a showreel skill install.
 Outputs go to --out-dir (default: <wav dir>/verify). Needs ffmpeg and numpy only.
 """
 import argparse
@@ -23,7 +21,6 @@ import json
 import re
 import struct
 import subprocess
-import sys
 import time
 import zlib
 from pathlib import Path
@@ -314,7 +311,7 @@ def waveform_png(x, meta, G, results, path):
     print(f"[waveform] wrote {path}")
 
 
-# ---------------------------------------------------------------- spectrograms, test mix
+# ---------------------------------------------------------------- spectrograms
 def spectrograms(wav, times, out):
     t0 = time.time() - 1
     for x in times:
@@ -327,41 +324,6 @@ def spectrograms(wav, times, out):
             print(f"[spec] {x:g} s: skipped (the cue is shorter; no file written)")
 
 
-def find_mix_py(timeline, given):
-    """showreel's mix.py: --mix-py, then $SHOWREEL_SCRIPTS, then a showreel skill install above the project or in ~/.claude"""
-    import os
-    cands = [given] if given else []
-    if os.environ.get("SHOWREEL_SCRIPTS"):
-        cands.append(Path(os.environ["SHOWREEL_SCRIPTS"]) / "mix.py")
-    for d in [Path(timeline).resolve().parent, *Path(timeline).resolve().parents]:
-        cands.append(d / ".claude/skills/showreel/scripts/mix.py")
-    cands.append(Path.home() / ".claude/skills/showreel/scripts/mix.py")
-    return next((Path(c) for c in cands if c and Path(c).exists()), None)
-
-
-def test_mix(timeline, wav, out, mix_py=None):
-    mix_py = find_mix_py(timeline, mix_py)
-    if not mix_py:
-        print("[mix] showreel mix.py not found (pass --mix-py PATH or set SHOWREEL_SCRIPTS)"); return
-    tl = json.loads(Path(timeline).read_text())
-    mf = (tl.get("music") or {}).get("file")
-    if mf:
-        mp = Path(mf) if Path(mf).is_absolute() else Path(timeline).resolve().parent / mf
-        if mp.resolve() != Path(wav).resolve():
-            print(f"[mix] ! timeline music.file is {mp}, not the verified WAV; the test mix uses the timeline's file")
-    dst = out / "mix_test.wav"
-    r = subprocess.run([sys.executable, str(mix_py), str(timeline), "--out", str(dst)], capture_output=True, text=True)
-    (out / "mix_test_report.txt").write_text(r.stdout + r.stderr)
-    rows = [(m.group(1), float(m.group(2)), m.group(3)) for m in re.finditer(r"^(\S+)\s+(-?[\d.]+)dB\s+(✓|△|✗)", r.stdout, re.M)]
-    if not rows:
-        print("[mix] no narration table (no narration, or mix.py failed); see " + str(out / "mix_test_report.txt")); return
-    lo = min(rows, key=lambda v: v[1]); hi = max(rows, key=lambda v: v[1])
-    bad = [f"{i} {d:.1f}dB {m}" for i, d, m in rows if m != "✓"]
-    print(f"[mix] {len(rows)} narration lines: {sum(1 for v in rows if v[2] == '✓')} ✓ · VO over bed min {lo[1]:.1f} dB ({lo[0]}) · max {hi[1]:.1f} dB ({hi[0]})"
-          + (f" · not ✓: {', '.join(bad)}" if bad else ""))
-    print(f"[mix] {dst}  (report: {out / 'mix_test_report.txt'})")
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("wav")
@@ -371,8 +333,6 @@ def main():
     ap.add_argument("--bars", help="per-bar loudness table for bars A-B (default: around the strongest accent)")
     ap.add_argument("--waveform-png", nargs="?", const="", help="PNG of every accent with the grid marked (default name in --out-dir)")
     ap.add_argument("--spec", help="comma-separated start seconds for 20-s spectrograms")
-    ap.add_argument("--mix", help="showreel timeline.json for a test mix through showreel's mix.py")
-    ap.add_argument("--mix-py", help="path to showreel's scripts/mix.py (default: $SHOWREEL_SCRIPTS or an installed showreel skill)")
     a = ap.parse_args()
     wav = Path(a.wav).resolve()
     out = Path(a.out_dir).resolve() if a.out_dir else wav.parent / "verify"
@@ -393,8 +353,6 @@ def main():
         waveform_png(x, meta, G, results, Path(a.waveform_png) if a.waveform_png else out / "hits_waveform.png")
     if a.spec:
         spectrograms(wav, [float(v) for v in a.spec.split(",")], out)
-    if a.mix:
-        test_mix(a.mix, wav, out, a.mix_py)
 
 
 if __name__ == "__main__":

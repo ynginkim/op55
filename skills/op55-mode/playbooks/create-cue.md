@@ -8,7 +8,7 @@
 4. 수치·그림·해당되는 mix를 검수하고 필요한 수정을 반복한다.
 5. 파일과 credits, 검사 결과를 전달하고 사람의 청취를 요청한다.
 
-**1.** Read ../resolve-op55-tools/SKILL.md. `$S`, 도구, bank를 확인한다. 브리프에서 길이 또는 timeline, 꼭 맞을 지점, 나레이션 여부와 줄별 시간, 분위기를 채운다. 직접 정할 수 없는 필수 정보만 한 번에 하나 묻는다. 이 cue에 해당하는 필수 검사와 N/A가 될 항목을 미리 적는다(나레이션이 없으면 mix margin, synth kick이 없으면 kick onset). 이미 있는 영상의 격자를 지켜야 하거나 기존 cue를 고치는 요청이면 `playbooks/revise-cue.md`로 바꾼다.
+**1.** Read ../resolve-op55-tools/SKILL.md. `$S`, 도구, bank를 확인한다. 브리프에서 길이 또는 timeline, 꼭 맞을 지점, 나레이션 여부와 줄별 시간, 분위기를 채운다. 직접 정할 수 없는 필수 정보만 한 번에 하나 묻는다. 이 cue에 해당하는 필수 검사와 N/A가 될 항목을 미리 적는다(synth kick이 없으면 kick onset). 이미 있는 영상의 격자를 지켜야 하거나 기존 cue를 고치는 요청이면 `playbooks/revise-cue.md`로 바꾼다.
 
 **2.** Read ../op55-compose/SKILL.md. 나레이션이 있으면 **principle-protect-the-voice**, palette와 강세에는 **principle-arrange-for-the-picture**를 적용한다. 반환된 cue.md, score.mjs, 정하지 못한 입력을 확인한다. 기준점이나 meter를 정하지 못했으면 3단계로 가지 않고 묻는다.
 
@@ -17,7 +17,7 @@
 **4.** Read ../op55-verify/SKILL.md. 반환된 상태표를 이렇게 다룬다.
 
 - 미달: 원인 후보가 편곡이나 score 값(층 gain, `lead`, 시작 시각, `levels`)이면 2단계에서 고치고 3단계부터 다시 한다. 같은 score의 재렌더로 풀리는 문제(bank 설치 후 등)면 3단계로 돌아간다.
-- 미측정: 경로나 옵션을 고쳐 op55-verify만 다시 부른다(`--spec` 시작점, `--mix-py` 경로).
+- 미측정: 경로나 옵션을 고쳐 op55-verify만 다시 부른다(예: `--spec` 시작점).
 - N/A: 이유와 대체 확인을 5단계 보고로 옮긴다. 다시 렌더하지 않는다.
 
 필수 미달·미측정이 남으면 5단계로 가지 않는다. 수정을 거듭해도 같은 항목이 나아지지 않으면 멈추고 시도한 것과 수치를 보고해 사용자의 판단을 받는다. 끝내 고칠 수 없는 항목은 5단계 보고의 앞 문장에 적는다.
