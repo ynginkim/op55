@@ -61,6 +61,8 @@ Ask for it and op55 turns any cue into a video like these (`preview.py`): the sp
 
 ## Install
 
+The pinned [`skills@1.7.4` installer](https://github.com/vercel-labs/skills/blob/v1.7.4/package.json) requires **Node ≥ 22.20.0**. The op55 renderer itself requires Node ≥ 18; use Node ≥ 22.20.0 for the complete install-and-render workflow.
+
 ```bash
 npx skills@1.7.4 add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
 ```
@@ -95,13 +97,22 @@ On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont bank
 
 ### The orchestra
 
+A **soundbank** supplies the instrument sounds, not the composition. The score says which note to play, when, and how hard; a SoundFont (`.sf2`) bank contains recorded samples and rules mapping pitch and velocity to those sounds. It is neither a finished track nor an AI model. The same score can sound different with another bank. op55 also has synthesized voices: the synth `piano` is separate from the sampled `upright` and `grand` pianos below.
+
 | Bank | What | License | Size |
 | --- | --- | --- | --- |
 | `gm` | [GeneralUser GS 2.0.3](https://github.com/mrbumpy409/GeneralUser-GS): the full GM/GS set, 13 drum kits | Free for private and commercial music | 32 MB |
 | `upright` | [Upright Piano KW](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html) (FreePats): a Kawai upright in a living room | CC0 | 56 MB |
 | `grand` | [Salamander Grand Piano V3](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html): Yamaha C5, 16 velocity layers (optional) | CC BY 3.0, credit required | 1.2 GB |
 
-op55 never uses audio whose license it has not checked. When a cue needs a credit line, `music.meta.json` says so.
+The default setup downloads `gm` and `upright`; `grand` is optional. The banks keep their own licenses, separate from op55's MIT code. See [THIRD_PARTY.md](THIRD_PARTY.md) for the terms and the GeneralUser sample-provenance limitation; checking a license is not independent clearance of every original sample. When a cue needs a credit line, `music.meta.json` records it. This does not automatically publish the credit in your video or upload description; include the required attribution where you distribute the result.
+
+#### `banks-v1` versus `v0.1.0`
+
+- [`v0.1.0`](https://github.com/ynginkim/op55/releases/tag/v0.1.0) versions the op55 code and skill.
+- [`banks-v1`](https://github.com/ynginkim/op55/releases/tag/banks-v1) is a separate **sound-data distribution**, not op55 version 1.0. Its release assets host gzip-compressed `gm` and `upright` SF2 files plus their source/license notices, keeping large sound files out of the Git source tree.
+
+Setup uses `banks-v1` as its primary download location, extracts the files into `~/.cache/op55/banks`, and checks their SHA-256 hashes. `grand` is downloaded separately from FreePats, not from `banks-v1`. The release's automatic “Source code” ZIP/TAR files are GitHub's source snapshots, not the soundbank downloads. See [RELEASING.md](RELEASING.md) for the separate code and bank-release process.
 
 ### A score, abridged
 
