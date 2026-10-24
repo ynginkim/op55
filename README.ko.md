@@ -81,7 +81,7 @@ npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a c
 
 > 이 제품 영상에 60초짜리 배경음악 만들어줘. 따뜻하게, 피아노랑 현악기로. 0:12와 0:48에 히트, 나레이션은 0:05~0:40.
 
-이런 요청이면 `op55-mode`가 알아서 시작된다. 이름으로 부르려면 Claude Code에서 `/op55-mode`, Codex에서 `$op55-mode`를 쓴다. 나머지 일곱 개는 mode나 showreel 같은 다른 스킬 세트가 부르며 혼자 부르지 않는다.
+이런 요청이면 `op55-mode`가 알아서 시작된다. 이름으로 부르려면 Claude Code에서 `/op55-mode`, Codex에서 `$op55-mode`를 쓴다. 나머지 일곱 개는 mode나 다른 스킬 세트가 부르며 혼자 부르지 않는다.
 
 처음 쓸 때 Claude가 `resolve-op55-tools`의 `setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55/banks`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다(선택 기능인 미리보기 영상에는 Pillow도 필요하다).
 
@@ -158,11 +158,11 @@ export function compose({ bar, BEAT, ccRamp }) {
   rank correlation energy vs loudness: +0.96 ✓
 ```
 
-## showreel과 함께
+## 다른 스킬 세트에서 쓰기
 
-- op55는 [showreel](https://github.com/revfactory/showreel)의 음악 단계에서 출발했다. showreel은 한국어 모션그래픽 영상을 처음부터 끝까지 만드는 Claude 스킬이다.
-- op55가 쓰는 파일과 형식은 [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md)에 있다.
-- showreel이 op55를 부르고 그 파일을 쓰는 방법은 showreel 쪽 문서에 있다: [ynginkim/showreel](https://github.com/ynginkim/showreel) 포크의 [`references/op55.md`](https://github.com/ynginkim/showreel/blob/main/references/op55.md).
+- 영상 스킬 세트는 op55를 음악 단계로 쓸 수 있다. `op55-mode`를 부르지 않고 `op55-compose`, `op55-render`, `op55-verify`를 직접 읽고, 확인한 scripts 폴더를 넘긴다.
+- op55가 약속하는 것(스킬 이름, 도구 경로, 명령 인자, 출력 파일, 버전)과 각 파일의 형식은 [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md)에 있다.
+- 설치된 버전은 `node <scripts>/render.mjs --version`으로 확인한다.
 
 ## 레포 구성
 
@@ -201,7 +201,7 @@ DESIGN.md                     이렇게 나눈 이유와 검증 기록
 
 ## 크레딧
 
-- **엔진:** [showreel 포크](https://github.com/ynginkim/showreel)에서 처음 만들어 이곳으로 옮겼다. 코드는 MIT다.
+- **시작과 엔진:** op55는 [showreel](https://github.com/revfactory/showreel)에서 시작했다. showreel은 모션그래픽 영상을 처음부터 끝까지 만드는 Claude 스킬이다. 배경 음악을 외부 음악 생성 API로 만들었는데, 영상마다 그 비용이 가장 많이 나왔다. 그 호출을 대신해 Claude가 코드로 작곡하고 로컬에서 렌더하자는 아이디어가 op55의 시작이다. 엔진 코드는 MIT다.
 - **샘플러:** spessasus의 [spessasynth_core](https://github.com/spessasus/spessasynth_core)(Apache-2.0). 라이선스와 함께 `skills/resolve-op55-tools/scripts/vendor/`에 넣었다.
 - **뱅크:**
   - GeneralUser GS: S. Christian Collins

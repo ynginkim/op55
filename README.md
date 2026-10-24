@@ -73,7 +73,7 @@ Then ask:
 
 > Make a 60-second background track for this product video. Warm, piano and strings, hits at 0:12 and 0:48, narration from 0:05 to 0:40.
 
-A request like this starts `op55-mode` by itself. To call it by name, type `/op55-mode` in Claude Code or `$op55-mode` in Codex. The other seven skills are called by the mode (or by another skillset such as showreel), not on their own.
+A request like this starts `op55-mode` by itself. To call it by name, type `/op55-mode` in Claude Code or `$op55-mode` in Codex. The other seven skills are called by the mode (or by another skillset), not on their own.
 
 On first use Claude runs `setup.mjs` from `resolve-op55-tools`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55/banks`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg (plus Pillow for the optional preview video).
 
@@ -149,9 +149,9 @@ Full example: [`eroica.score.mjs`](skills/resolve-op55-tools/scripts/examples/er
   rank correlation energy vs loudness: +0.96 ✓
 ```
 
-## With showreel
+## From another skillset
 
-op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. The files op55 writes and their shapes are in [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md). How showreel calls op55 and uses those files is documented in showreel, in [`references/op55.md`](https://github.com/ynginkim/showreel/blob/main/references/op55.md) of the [ynginkim/showreel](https://github.com/ynginkim/showreel) fork.
+A video skillset can use op55 as its music step. It reads `op55-compose`, `op55-render` and `op55-verify` directly instead of running `op55-mode`, and passes the scripts folder it confirmed. [`output-contract.md`](skills/resolve-op55-tools/references/output-contract.md) lists what op55 promises: skill names, tool paths, command-line flags, output files and the version. It also gives the shape of each file. `node <scripts>/render.mjs --version` prints the installed version.
 
 ## Repo
 
@@ -196,7 +196,7 @@ mode 1개, playbook 2개, skill 4개, principle 3개 (설치 단위 8개).
 
 ## Credits
 
-- **Engine:** written for the [showreel fork](https://github.com/ynginkim/showreel) and moved here. The code is MIT.
+- **Origin and engine:** op55 began with [showreel](https://github.com/revfactory/showreel), a Claude skill that makes motion-graphics videos end to end. Its background music came from an external music-generation API, and that was the most expensive step of each video. op55 started as the idea of replacing that call: Claude composes the cue in code and renders it locally. The engine code is MIT.
 - **Sampler:** [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus, Apache-2.0. It is vendored, with its license, in `skills/resolve-op55-tools/scripts/vendor/`.
 - **Banks:**
   - GeneralUser GS by S. Christian Collins
