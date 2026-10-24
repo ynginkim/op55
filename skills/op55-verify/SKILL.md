@@ -19,7 +19,7 @@ python3 "$S/verify.py" audio/music/music.wav --analysis audio/music/analysis.jso
 ```
 
 - `--spec` 시작점은 cue 안에 있어야 한다. 30초 미만 cue는 `--spec 0`을 쓴다. 넓은 범위가 필요하면 `--bars 36-44`, 출력 폴더는 `--out-dir`.
-- showreel 프로젝트면 `--mix timeline.json --mix-py "<showreel scripts>/mix.py"`를 붙인다. 계약은 `../resolve-op55-tools/references/showreel-contract.md`에 있다.
+- showreel 프로젝트면 `--mix timeline.json --mix-py "<showreel scripts>/mix.py"`를 붙인다. `--mix-py`가 없으면 verify.py는 `$SHOWREEL_SCRIPTS`, timeline 위쪽 폴더의 `.claude/skills/showreel`, 홈 폴더의 `.claude/skills/showreel` 순서로 mix.py를 찾는다. showreel 쪽 작업 순서는 `showreel/references/op55.md`에 있다.
 - 출력한 PNG(`hits_waveform.png`, `spec_*.png`)는 Read 도구로 직접 연다. 열지 않은 그림은 검사하지 않은 것이다.
 - verify 출력, 로그, 진단 렌더(dbg/)는 프로젝트 안에 쓰고 /tmp 같은 프로젝트 밖에 쓰지 않는다. 진단 폴더는 보고한 뒤 사용자에게 지울지 묻고, 묻기 전에 지우지 않는다.
 

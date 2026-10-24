@@ -29,16 +29,7 @@
       "skills/op55/"
     ],
     "exceptions": {},
-    "transitions": {
-      "skills/resolve-op55-tools/SKILL.md": {
-        "reason": "showreel preflight.py still searches the old folder name; this paragraph explains why OP55_SCRIPTS must be passed.",
-        "close_when": "showreel alignment makes preflight.py find resolve-op55-tools/scripts and the old-path sentence is removed."
-      },
-      "skills/resolve-op55-tools/references/showreel-contract.md": {
-        "reason": "Lists showreel preflight.py's current fallback candidates, which use the old folder name.",
-        "close_when": "showreel alignment changes preflight.py's candidates and this list is updated."
-      }
-    }
+    "transitions": {}
   },
   "migration": {
     "rewritten": [
@@ -46,7 +37,7 @@
       "tools/art/demo-video.sh",
       "skills/op55-compose/references/score.md",
       "skills/op55-render/references/preview.md",
-      "skills/resolve-op55-tools/references/showreel-contract.md",
+      "skills/resolve-op55-tools/references/output-contract.md",
       "README.md",
       "README.ko.md",
       "THIRD_PARTY.md",

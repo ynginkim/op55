@@ -19,7 +19,7 @@ test -f "$S/render.mjs" && test -f "$S/verify.py" && echo "$S"
 
 설치본 안의 배치를 바꾸지 않는다. `scripts/render.mjs`, `scripts/verify.py`, `scripts/preview.py`, `scripts/setup.mjs`, `scripts/banks.mjs`, `scripts/lib/`, `scripts/vendor/`, `scripts/examples/`, 그리고 preview용 `assets/fonts/`가 한 벌이다. preview.py는 scripts 폴더 옆의 assets/fonts를 읽으므로 두 폴더는 형제로 남아야 한다. 이 자원을 다른 skill에 복사하지 않는다.
 
-showreel 같은 다른 skillset이 op55를 부를 때는 확인한 `$S`를 `OP55_SCRIPTS="$S"`로 넘긴다. 이 값이 없으면 showreel preflight가 예전 폴더 이름(skills/op55/scripts)으로 후보를 찾다가 사용자 전역에 남은 이전 사본을 잡을 수 있다. 그러면 다른 버전의 엔진으로 렌더된다. 파일 계약은 `references/showreel-contract.md`에 있다.
+다른 skillset이 op55를 부를 때는 확인한 `$S`를 넘긴다(showreel은 `OP55_SCRIPTS`로 받는다). 부르는 쪽이 scripts를 따로 찾으면 다른 곳에 남은 이전 사본을 잡아 다른 버전의 엔진으로 렌더할 수 있다. op55가 쓰는 파일과 형식은 `references/output-contract.md`에 있다. 그 파일을 영상에서 어떻게 쓰는지는 부르는 skillset의 문서에 있다.
 
 ## 도구
 
