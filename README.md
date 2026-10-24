@@ -113,9 +113,9 @@ A **soundbank** supplies the instrument sounds, not the composition. The score s
 
 The default setup downloads `gm` and `upright`; `grand` is optional. The banks keep their own licenses, separate from op55's MIT code. See [THIRD_PARTY.md](THIRD_PARTY.md) for the terms and the GeneralUser sample-provenance limitation; checking a license is not independent clearance of every original sample. When a cue needs a credit line, `music.meta.json` records it. This does not automatically publish the credit in your video or upload description; include the required attribution where you distribute the result.
 
-#### `banks-v1` versus `v0.1.0`
+#### `banks-v1` versus code versions
 
-- [`v0.1.0`](https://github.com/ynginkim/op55/releases/tag/v0.1.0) versions the op55 code and skill.
+- Code [releases](https://github.com/ynginkim/op55/releases) tagged `vMAJOR.MINOR.PATCH` version the op55 code and skill. An install reports its version with `node <scripts>/render.mjs --version`.
 - [`banks-v1`](https://github.com/ynginkim/op55/releases/tag/banks-v1) is a separate **sound-data distribution**, not op55 version 1.0. Its release assets host gzip-compressed `gm` and `upright` SF2 files plus their source/license notices, keeping large sound files out of the Git source tree.
 
 Setup uses `banks-v1` as its primary download location, extracts the files into `~/.cache/op55/banks`, and checks their SHA-256 hashes. `grand` is downloaded separately from FreePats, not from `banks-v1`. The release's automatic “Source code” ZIP/TAR files are GitHub's source snapshots, not the soundbank downloads. See [RELEASING.md](RELEASING.md) for the separate code and bank-release process.
