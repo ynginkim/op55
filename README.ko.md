@@ -161,7 +161,7 @@ skills/op55/
     examples/                 starter(합성), eroica(샘플 + 합성), pstack-harness(300초, 합성)
     vendor/                   spessasynth_core 4.3.22 번들(Apache-2.0)
   assets/fonts/               미리보기용 Instrument Serif, JetBrains Mono(OFL)
-tools/                        regress.sh(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
+tools/                        regress.sh(대조), regress.sha256(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
 ```
 
 ## 로드맵
@@ -194,6 +194,6 @@ MIT covers original code, not third-party banks, fonts, or vendor code. Read [TH
 
 [기여 안내](CONTRIBUTING.md) · [행동강령](CODE_OF_CONDUCT.md) · [보안 제보](SECURITY.md) · [도움받기](SUPPORT.md) · [변경 기록](CHANGELOG.md) · [버전·릴리스](RELEASING.md)
 
-현재 준비 버전은 `0.1.0-dev`이며 `v0.1.0` 코드 릴리스를 발행했다는 뜻이 아니다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
+소스 버전은 [VERSION](VERSION)에서, 발행된 태그·릴리스는 [GitHub Releases](https://github.com/ynginkim/op55/releases)에서 확인한다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
 
 [하네스 패밀리](https://github.com/ynginkim/harness-family) 공통 철학과 목록. 비공개 저장소는 접근 권한이 있는 계정에서만 열린다.
