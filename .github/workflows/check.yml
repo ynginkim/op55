@@ -6,7 +6,7 @@ jobs:
   structural:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -20,6 +20,8 @@ jobs:
           find skills/resolve-op55-tools/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
           bash -n tools/regress.sh
           bash -n tools/release-banks.sh
+      - name: Test the render engine
+        run: node --test tools/test_engine.mjs
       - name: Check Python syntax without importing optional dependencies
         run: |
           python3 - <<'PYTHON'
@@ -35,7 +37,7 @@ jobs:
     env:
       OP55_BANKS: ${{ github.workspace }}/.regress/banks
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -69,7 +71,7 @@ jobs:
   skillset:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-python@v7

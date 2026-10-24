@@ -19,6 +19,8 @@ Keep bank/resource release tags separate from code releases. In op55, `banks-v1`
 
 ## Reproducible installation
 
+The pinned [`skills@1.7.4` installer](https://github.com/vercel-labs/skills/blob/v1.7.4/package.json) requires Node.js >= 22.20.0. This installer requirement is separate from the op55 renderer's Node.js >= 18 requirement.
+
 The skills installer parses a quoted `owner/repo#REF` as a Git ref. `@name` selects a skill, not a version. Use a published tag or full 40-character commit SHA; do not advertise a tag before it exists. Pin the installer itself, for example `npx skills@1.7.4 add 'owner/repo#FULL_COMMIT_SHA'`, replacing the source with the verified repository and SHA.
 
 The `1.7.4` parser and clone behavior were reviewed in [source-parser.ts](https://github.com/vercel-labs/skills/blob/v1.7.4/src/source-parser.ts) and [git.ts](https://github.com/vercel-labs/skills/blob/v1.7.4/src/git.ts). Private repositories still require existing Git access; do not create or paste access tokens into commands, documents, or issues.

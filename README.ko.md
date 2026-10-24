@@ -69,6 +69,8 @@ https://github.com/user-attachments/assets/cb2ac109-c193-44be-9398-9627b86ca8a6
 
 ## 설치
 
+고정된 [`skills@1.7.4` 설치 도구](https://github.com/vercel-labs/skills/blob/v1.7.4/package.json)는 **Node ≥ 22.20.0**을 요구한다. op55 렌더러 자체의 요구 사항은 Node ≥ 18이지만, 설치부터 렌더까지 하려면 Node ≥ 22.20.0을 사용한다.
+
 ```bash
 npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
 ```
@@ -110,13 +112,22 @@ npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a c
 
 ### 악기 뱅크
 
+**사운드뱅크는 작곡된 곡이 아니라 악기의 소리 재료다.** 악보가 어떤 음을 언제 얼마나 세게 연주할지 정한다면, SoundFont(`.sf2`) 뱅크는 실제 악기를 녹음한 샘플과 음높이·타건 세기에 따른 재생 규칙을 제공한다. 완성된 음악이나 AI 모델이 아니며, 같은 악보도 뱅크에 따라 음색이 달라진다. op55에는 파형으로 만드는 합성 악기도 있다. 합성 `piano`와 아래의 샘플 피아노 `upright`·`grand`는 서로 다르다.
+
 | 뱅크 | 무엇 | 라이선스 | 크기 |
 | --- | --- | --- | --- |
 | `gm` | [GeneralUser GS 2.0.3](https://github.com/mrbumpy409/GeneralUser-GS): GM/GS 전체, 드럼 키트 13종 | 개인·상업 음악에 자유롭게 사용 | 32MB |
 | `upright` | [Upright Piano KW](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html)(FreePats): 거실에서 녹음한 가와이 업라이트 | CC0 | 56MB |
 | `grand` | [Salamander Grand Piano V3](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html): 야마하 C5, 벨로시티 16단(선택) | CC BY 3.0, 크레딧 필요 | 1.2GB |
 
-op55는 라이선스를 확인하지 않은 소리를 쓰지 않는다. 크레딧이 필요한 큐면 `music.meta.json`에 그 문구가 적힌다.
+기본 설치는 `gm`과 `upright`를 내려받고, `grand`는 선택 설치다. 외부 뱅크에는 op55 코드의 MIT와 별개인 원래 라이선스가 적용된다. 조건과 GeneralUser 샘플 원출처의 한계는 [THIRD_PARTY.md](THIRD_PARTY.md)를 참고한다. 라이선스 문서 확인이 모든 원본 샘플의 권리관계 검증을 뜻하지는 않는다. 필요한 크레딧은 `music.meta.json`에 기록되지만 영상이나 업로드 설명에 자동 게시되지는 않는다. 결과물을 배포하는 곳에 필요한 고지를 포함해야 한다.
+
+#### `banks-v1`과 `v0.1.0`의 차이
+
+- [`v0.1.0`](https://github.com/ynginkim/op55/releases/tag/v0.1.0)은 op55 코드와 스킬의 버전이다.
+- [`banks-v1`](https://github.com/ynginkim/op55/releases/tag/banks-v1)은 별도의 **음원 데이터 배포 묶음**이며 op55 프로그램 1.0을 뜻하지 않는다. 대용량 음원을 Git 소스 트리에 넣지 않고, gzip으로 압축한 `gm`·`upright` SF2와 출처·라이선스 문서를 릴리스 첨부파일로 제공한다.
+
+설치 코드는 `banks-v1`을 주 다운로드 경로로 사용하고, 받은 파일을 `~/.cache/op55/banks`에 풀어 SHA-256을 검사한다. `grand`는 이 릴리스에 없고 FreePats에서 별도로 받는다. 릴리스에 자동으로 표시되는 “Source code” ZIP/TAR는 GitHub의 소스 스냅샷이지 악기 뱅크 다운로드가 아니다. 코드와 뱅크를 따로 배포하는 절차는 [RELEASING.md](RELEASING.md)에 있다.
 
 ### 악보 한 토막
 
