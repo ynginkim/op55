@@ -1,0 +1,68 @@
+name: Check audio harness
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  structural:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check JavaScript and shell syntax
+        run: |
+          find skills/op55/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
+          bash -n tools/regress.sh
+          bash -n tools/release-banks.sh
+      - name: Check Python syntax without importing optional dependencies
+        run: |
+          python3 - <<'PYTHON'
+          import ast
+          from pathlib import Path
+          for path in Path('skills/op55/scripts').rglob('*.py'):
+              ast.parse(path.read_text(), filename=str(path))
+          PYTHON
+      - run: python3 tools/test_regress.py
+  audio-regression:
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      OP55_BANKS: ${{ github.workspace }}/.regress/banks
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify approved regression platform
+        run: |
+          test "$(uname -m)" = arm64
+          node -e 'if (process.platform !== "darwin" || process.arch !== "arm64" || process.versions.node.split(".")[0] !== "22") process.exit(1)'
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.OP55_BANKS }}
+          key: op55-banks-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('skills/op55/scripts/lib/banks.mjs') }}
+      - name: Install default banks
+        run: node skills/op55/scripts/setup.mjs
+      - name: Verify cached bank bytes
+        run: |
+          node --input-type=module <<'JS'
+          import { createHash } from 'node:crypto';
+          import { readFileSync } from 'node:fs';
+          import { BANKS, bankPath } from './skills/op55/scripts/lib/banks.mjs';
+          for (const [id, bank] of Object.entries(BANKS)) {
+            if (!bank.default) continue;
+            const bytes = readFileSync(bankPath(id));
+            const hash = createHash('sha256').update(bytes).digest('hex');
+            if (bytes.length !== bank.bytes || hash !== bank.sha256) throw new Error(`Bank integrity failed: ${id}`);
+          }
+          JS
+      - name: Compare rendered WAVs to approved hashes
+        run: bash tools/regress.sh

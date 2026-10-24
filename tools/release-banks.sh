@@ -7,5 +7,10 @@ for f in GeneralUser-GS-2.0.3.sf2 UprightPianoKW-20220221.sf2; do   # the 1.2 GB
   [ -s "$OUT/$f.gz" ] || gzip -9 -c "$DIR/$f" > "$OUT/$f.gz"
   ls -la "$OUT/$f.gz"
 done
-gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "SoundFont banks v1" --notes "Mirrors of the banks op55's setup.mjs installs, gzip-compressed. Licenses: GeneralUser GS License v2.0 (free for private and commercial music), Upright Piano KW CC0 1.0. setup.mjs checks each file's SHA-256 after unpacking. The Salamander grand is fetched from FreePats directly."
-gh release upload "$TAG" "$OUT"/*.gz --clobber
+# Keep original terms and provenance beside the mirrored sounds.
+NOTICES=(licenses/banks/GeneralUser-GS-LICENSE.txt licenses/banks/Upright-Piano-KW-NOTICE.txt licenses/banks/BANK-SOURCES.txt licenses/banks/CC0-1.0.txt)
+for notice in "${NOTICES[@]}"; do
+  test -s "$notice" || { echo "Missing bank notice: $notice" >&2; exit 1; }
+done
+gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "SoundFont banks v1" --notes "Mirrors of the banks op55's setup.mjs installs, gzip-compressed. Licenses: GeneralUser GS License v2.0 (free for private and commercial music), Upright Piano KW CC0 1.0. setup.mjs checks each file's SHA-256 after unpacking. Read the attached original license and source notices, including GeneralUser sample-origin uncertainty. The Salamander grand is fetched from FreePats directly."
+gh release upload "$TAG" "$OUT"/*.gz "${NOTICES[@]}" --clobber

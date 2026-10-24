@@ -11,3 +11,5 @@ npx esbuild@0.25 node_modules/spessasynth_core/dist/index.js --bundle --format=e
 ```
 
 After an upgrade, run `tools/regress.sh`: the sampled example's hash will tell you whether the sound changed.
+
+The published spessasynth_core 4.3.22 also embeds fflate. Preserve fflate.LICENSE (MIT, Arjun Barrett) alongside both Apache-2.0 license files when rebuilding.
