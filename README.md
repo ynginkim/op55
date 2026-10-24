@@ -6,7 +6,7 @@ A Claude skillset. No music APIs, no loops, no stock tracks. Same score, same by
 </p>
 
 <p align="center">
-<img alt="npx skills add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
+<img alt="npx skills@1.7.4 add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
 <img alt="Claude Opus 5.5" src="https://img.shields.io/badge/composed%20by-Claude%20Opus%205.5-efe6d6?style=for-the-badge&labelColor=0a0908">
 <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-a99d8a?style=for-the-badge&labelColor=0a0908">
 </p>
@@ -62,7 +62,7 @@ Ask for it and op55 turns any cue into a video like these (`preview.py`): the sp
 ## Install
 
 ```bash
-npx skills add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
+npx skills@1.7.4 add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
 ```
 
 This installs eight skills as one set: the entry point [`op55-mode`](skills/op55-mode/SKILL.md), four work skills and three principles. Keep them together: they read each other through sibling folders, and the render scripts live in one of them (`resolve-op55-tools`).
@@ -73,9 +73,9 @@ Then ask:
 
 A request like this starts `op55-mode` by itself. To call it by name, type `/op55-mode` in Claude Code or `$op55-mode` in Codex. The other seven skills are called by the mode (or by another skillset such as showreel), not on their own.
 
-On first use Claude runs `setup.mjs` from `resolve-op55-tools`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg (plus Pillow for the optional preview video).
+On first use Claude runs `setup.mjs` from `resolve-op55-tools`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55/banks`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg (plus Pillow for the optional preview video).
 
-**Upgrading from the single `op55` skill.** The entry used to be `/op55`; it is now `/op55-mode`. Run the `add` command again to get the new set, then remove the old copy so it cannot shadow the new one: `npx skills remove op55` in the project, or `npx skills remove -g op55` if you installed it globally. Your scores and the bank cache are not touched.
+**Upgrading from the single `op55` skill.** The entry used to be `/op55`; it is now `/op55-mode`. Run the `add` command again to get the new set, then remove the old copy so it cannot shadow the new one: `npx skills@1.7.4 remove op55` in the project, or `npx skills@1.7.4 remove -g op55` if you installed it globally. Your scores and the bank cache are not touched.
 
 ## How it works
 
@@ -96,7 +96,7 @@ On first use Claude runs `setup.mjs` from `resolve-op55-tools`, which downloads 
 - **Deterministic.**
   - Every random choice comes from a named, seeded stream.
   - The same score, seed and banks give the same WAV byte for byte.
-  - `tools/regress.sh` holds the approved hashes.
+  - `tools/regress.sha256` holds the approved hashes.
 - **Verified, then heard.** `verify.py` writes the numbers and pictures, Claude fixes what they show, and a human listens last.
 
 ### The orchestra
@@ -161,7 +161,7 @@ skills/
       vendor/                 spessasynth_core 4.3.22, bundled (Apache-2.0)
     assets/fonts/             Instrument Serif, JetBrains Mono (OFL) for previews
   principle-*/                protect the voice, freeze the grid, arrange for the picture
-tools/                        regress.sh (approved hashes), art/ (README art: prompts, compositor, demo video)
+tools/                        regress.sh (checks), regress.sha256 (approved hashes), art/ (README art: prompts, compositor, demo video)
 scripts/                      skillset structure checks (check.py, selftest.py, install_smoke.py); not installed
 DESIGN.md                     why the skills are split this way, and the verification record
 ```
@@ -195,3 +195,15 @@ mode 1개, playbook 2개, skill 4개, principle 3개 (설치 단위 8개).
   - Generated with Codex's imagegen. The prompts are in `tools/art/prompts`.
   - Typography is composited in code (`tools/art/compose.mjs`).
 - **Music:** Ludwig van Beethoven, Symphony No. 3 in E-flat, Op. 55 (1804), public domain. Dedicated, eventually, to the memory of a great man.
+
+## License scope
+
+MIT covers original code, not third-party banks, fonts, or vendor code. Read [THIRD_PARTY.md](THIRD_PARTY.md) and the original notices in [licenses/banks](licenses/banks) before redistribution.
+
+## 기여와 버전
+
+[기여 안내](CONTRIBUTING.md) · [행동강령](CODE_OF_CONDUCT.md) · [보안 제보](SECURITY.md) · [도움받기](SUPPORT.md) · [변경 기록](CHANGELOG.md) · [버전·릴리스](RELEASING.md)
+
+소스 버전은 [VERSION](VERSION)에서, 발행된 태그·릴리스는 [GitHub Releases](https://github.com/ynginkim/op55/releases)에서 확인한다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
+
+[하네스 패밀리](https://github.com/ynginkim/harness-family) 공통 철학과 목록. 비공개 저장소는 접근 권한이 있는 계정에서만 열린다.

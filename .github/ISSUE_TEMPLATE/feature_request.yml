@@ -1,0 +1,27 @@
+name: Feature request
+description: Propose a focused change to an execution or judgment contract.
+body:
+  - type: dropdown
+    id: basis
+    attributes:
+      label: Primary basis
+      options:
+        - Playbook (flow)
+        - Skill (execution)
+        - Principle (judgment)
+        - Mode composition or tooling
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Need and expected outcome
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Contract and compatibility
+      description: Describe affected inputs, outputs, names, install paths, alternatives, and a way to verify success.
+    validations:
+      required: true

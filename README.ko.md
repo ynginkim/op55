@@ -6,7 +6,7 @@ Claude 스킬 세트. 음악 생성 API도, 루프도, 스톡 음원도 쓰지 �
 </p>
 
 <p align="center">
-<img alt="npx skills add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
+<img alt="npx skills@1.7.4 add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
 <img alt="Claude Opus 5.5" src="https://img.shields.io/badge/composed%20by-Claude%20Opus%205.5-efe6d6?style=for-the-badge&labelColor=0a0908">
 <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-a99d8a?style=for-the-badge&labelColor=0a0908">
 </p>
@@ -70,7 +70,7 @@ https://github.com/user-attachments/assets/cb2ac109-c193-44be-9398-9627b86ca8a6
 ## 설치
 
 ```bash
-npx skills add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
+npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
 ```
 
 스킬 여덟 개가 한 벌로 설치된다. 입구인 [`op55-mode`](skills/op55-mode/SKILL.md), 작업 스킬 넷, 판단 원칙 셋이다. 서로 형제 폴더로 읽고 렌더 스크립트는 그중 하나(`resolve-op55-tools`)에 들어 있으니 함께 둔다.
@@ -81,9 +81,9 @@ npx skills add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-
 
 이런 요청이면 `op55-mode`가 알아서 시작된다. 이름으로 부르려면 Claude Code에서 `/op55-mode`, Codex에서 `$op55-mode`를 쓴다. 나머지 일곱 개는 mode나 showreel 같은 다른 스킬 세트가 부르며 혼자 부르지 않는다.
 
-처음 쓸 때 Claude가 `resolve-op55-tools`의 `setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다(선택 기능인 미리보기 영상에는 Pillow도 필요하다).
+처음 쓸 때 Claude가 `resolve-op55-tools`의 `setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55/banks`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다(선택 기능인 미리보기 영상에는 Pillow도 필요하다).
 
-**예전 단일 `op55` 스킬에서 옮겨 올 때.** 입구 이름이 `/op55`에서 `/op55-mode`로 바뀌었다. `add` 명령을 다시 실행해 새 세트를 받은 뒤, 예전 사본이 새 스킬을 가리지 않도록 지운다. 프로젝트에 설치했으면 `npx skills remove op55`, 전역에 설치했으면 `npx skills remove -g op55`다. 악보와 뱅크 캐시는 그대로 남는다.
+**예전 단일 `op55` 스킬에서 옮겨 올 때.** 입구 이름이 `/op55`에서 `/op55-mode`로 바뀌었다. `add` 명령을 다시 실행해 새 세트를 받은 뒤, 예전 사본이 새 스킬을 가리지 않도록 지운다. 프로젝트에 설치했으면 `npx skills@1.7.4 remove op55`, 전역에 설치했으면 `npx skills@1.7.4 remove -g op55`다. 악보와 뱅크 캐시는 그대로 남는다.
 
 ## 동작 방식
 
@@ -173,7 +173,7 @@ skills/
       vendor/                 spessasynth_core 4.3.22 번들(Apache-2.0)
     assets/fonts/             미리보기용 Instrument Serif, JetBrains Mono(OFL)
   principle-*/                대사 먼저, 격자 고정, 영상에 맞춘 편곡
-tools/                        regress.sh(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
+tools/                        regress.sh(대조), regress.sha256(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
 scripts/                      스킬 세트 구조 검사(check.py, selftest.py, install_smoke.py). 설치되지 않는다
 DESIGN.md                     이렇게 나눈 이유와 검증 기록
 ```
@@ -201,3 +201,15 @@ DESIGN.md                     이렇게 나눈 이유와 검증 기록
   - Codex imagegen으로 생성했다. 프롬프트는 `tools/art/prompts`에 있다.
   - 글자는 코드로 합성했다(`tools/art/compose.mjs`).
 - **음악:** 루트비히 판 베토벤, 교향곡 3번 E♭장조 Op. 55(1804), 퍼블릭 도메인. 결국 "한 위대한 인물의 추억을 기리며" 헌정되었다.
+
+## License scope
+
+MIT covers original code, not third-party banks, fonts, or vendor code. Read [THIRD_PARTY.md](THIRD_PARTY.md) and the original notices in [licenses/banks](licenses/banks) before redistribution.
+
+## 기여와 버전
+
+[기여 안내](CONTRIBUTING.md) · [행동강령](CODE_OF_CONDUCT.md) · [보안 제보](SECURITY.md) · [도움받기](SUPPORT.md) · [변경 기록](CHANGELOG.md) · [버전·릴리스](RELEASING.md)
+
+소스 버전은 [VERSION](VERSION)에서, 발행된 태그·릴리스는 [GitHub Releases](https://github.com/ynginkim/op55/releases)에서 확인한다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
+
+[하네스 패밀리](https://github.com/ynginkim/harness-family) 공통 철학과 목록. 비공개 저장소는 접근 권한이 있는 계정에서만 열린다.

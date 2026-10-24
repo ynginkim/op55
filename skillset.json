@@ -20,7 +20,10 @@
       "README.md",
       "README.ko.md",
       "THIRD_PARTY.md",
-      "tools/**/*.sh"
+      "CONTRIBUTING.md",
+      "tools/**/*.sh",
+      "tools/**/*.py",
+      ".github/workflows/*.yml"
     ],
     "forbidden": [
       "skills/op55/"
@@ -34,10 +37,6 @@
       "skills/resolve-op55-tools/references/showreel-contract.md": {
         "reason": "Lists showreel preflight.py's current fallback candidates, which use the old folder name.",
         "close_when": "showreel alignment changes preflight.py's candidates and this list is updated."
-      },
-      "skills/resolve-op55-tools/scripts/vendor/README.md": {
-        "reason": "Vendor bytes are kept unchanged in this restructure; the rebuild example still names the old output path.",
-        "close_when": "The next vendor rebuild commit updates the --outfile path to skills/resolve-op55-tools/scripts/vendor/."
       }
     }
   },
@@ -50,7 +49,11 @@
       "skills/resolve-op55-tools/references/showreel-contract.md",
       "README.md",
       "README.ko.md",
-      "THIRD_PARTY.md"
+      "THIRD_PARTY.md",
+      "skills/resolve-op55-tools/scripts/vendor/README.md",
+      "CONTRIBUTING.md",
+      "tools/test_regress.py",
+      ".github/workflows/check.yml"
     ],
     "pending": []
   },

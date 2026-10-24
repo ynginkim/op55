@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a reproducible problem without secrets or private project data.
+body:
+  - type: input
+    id: product
+    attributes:
+      label: Component and version or commit
+    validations:
+      required: true
+  - type: textarea
+    id: installation
+    attributes:
+      label: Installation and environment
+      description: Include install command, agent, OS, Node and Python versions. Remove tokens and personal paths.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Use synthetic inputs. Never paste .env files, credentials, private learning records, or customer material.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
