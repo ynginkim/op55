@@ -116,6 +116,8 @@ Level guide: a sampled part at `gain` 1 and vel 0.6 sits close to the synth `pia
 ## Loudness shape, automation, master, space
 
 - `levels.points` are relative LU targets per bar span. The renderer measures each span, trims it toward the shape (clamped ±9 dB), applies `automation(t, gDb)`, then normalises the whole file. Leave room: quiet sections -8 to -10, big ones -2 to 0.
+- The renderer stops if a `levels.points` bar or `levels.end` is past `duration`, and the error names that field, the bar, its time, and `duration`.
+- Each `levels` span, from a point to the next point, `levels.end`, or `duration`, must have a positive duration.
 - `automation(t, g)` returns the gain (dB) at time `t` given the `levels` trim `g`. Typical: `+1.6` in narration gaps, `-3` for the eighth note before a big arrival.
 - `master.lufs` -13 is the default for delivery; a dynamic orchestral cue can sit at -14 to -15 to keep its transients.
 - `space.hall` sets the shared hall. Orchestral cues like a longer one (`len 4.2, rtMid 2.7`).

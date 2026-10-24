@@ -60,6 +60,17 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
   const grid = makeGrid(mod.grid);
   const out = await mod.compose(toolkit(grid));
   const events = out.events || {};
+  const levels = out.levels || mod.levels || null;
+  if (levels && levels.points && levels.points.length) {
+    for (const [bar] of levels.points) {
+      const t = grid.bar(bar);
+      if (t > mod.duration) throw new Error(`levels.points bar ${bar} (${t} s) is past duration ${mod.duration} s`);
+    }
+    if (levels.end != null) {
+      const t = grid.bar(levels.end);
+      if (t > mod.duration) throw new Error(`levels.end bar ${levels.end} (${t} s) is past duration ${mod.duration} s`);
+    }
+  }
   const N = Math.round(mod.duration * SR);
   const mx = new Mixer(N, stems);
   const GAIN = { ...DEFAULT_MIX, ...(mod.mix || {}) };
@@ -100,13 +111,13 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
       else throw new Error(`master.eq: unknown band ${type}`);
     }
   }
-  const levels = out.levels || mod.levels || null;
   let segs = [{ k: null, target: 0, t0: 0, t1: mod.duration, trim: 0 }];
   if (levels && levels.points && levels.points.length) {
     const P = levels.points, end = levels.end ?? null;
     const z = blockPower(L, R);
     segs = P.map(([k, target], i) => ({ k, target, t0: Math.max(0, grid.bar(k)), t1: i + 1 < P.length ? grid.bar(P[i + 1][0]) : (end != null ? grid.bar(end) : mod.duration) }));
     for (const s of segs) {
+      if (!(s.t1 > s.t0)) throw new Error(`levels bar ${s.k} (${s.t0} s to ${s.t1} s) requires a positive duration`);
       let sum = 0, c = 0;
       for (let b = Math.ceil((s.t0 + 0.4) * 10); b + 1 <= s.t1 * 10; b++) { let p = 0; for (let j = b - 3; j <= b; j++) p += z[j]; sum += p / 4; c++; }
       s.meas = lufsOf(sum / Math.max(1, c));
