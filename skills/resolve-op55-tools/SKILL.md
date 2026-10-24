@@ -3,7 +3,7 @@ name: resolve-op55-tools
 description: "op55 음악 작업의 실행 사실을 한 곳에서 확인한다. scripts 절대 경로, Node·Python·ffmpeg·Pillow, SoundFont bank 설치 상태, 그대로 쓸 명령, 비용·라이선스·오류 처리를 돌려준다. op55-compose, op55-render, op55-verify가 먼저 읽는다."
 disable-model-invocation: true
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # op55 도구 확인

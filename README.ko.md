@@ -122,9 +122,9 @@ npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a c
 
 기본 설치는 `gm`과 `upright`를 내려받고, `grand`는 선택 설치다. 외부 뱅크에는 op55 코드의 MIT와 별개인 원래 라이선스가 적용된다. 조건과 GeneralUser 샘플 원출처의 한계는 [THIRD_PARTY.md](THIRD_PARTY.md)를 참고한다. 라이선스 문서 확인이 모든 원본 샘플의 권리관계 검증을 뜻하지는 않는다. 필요한 크레딧은 `music.meta.json`에 기록되지만 영상이나 업로드 설명에 자동 게시되지는 않는다. 결과물을 배포하는 곳에 필요한 고지를 포함해야 한다.
 
-#### `banks-v1`과 `v0.1.0`의 차이
+#### `banks-v1`과 코드 버전의 차이
 
-- [`v0.1.0`](https://github.com/ynginkim/op55/releases/tag/v0.1.0)은 op55 코드와 스킬의 버전이다.
+- `vMAJOR.MINOR.PATCH` 태그가 붙은 코드 [릴리스](https://github.com/ynginkim/op55/releases)가 op55 코드와 스킬의 버전이다. 설치본의 버전은 `node <scripts>/render.mjs --version`으로 확인한다.
 - [`banks-v1`](https://github.com/ynginkim/op55/releases/tag/banks-v1)은 별도의 **음원 데이터 배포 묶음**이며 op55 프로그램 1.0을 뜻하지 않는다. 대용량 음원을 Git 소스 트리에 넣지 않고, gzip으로 압축한 `gm`·`upright` SF2와 출처·라이선스 문서를 릴리스 첨부파일로 제공한다.
 
 설치 코드는 `banks-v1`을 주 다운로드 경로로 사용하고, 받은 파일을 `~/.cache/op55/banks`에 풀어 SHA-256을 검사한다. `grand`는 이 릴리스에 없고 FreePats에서 별도로 받는다. 릴리스에 자동으로 표시되는 “Source code” ZIP/TAR는 GitHub의 소스 스냅샷이지 악기 뱅크 다운로드가 아니다. 코드와 뱅크를 따로 배포하는 절차는 [RELEASING.md](RELEASING.md)에 있다.
