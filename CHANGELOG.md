@@ -14,6 +14,10 @@ Changes are grouped using [Keep a Changelog](https://keepachangelog.com/en/1.1.0
 ### Removed
 - `skills/op55/`.
 
+### Fixed
+- Rendering fails when a `levels.points` bar or `levels.end` is past `duration`, and the error names that field, the bar, its time, and `duration`.
+- Rendering rejects zero-length or reversed `levels` spans with an error that names the bar and its start and end times.
+
 To migrate, run `npx skills@1.7.4 add ynginkim/op55` again and remove the old copy with `npx skills@1.7.4 remove op55` (add `-g` for a global install). Callers that hard-code `.claude/skills/op55/scripts` should use `resolve-op55-tools/scripts`. Pass showreel the script folder as `OP55_SCRIPTS` (see `skills/resolve-op55-tools/references/showreel-contract.md`).
 
 ## [0.1.0] - 2026-10-24
