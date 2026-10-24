@@ -32,7 +32,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 20
     env:
-      OP55_BANKS: ${{ runner.temp }}/op55-banks
+      OP55_BANKS: ${{ github.workspace }}/.regress/banks
     steps:
       - uses: actions/checkout@v4
         with:
