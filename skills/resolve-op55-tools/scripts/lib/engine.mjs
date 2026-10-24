@@ -117,6 +117,7 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
     const z = blockPower(L, R);
     segs = P.map(([k, target], i) => ({ k, target, t0: Math.max(0, grid.bar(k)), t1: i + 1 < P.length ? grid.bar(P[i + 1][0]) : (end != null ? grid.bar(end) : mod.duration) }));
     for (const s of segs) {
+      if (!(s.t1 > s.t0)) throw new Error(`levels bar ${s.k} (${s.t0} s to ${s.t1} s) requires a positive duration`);
       let sum = 0, c = 0;
       for (let b = Math.ceil((s.t0 + 0.4) * 10); b + 1 <= s.t1 * 10; b++) { let p = 0; for (let j = b - 3; j <= b; j++) p += z[j]; sum += p / 4; c++; }
       s.meas = lufsOf(sum / Math.max(1, c));
