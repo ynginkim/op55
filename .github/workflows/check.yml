@@ -6,13 +6,13 @@ jobs:
   structural:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - name: Check JavaScript and shell syntax
@@ -39,17 +39,17 @@ jobs:
     env:
       OP55_BANKS: ${{ github.workspace }}/.regress/banks
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - name: Verify approved regression platform
         run: |
           test "$(uname -m)" = arm64
           node -e 'if (process.platform !== "darwin" || process.arch !== "arm64" || process.versions.node.split(".")[0] !== "22") process.exit(1)'
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ${{ env.OP55_BANKS }}
           key: op55-banks-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('skills/resolve-op55-tools/scripts/lib/banks.mjs') }}
@@ -73,13 +73,13 @@ jobs:
   skillset:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
       - run: python3 scripts/check.py .
