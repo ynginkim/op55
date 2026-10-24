@@ -105,7 +105,9 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
   if (levels && levels.points && levels.points.length) {
     const P = levels.points, end = levels.end ?? null;
     const z = blockPower(L, R);
-    segs = P.map(([k, target], i) => ({ k, target, t0: Math.max(0, grid.bar(k)), t1: i + 1 < P.length ? grid.bar(P[i + 1][0]) : (end != null ? grid.bar(end) : mod.duration) }));
+    // A boundary past the file's length would measure off the end of the buffers
+    // and poison every trim with NaN: clamp each segment to the duration (#8).
+    segs = P.map(([k, target], i) => ({ k, target, t0: Math.max(0, grid.bar(k)), t1: Math.min(mod.duration, i + 1 < P.length ? grid.bar(P[i + 1][0]) : (end != null ? grid.bar(end) : mod.duration)) }));
     for (const s of segs) {
       let sum = 0, c = 0;
       for (let b = Math.ceil((s.t0 + 0.4) * 10); b + 1 <= s.t1 * 10; b++) { let p = 0; for (let j = b - 3; j <= b; j++) p += z[j]; sum += p / 4; c++; }
