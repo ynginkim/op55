@@ -1,6 +1,6 @@
 # op55 skillset 설계
 
-Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다.
+Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 기록했다. 새 세션 진입은 세 조합(경로 2회, 제작 1회)만 확인했고 사람 청취는 미확인이다. 이 문서는 단일 `op55` skill을 mode·playbook·skill·principle 구조로 옮긴 결과와 그 이유, 검증 기록을 담는다. 변환 계획은 meta-harness 저장소의 examples/op55/plan.md(기준점 op55 828990b)이며, 이 저장소에는 복사하지 않았다. 2026-10-24에 저장소 history가 작성자 이메일만 noreply로 바꾸는 방식으로 재작성됐다. 828990b는 지금 main의 1aece78과 트리가 같고, 이 문서의 커밋 hash는 재작성 뒤 값이다. 같은 날 main에 들어온 PR #3(공개 준비 문서, CI, 회귀 테스트)을 이 브랜치에 merge했다(5ccd582). 공개 커밋 이메일은 이후 ynginkim@gmail.com으로 통일하기로 했다.
 
 ## 목표와 범위
 
@@ -8,7 +8,7 @@ Status: implemented. 구조·설치·회귀·동작 검증은 아래에 따로 �
 
 바꾸지 않은 것: 렌더 엔진(scripts/lib, scripts/vendor, DSP)의 바이트, score module API, 세 예제와 승인 hash(tools/regress.sha256), verify.py와 preview.py의 동작과 출력 형식. 파일은 위치만 옮겼다.
 
-이 저장소 밖의 소비자(video-creator의 SessionStart 훅과 CLAUDE.md, showreel의 preflight와 문서)는 이번 변경에 포함하지 않는다. 아래 이전 장부에 후속 작업으로 남긴다.
+이 저장소 밖의 소비자(video-creator의 SessionStart 훅과 CLAUDE.md, showreel의 preflight와 문서)는 이 저장소의 변경에 들어 있지 않다. video-creator는 같은 작업에서 그 저장소에 따로 반영하고, showreel은 후속 작업이다. 상태는 아래 이전 장부에 적는다.
 
 ## 판정 기준
 
@@ -99,7 +99,7 @@ score.md:43은 "격자가 1 ms 안에서 같으면 그림을 다시 렌더할 �
 
 ## 진입 정책과 언어
 
-name은 영어 kebab-case, SKILL.md 본문·description·default_prompt는 한국어다(변환 계획 §2). 옮긴 references는 원문 영어를 유지한다. op55-mode의 description에는 영어 사용자도 자연어로 진입할 수 있게 원래의 영어 트리거 문구를 남겼다. op55-mode만 자연어 자동 진입이고(Q1) 나머지는 명시 호출이다. Claude Code는 `disable-model-invocation`, Codex는 `policy.allow_implicit_invocation`으로 표시한다.
+name은 영어 kebab-case, SKILL.md 본문·description·default_prompt는 한국어다(변환 계획 §2). 옮긴 references는 원문 영어를 유지한다. op55-mode의 description에는 영어 사용자도 자연어로 진입할 수 있게 원래의 영어 트리거 문구를 남겼다. 사용자가 2026-10-24에 이 언어 배치를 유지하기로 했다. op55-mode만 자연어 자동 진입이고(Q1) 나머지는 명시 호출이다. Claude Code는 `disable-model-invocation`, Codex는 `policy.allow_implicit_invocation`으로 표시한다.
 
 <!-- skillset:policy:start -->
 | mode | 자연어 자동 호출 |
@@ -118,14 +118,17 @@ leaf skill과 principle의 자동 호출은 `false`다.
 | tools/regress.sh, tools/art/demo-video.sh | skills/op55/scripts | 고침 |
 | README.md, README.ko.md | skill 하나, 예전 링크와 트리, `/op55` | 고침: 여덟 skill 설치, `/op55-mode`, 예전 사본 제거 명령 |
 | THIRD_PARTY.md | vendor와 fonts의 예전 경로 | 고침 |
-| skills/resolve-op55-tools/scripts/vendor/README.md | 재빌드 예시의 출력 경로 | 그대로 둠. vendor 바이트 보존 지시. portability transition에 등록, 다음 vendor 갱신 때 고침 |
-| video-creator tools/session-start.sh | skills/op55 한 폴더만 .claude/skills/op55로 링크, setup 경로 고정 | 후속 작업: op55/skills/* 각각 링크, setup 경로를 resolve-op55-tools/scripts로, 끊어진 .claude/skills/op55 링크 정리 |
-| video-creator CLAUDE.md | O=.claude/skills/op55/scripts, 예제 경로 | 후속 작업: O를 .claude/skills/resolve-op55-tools/scripts로 |
+| skills/resolve-op55-tools/scripts/vendor/README.md | 재빌드 예시의 출력 경로 | 고침. 문서만 바꾸고 vendor 바이트는 그대로다. PR #3도 이 파일에 fflate 문장을 더했다 |
+| PR #3이 더한 CONTRIBUTING.md, tools/test_regress.py, .github/workflows/check.yml | skills/op55/scripts | 고침. check.yml은 main의 문법 검사·macOS 음질 회귀 job에 skillset job을 더한 한 파일이다. CONTRIBUTING.md에 skillset 검사 두 줄을 더했다 |
+| CHANGELOG.md | 없음(main에서 새로 생김) | Unreleased에 breaking 변경과 이전 방법을 적음. VERSION과 릴리스는 바꾸지 않음 |
+| video-creator tools/session-start.sh | skills/op55 한 폴더만 .claude/skills/op55로 링크, setup 경로 고정 | 배치와 무관한 훅으로 바꿈: 원본에서 사라진 스킬 링크를 지우고, op55/skills/*마다 링크하고, setup.mjs를 찾아 bank를 확인한다. merge 전에 반영 |
+| video-creator .claude/settings.json | 없음 | env `OP55_SCRIPTS`에 .claude/skills/resolve-op55-tools/scripts를 넣어 showreel preflight가 새 경로를 먼저 찾게 함. merge 전에 반영 |
+| video-creator CLAUDE.md, .gitignore | O=.claude/skills/op55/scripts, 예제 경로, 링크 한 개 | O를 .claude/skills/resolve-op55-tools/scripts로, 링크 여덟 개. 그 checkout을 새 main에 맞춘 뒤 반영 |
 | showreel scripts/preflight.py | 예전 이름의 scripts 후보 | 후속 작업(showreel 정렬). 그 전까지 op55를 부를 때 OP55_SCRIPTS 전달 |
 | showreel SKILL.md, references/audio.md, CUSTOM.md | "op55 스킬을 불러" | 후속 작업(showreel 정렬) |
 | 공개 설치자 | `npx skills add ynginkim/op55`로 skill 하나 | 같은 명령으로 여덟 개. 예전 사본은 `npx skills remove op55`(전역이면 `-g`) |
 
-video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 자동으로 pull한다. 훅과 CLAUDE.md 변경이 준비되기 전에 이 변경이 main에 들어가면, 다음 세션부터 .claude/skills/op55 링크가 끊어지고 showreel preflight가 사용자 전역의 예전 사본을 잡을 수 있다. 그래서 merge는 훅 변경 뒤에 한다.
+video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 `pull --ff-only`로 당겨 온다. 훅과 CLAUDE.md 변경이 준비되기 전에 이 변경이 main에 들어가면, 다음 세션부터 .claude/skills/op55 링크가 끊어지고 showreel preflight가 사용자 전역의 예전 사본을 잡을 수 있다. 그래서 merge는 훅 변경 뒤에 한다. 2026-10-24 현재 그 checkout은 이메일 재작성 전 history(828990b)에 있어 fast-forward가 되지 않으므로, 훅이 저절로 새 main을 받지는 않는다. 트리는 재작성 뒤 커밋과 11개 모두 같아서 새 main에 맞춰도 잃는 내용이 없다.
 
 ## 구조 검사 적용
 
@@ -136,21 +139,21 @@ video-creator의 SessionStart 훅은 op55 checkout이 깨끗하고 main이면 �
 | S1 참조·frontmatter·색인·언어·오류 주입 | 적용 |
 | S2 설치 경계·등록된 사본 diff | 설치 경계 적용. 등록 사본 없음(copies 빔). checker 사본은 외부 원본이라 CHECKER-SOURCE.md의 hash로 관리 |
 | S3 adapter 소비 leaf의 제목 직후 포인터 | 적용: op55-compose, op55-render, op55-verify → resolve-op55-tools |
-| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, tools에서 금지. transition 3건 |
-| S5 이전 장부 prune 검사 | 적용: rewritten 8건, pending 0건. 저장소 밖 소비자는 위 표 |
+| S4 제품명 lint·경로별 예외·transition | 적용: 예전 경로 skills/op55/를 skills, README 두 개, THIRD_PARTY, CONTRIBUTING, tools의 sh·py, workflow에서 금지. transition 2건(둘 다 showreel preflight 설명) |
+| S5 이전 장부 prune 검사 | 적용: rewritten 12건, pending 0건. 저장소 밖 소비자는 위 표 |
 | S6 CLI 스냅샷 대조 | 쓰지 않음. 명령은 resolve-op55-tools 표가 정본이고 실제 실행으로 확인 |
 | S7 install smoke | 적용 |
 | S8 진입 정책 | 적용 |
 | S9 색인 밖 principle 사용 | 적용(경고 0이 목표) |
 | S10 미확인 닫을 조건 | 적용 |
 | S11 생성 문서·링크 드리프트 | 적용 |
-| S12 push·PR CI | .github/workflows/check.yml |
+| S12 push·PR CI | .github/workflows/check.yml의 skillset job. 같은 파일에 main의 structural, audio-regression job이 있다 |
 
 구조 검사 통과는 음악 품질이나 사람의 청취 판단을 포함하지 않는다.
 
 ## 검증 기록
 
-2026-10-23, macOS (Darwin arm64), Node v22.22.2, Python 3.15.0, ffmpeg 8.1, numpy 2.5.4, Pillow 13.0.0, npx 10.9.7, skills CLI 1.7.4. skill 파일은 커밋 f405457 이후 바뀌지 않았다. 증거 파일은 작업 세션의 임시 폴더에 있고 저장소에 넣지 않았다.
+2026-10-23, macOS (Darwin arm64), Node v22.22.2, Python 3.15.0, ffmpeg 8.1, numpy 2.5.4, Pillow 13.0.0, npx 10.9.7, skills CLI 1.7.4. skill 파일은 커밋 f405457 이후 op55-verify의 위생 문장 한 줄(6574f20)과 vendor/README.md의 경로 한 줄 말고는 바뀌지 않았다. main merge 뒤 재검증은 아래 'main merge 뒤 재검증'에 따로 적는다. 증거 파일은 작업 세션의 임시 폴더에 있고 저장소에 넣지 않았다.
 
 ### 구조
 
@@ -206,7 +209,7 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 
 ### 재구성 전부터 있던 미달
 
-위 두 미달은 이번 변경이 만든 것이 아니다. 세 예제의 WAV가 828990b의 승인 hash와 바이트까지 같고 verify.py도 같으므로, 기준점에서도 같은 출력이 나온다. verify.py가 limiter 4 dB 초과를 ✗로 표시하기 시작한 것은 bdb958b(재작성 뒤 f151990)다(그 전에는 SKILL.md의 문장 기준만 있었다). 예제를 고치면 승인 hash가 바뀌므로 이번 범위에서 고치지 않았다.
+위 두 미달은 이번 변경이 만든 것이 아니다. 세 예제의 WAV가 828990b의 승인 hash와 바이트까지 같고 verify.py도 같으므로, 기준점에서도 같은 출력이 나온다. verify.py가 limiter 4 dB 초과를 ✗로 표시하기 시작한 것은 bdb958b(재작성 뒤 f151990)다(그 전에는 SKILL.md의 문장 기준만 있었다). 예제를 고치면 승인 hash가 바뀌므로 이번 범위에서 고치지 않았고, 사용자가 2026-10-24에 고치지 않기로 했다.
 
 | 예제 | 미달 | 고칠 때 |
 | --- | --- | --- |
@@ -225,20 +228,34 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 
 제작 결과는 세션의 보고를 그대로 쓰지 않고 따로 확인했다. 같은 score를 다시 렌더하면 SHA-256이 같다(313887e7…). verify.py를 다시 돌린 결과: -13.0 LUFS ✓, -1.3 dBTP ✓, clipping 0, DC 1e-6 미만, fade 뒤 무음, limiter 최대 2.00 dB ✓, grid 0.00 ms ✓, kick 20개 최대 1.31 ms ✓, Logo hit +2.21 ms ✓, Final chord +0.08 ms ✓, 순위 상관 +1.00 ✓, Logo 마디(bar 4)가 곡에서 가장 크고 직전보다 +8.6 dB. 파형과 스펙트로그램도 직접 열어 문제를 찾지 못했다. score에는 `Math.random`과 시계가 없고 `makeRng`를 쓴다. bank는 gm(drum kit 25)뿐이라 credit 줄이 없다. mix margin은 N/A다.
 
-제작 세션에서 본 위생 문제 두 가지가 있다. verify 출력을 프로젝트 밖 /tmp에 tee했다가 verify/로 복사했다. 끝에 자기가 만든 dbg/ 진단 폴더를 지웠다. 사용자 자산은 건드리지 않았지만 op55-verify에 "진단 출력과 로그는 프로젝트 안에 쓰고, 진단 폴더는 보고 뒤 사용자에게 지울지 묻는다" 같은 문장을 넣을지는 사용자가 정할 일로 남긴다. 사람 청취는 하지 않았다.
+제작 세션에서 본 위생 문제 두 가지가 있다. verify 출력을 프로젝트 밖 /tmp에 tee했다가 verify/로 복사했다. 끝에 자기가 만든 dbg/ 진단 폴더를 지웠다. 사용자 자산은 건드리지 않았다. 사용자 결정(2026-10-24)으로 op55-verify의 입력과 결과 절에 "verify 출력, 로그, 진단 렌더는 프로젝트 안에 쓰고, 진단 폴더는 보고 뒤 사용자에게 묻기 전에 지우지 않는다"는 문장을 넣었다(6574f20). 사람 청취는 하지 않았다.
+
+### main merge 뒤 재검증
+
+2026-10-24, 같은 기기와 도구 버전. 5ccd582(main merge)에 6574f20, 7f504dc를 더한 작업 트리에서 돌렸다.
+
+| 확인 | 결과 |
+| --- | --- |
+| 충돌 | 6건 해결: tools/regress.sh(main의 인자 검사 + 새 경로), THIRD_PARTY.md(fflate 줄 + 새 경로), fflate.LICENSE(vendor/ 새 위치, 바이트는 main과 같음), README 두 개(여덟 skill 설치 문단 + main의 skills@1.7.4 고정, banks/ 경로, regress.sha256), check.yml(job 합침) |
+| `python3 scripts/check.py .` | exit 0. 8 skills, 경고 0 |
+| `python3 scripts/selftest.py` | 49 tests OK |
+| `python3 tools/test_regress.py` | 7 tests OK(가짜 renderer로 실패 의미만 확인) |
+| CI structural 단계의 명령 | `node --check`(scripts의 모든 .mjs), `bash -n` 두 개, Python AST 검사 모두 통과 |
+| `tools/regress.sh` | exit 0. eroica, pstack-harness, starter 모두 ✓(Node v22.22.2, 69 s) |
+| `python3 scripts/install_smoke.py . --dest <새 폴더>` | exit 0. 8개 설치, playbook 4건과 참조 114건 열림. `diff -r skills/ <설치본>/.agents/skills/` 같음(fflate.LICENSE 포함) |
+| video-creator 훅 모의 실행 | 임시 폴더에 훅 사본, 가짜 showreel, op55 clone을 두고 돌림. 예전 배치(1aece78): 링크 변화 없음. 새 배치(PR head): 끊어진 op55 링크를 지우고 여덟 개를 링크, 모두 SKILL.md가 열림. 재실행: 출력 없음. bank가 없으면 새 setup 경로로 안내. 예전 배치로 되돌리면 다시 op55 하나. 모든 경우 exit 0 |
 
 ## 확인하지 못한 것
 
 | 항목 | 상태 | 닫을 조건 |
 | --- | --- | --- |
 | 실제 음악 품질 | unverified | 사용자가 렌더된 WAV를 전체 청취하고 질감·흐름·영상/대사 적합성을 판정 |
-| 새 세션 진입의 나머지 조합 | 일부 확인 | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. todo 도구는 제작 세션에서만 썼고 경로 시험 두 번은 텍스트 fallback. 같은 설치본으로 각 1회 |
-| 제작 세션의 진단 파일 위생 | 관찰함 | /tmp 쓰기와 dbg/ 삭제를 막을 문장을 op55-verify에 넣을지 사용자가 결정 |
+| 새 세션 진입의 나머지 조합 | 일부 확인(사용자 결정으로 추가 시험 안 함) | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. 진입 문제가 보고되면 같은 설치본으로 각 1회 시험 |
+| op55-verify 위생 문장의 효과 | 문장만 넣음 | 다음 실제 제작 세션에서 verify 로그와 dbg/가 프로젝트 안에 남고 삭제 전에 묻는지 확인 |
 | GitHub 원격 설치 형식 | unverified | main 반영 뒤 `npx skills add ynginkim/op55`로 빈 프로젝트에 설치해 여덟 skill과 형제 참조 확인 |
 | 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. ubuntu에서 check, selftest 49 tests, install smoke(8개, 참조 114건)가 실제로 돌았다 |
-| SessionStart 훅 링크 | unverified | video-creator 훅 변경 뒤 사본에서 훅을 실행해 모든 skill 링크와 setup 안내 확인 |
+| SessionStart 훅 링크 | 모의 실행 확인 | 실제 video-creator에서 checkout을 새 main에 맞춘 뒤 훅을 돌려 여덟 링크, 예전 링크 삭제, showreel preflight의 OP55_SCRIPTS 선택 확인 |
 | showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
-| starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태) | 예제를 고치는 별도 작업에서 소리를 바꾸고 승인 hash를 갱신 |
-| vendor/README.md의 재빌드 출력 경로 | 예전 경로 | 다음 vendor 갱신 커밋에서 resolve-op55-tools 경로로 고치고 portability transition 삭제 |
+| starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태, 사용자 결정으로 고치지 않음) | 예제를 고치기로 하면 소리를 바꾸고 승인 hash를 갱신한 뒤 사람이 청취 |
 | 다른 환경의 회귀 hash | unverified | Node 22, macOS arm64 밖의 환경에서 tools/regress.sh를 돌려 같은지 기록 |
 | bank 라이선스 최신성 | unverified | 결과물 배포 직전 공식 원문과 배포 hash 재확인 |
