@@ -253,7 +253,7 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 | 새 세션 진입의 나머지 조합 | 일부 확인(사용자 결정으로 추가 시험 안 함) | Claude 자연어(경로·제작)와 Codex 명시는 통과. Claude 명시(`/op55-mode`)와 Codex 자연어는 미확인. 진입 문제가 보고되면 같은 설치본으로 각 1회 시험 |
 | op55-verify 위생 문장의 효과 | 문장만 넣음 | 다음 실제 제작 세션에서 verify 로그와 dbg/가 프로젝트 안에 남고 삭제 전에 묻는지 확인 |
 | GitHub 원격 설치 형식 | unverified | main 반영 뒤 `npx skills add ynginkim/op55`로 빈 프로젝트에 설치해 여덟 skill과 형제 참조 확인 |
-| 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. ubuntu에서 check, selftest 49 tests, install smoke(8개, 참조 114건)가 실제로 돌았다 |
+| 원격 CI | 확인함 | PR #2의 push·pull_request 실행 모두 통과. main merge 뒤(aa54639)에는 세 job을 로그로 확인했다. skillset(ubuntu): check 경고 0, selftest 49 tests, install smoke 8개·참조 114건. structural: 문법 검사와 test_regress. audio-regression(macos-15-arm64, Node 22.23.2, bank cache 복원 뒤 크기·SHA-256 확인): eroica, pstack-harness, starter 모두 ✓ |
 | SessionStart 훅 링크 | 모의 실행 확인 | 실제 video-creator에서 checkout을 새 main에 맞춘 뒤 훅을 돌려 여덟 링크, 예전 링크 삭제, showreel preflight의 OP55_SCRIPTS 선택 확인 |
 | showreel 경계 end-to-end | unverified | showreel 정렬 뒤 신규 제작과 기존 오디오 교체를 hit·envelope 소비 장면까지 확인 |
 | starter limiter, eroica 강세 마디 미달 | 확인함(기존 상태, 사용자 결정으로 고치지 않음) | 예제를 고치기로 하면 소리를 바꾸고 승인 hash를 갱신한 뒤 사람이 청취 |
