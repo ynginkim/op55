@@ -18,7 +18,8 @@ jobs:
       - name: Check JavaScript and shell syntax
         run: |
           find skills/op55/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
-          bash -n tools/regress.sh tools/release-banks.sh
+          bash -n tools/regress.sh
+          bash -n tools/release-banks.sh
       - name: Check Python syntax without importing optional dependencies
         run: |
           python3 - <<'PYTHON'
