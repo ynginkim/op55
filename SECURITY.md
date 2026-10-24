@@ -4,7 +4,7 @@
 
 Do not put secrets, personal data, exploit details, or active credentials in a public issue or pull request. If this repository's Security tab offers **Report a vulnerability**, use that private GitHub reporting flow. This document does not enable that feature or assert that it is available.
 
-If GitHub private reporting is unavailable, email [ynginkim@gmail.com](mailto:ynginkim@gmail.com). This is the owner-designated private security reporting contact, not a GitHub login or commit identity. Do not include live credentials.
+If GitHub private reporting is unavailable, email [ynginkim@gmail.com](mailto:ynginkim@gmail.com). This is the owner-designated private security reporting contact. Do not include live credentials.
 
 ## Scope
 
