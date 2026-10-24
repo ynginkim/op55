@@ -4,14 +4,16 @@
 //   node <skill>/scripts/render.mjs --score <project>/audio/music/score.mjs \
 //        --out <project>/audio/music/music.wav [--analysis <project>/audio/music/analysis.json]
 //        [--stems pad,bass,...] [--stems-dir DIR] [--mute arp,glass] [--describe]
+//   node <skill>/scripts/render.mjs --version
 //
 // Writes: the WAV (48 kHz stereo 24-bit, about -13 LUFS integrated, <= -1.3 dBTP), analysis.json (default: next to the
-// WAV) in the exact music_tools.py analyze shape, and <wav-stem>.meta.json (grid, sections, accents, gaps, kick/boom
+// WAV: file, duration, bpm, beats, downbeats, hits, energy), and <wav-stem>.meta.json (grid, sections, accents, gaps, kick/boom
 // onsets, master report, credits) for verify.py. --describe prints the score's grid/sections/accents as JSON and exits.
+// --version prints `op55 <version>` from this skill's SKILL.md (metadata.version), which installs with the scripts.
 // Deterministic: every random choice is seeded by the score's `seed` export, and sampled parts render sample-exact.
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, resolve, join, basename } from 'node:path';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { SR, writeWav24 } from './lib/dsp.mjs';
 import { renderScore, describe } from './lib/engine.mjs';
 import { makeGrid } from './lib/grid.mjs';
@@ -20,8 +22,14 @@ import { analysisJson, projectRelative, summary } from './lib/analysis.mjs';
 const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf('--' + k); return i >= 0 ? args[i + 1] : null; };
 const flag = k => args.includes('--' + k);
+if (flag('version')) {
+  const skill = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', 'SKILL.md'), 'utf8');
+  const version = skill.match(/^---\n([\s\S]*?)\n---/)?.[1].match(/^metadata:\n {2}version: "([^"]+)"$/m)?.[1];
+  console.log(`op55 ${version ?? 'unknown'}`);
+  process.exit(version ? 0 : 1);
+}
 if (flag('help') || !opt('score')) {
-  console.log('usage: node render.mjs --score score.mjs [--out music.wav] [--analysis analysis.json | --no-analysis] [--stems a,b] [--stems-dir DIR] [--mute a,b] [--describe]');
+  console.log('usage: node render.mjs --score score.mjs [--out music.wav] [--analysis analysis.json | --no-analysis] [--stems a,b] [--stems-dir DIR] [--mute a,b] [--describe] | --version');
   process.exit(opt('score') ? 0 : 2);
 }
 const scorePath = resolve(opt('score'));

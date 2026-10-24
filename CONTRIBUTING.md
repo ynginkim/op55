@@ -13,6 +13,7 @@ find skills/resolve-op55-tools/scripts -name '*.mjs' -print0 | xargs -0 -n1 node
 bash -n tools/regress.sh
 bash -n tools/release-banks.sh
 python3 tools/test_regress.py
+node --test tools/test_engine.mjs tools/test_version.mjs
 python3 scripts/check.py .
 python3 scripts/selftest.py
 ```

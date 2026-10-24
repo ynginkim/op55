@@ -22,6 +22,8 @@ jobs:
           bash -n tools/release-banks.sh
       - name: Test the render engine
         run: node --test tools/test_engine.mjs
+      - name: Check that the installed skill reports VERSION
+        run: node --test tools/test_version.mjs
       - name: Check Python syntax without importing optional dependencies
         run: |
           python3 - <<'PYTHON'
