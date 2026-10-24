@@ -104,3 +104,18 @@ test('levels.end returned by compose past duration rejects the render and writes
   const result = renderScore(fixture({ composeLevels: { points: [[0, -6]], end: 3 } }));
   assertRejected(result, 'levels.end bar 3 (3.5 s) is past duration 2.5 s');
 });
+
+test('the only levels.points bar exactly at duration rejects a zero-length span and writes nothing', () => {
+  const result = renderScore(fixture({ levels: { points: [[2, -6]] } }));
+  assertRejected(result, 'levels bar 2 (2.5 s to 2.5 s) requires a positive duration');
+});
+
+test('levels.end before its point rejects a negative span and writes nothing', () => {
+  const result = renderScore(fixture({ levels: { points: [[1, -6]], end: 0 } }));
+  assertRejected(result, 'levels bar 1 (1.5 s to 0.5 s) requires a positive duration');
+});
+
+test('a reversed intermediate levels span rejects the render and writes nothing', () => {
+  const result = renderScore(fixture({ levels: { points: [[0, -6], [2, 0], [1, -1]] } }));
+  assertRejected(result, 'levels bar 2 (2.5 s to 1.5 s) requires a positive duration');
+});
