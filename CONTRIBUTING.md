@@ -10,7 +10,8 @@ From the repository root:
 
 ```sh
 find skills/op55/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
-bash -n tools/regress.sh tools/release-banks.sh
+bash -n tools/regress.sh
+bash -n tools/release-banks.sh
 python3 tools/test_regress.py
 ```
 
