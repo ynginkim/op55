@@ -60,6 +60,17 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
   const grid = makeGrid(mod.grid);
   const out = await mod.compose(toolkit(grid));
   const events = out.events || {};
+  const levels = out.levels || mod.levels || null;
+  if (levels && levels.points && levels.points.length) {
+    for (const [bar] of levels.points) {
+      const t = grid.bar(bar);
+      if (t > mod.duration) throw new Error(`levels.points bar ${bar} (${t} s) is past duration ${mod.duration} s`);
+    }
+    if (levels.end != null) {
+      const t = grid.bar(levels.end);
+      if (t > mod.duration) throw new Error(`levels.end bar ${levels.end} (${t} s) is past duration ${mod.duration} s`);
+    }
+  }
   const N = Math.round(mod.duration * SR);
   const mx = new Mixer(N, stems);
   const GAIN = { ...DEFAULT_MIX, ...(mod.mix || {}) };
@@ -100,7 +111,6 @@ export async function renderScore(mod, { stems = [], mute = new Set(), log = () 
       else throw new Error(`master.eq: unknown band ${type}`);
     }
   }
-  const levels = out.levels || mod.levels || null;
   let segs = [{ k: null, target: 0, t0: 0, t1: mod.duration, trim: 0 }];
   if (levels && levels.points && levels.points.length) {
     const P = levels.points, end = levels.end ?? null;
