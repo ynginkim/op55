@@ -2,7 +2,7 @@
 
 <p align="center">
 <b>Background music for video, composed in code by Claude, rendered offline, verified by numbers.</b><br>
-A Claude skill. No music APIs, no loops, no stock tracks. Same score, same bytes.
+A Claude skillset. No music APIs, no loops, no stock tracks. Same score, same bytes.
 </p>
 
 <p align="center">
@@ -67,11 +67,17 @@ The pinned [`skills@1.7.4` installer](https://github.com/vercel-labs/skills/blob
 npx skills@1.7.4 add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
 ```
 
+This installs eight skills as one set: the entry point [`op55-mode`](skills/op55-mode/SKILL.md), four work skills and three principles. Keep them together: they read each other through sibling folders, and the render scripts live in one of them (`resolve-op55-tools`).
+
 Then ask:
 
 > Make a 60-second background track for this product video. Warm, piano and strings, hits at 0:12 and 0:48, narration from 0:05 to 0:40.
 
-On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55/banks`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg.
+A request like this starts `op55-mode` by itself. To call it by name, type `/op55-mode` in Claude Code or `$op55-mode` in Codex. The other seven skills are called by the mode (or by another skillset such as showreel), not on their own.
+
+On first use Claude runs `setup.mjs` from `resolve-op55-tools`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55/banks`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg (plus Pillow for the optional preview video).
+
+**Upgrading from the single `op55` skill.** The entry used to be `/op55`; it is now `/op55-mode`. Run the `add` command again to get the new set, then remove the old copy so it cannot shadow the new one: `npx skills@1.7.4 remove op55` in the project, or `npx skills@1.7.4 remove -g op55` if you installed it globally. Your scores and the bank cache are not touched.
 
 ## How it works
 
@@ -130,7 +136,7 @@ export function compose({ bar, BEAT, ccRamp }) {
 }
 ```
 
-Full example: [`eroica.score.mjs`](skills/op55/scripts/examples/eroica.score.mjs). API: [`references/score.md`](skills/op55/references/score.md).
+Full example: [`eroica.score.mjs`](skills/resolve-op55-tools/scripts/examples/eroica.score.mjs). API: [`references/score.md`](skills/op55-compose/references/score.md).
 
 ### Verify
 
@@ -145,24 +151,39 @@ Full example: [`eroica.score.mjs`](skills/op55/scripts/examples/eroica.score.mjs
 
 ## With showreel
 
-op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. showreel already reads both files op55 writes: `music.file` and `timeline.py --music-analysis`. See [`references/showreel.md`](skills/op55/references/showreel.md).
+op55 started life as the music step of [showreel](https://github.com/revfactory/showreel), a Claude skill that makes Korean motion-graphics videos end to end. showreel already reads both files op55 writes: `music.file` and `timeline.py --music-analysis`. Its music step reads `op55-compose`, `op55-render` and `op55-verify` directly and passes the scripts path as `OP55_SCRIPTS`. See [`showreel-contract.md`](skills/resolve-op55-tools/references/showreel-contract.md).
 
 ## Repo
 
 ```
-skills/op55/
-  SKILL.md                    the skill: workflow, palette, rules
-  references/                 score API, arranging for picture, verification, showreel
-  scripts/
-    render.mjs  verify.py     render a score, measure it
-    preview.py                on request: a spectrogram video that plays with the cue
-    setup.mjs   banks.mjs     fetch banks (SHA-256 checked), browse presets
-    lib/                      dsp, grid, synth voices, sampler, engine, analysis
-    examples/                 starter (synth), eroica (sampled + synth), pstack-harness (300 s, synth)
-    vendor/                   spessasynth_core 4.3.22, bundled (Apache-2.0)
-  assets/fonts/               Instrument Serif, JetBrains Mono (OFL) for previews
+skills/
+  op55-mode/                  the entry: picks a playbook and runs it to delivery
+    playbooks/                create-cue (new BGM), revise-cue (feedback, narration gaps, new music for a finished video)
+  op55-compose/               cue sheet, grid, score.mjs; references/ score API, arranging for picture
+  op55-render/                render the WAV, analysis and meta; on request a preview video (references/preview.md)
+  op55-verify/                read verify.py's numbers and pictures (references/verify.md)
+  resolve-op55-tools/         paths, tools, banks, exact commands, licenses; references/showreel-contract.md
+    scripts/
+      render.mjs  verify.py   render a score, measure it
+      preview.py              on request: a spectrogram video that plays with the cue
+      setup.mjs   banks.mjs   fetch banks (SHA-256 checked), browse presets
+      lib/                    dsp, grid, synth voices, sampler, engine, analysis
+      examples/               starter (synth), eroica (sampled + synth), pstack-harness (300 s, synth)
+      vendor/                 spessasynth_core 4.3.22, bundled (Apache-2.0)
+    assets/fonts/             Instrument Serif, JetBrains Mono (OFL) for previews
+  principle-*/                protect the voice, freeze the grid, arrange for the picture
 tools/                        regress.sh (checks), regress.sha256 (approved hashes), art/ (README art: prompts, compositor, demo video)
+scripts/                      skillset structure checks (check.py, selftest.py, install_smoke.py); not installed
+DESIGN.md                     why the skills are split this way, and the verification record
 ```
+
+The skillset follows the [meta-harness](https://github.com/ynginkim/meta-harness) layout: a mode that runs playbooks, skills that do the work, principles for judgment calls. Generated by `python3 scripts/check.py . --write-docs`:
+
+<!-- skillset:summary:start -->
+mode 1개, playbook 2개, skill 4개, principle 3개 (설치 단위 8개).
+
+검사: `python3 scripts/check.py .`
+<!-- skillset:summary:end -->
 
 ## Roadmap
 
@@ -176,7 +197,7 @@ tools/                        regress.sh (checks), regress.sha256 (approved hash
 ## Credits
 
 - **Engine:** written for the [showreel fork](https://github.com/ynginkim/showreel) and moved here. The code is MIT.
-- **Sampler:** [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus, Apache-2.0. It is vendored, with its license, in `scripts/vendor/`.
+- **Sampler:** [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus, Apache-2.0. It is vendored, with its license, in `skills/resolve-op55-tools/scripts/vendor/`.
 - **Banks:**
   - GeneralUser GS by S. Christian Collins
   - Upright Piano KW by FreePats (CC0)

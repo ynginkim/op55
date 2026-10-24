@@ -21,7 +21,7 @@ python3 $S/preview.py audio/music/music.wav --check [--title "Product launch BGM
   - The NOW label names the section that contains that moment.
   - The labels do not collide or run off the frame. Where sections are too close for a readable label, only the section line is drawn. The playhead starts below the label rows, so it never covers a label.
   - The title renders. Hangul or other CJK text needs a system font: Pretendard, Apple SD Gothic Neo or Noto Sans CJK are found automatically, or set `OP55_CJK_FONT`.
-- Needs Pillow (`python3 -m pip install pillow`) and ffmpeg. The fonts are bundled in `assets/fonts` (OFL).
+- Needs Pillow (`python3 -m pip install pillow`) and ffmpeg. The fonts are bundled in `../resolve-op55-tools/assets/fonts` (OFL).
 
 ## Sharing
 

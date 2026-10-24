@@ -9,10 +9,12 @@ Use Python 3.12 for standard-library checks. Node.js 22 and Git are needed where
 From the repository root:
 
 ```sh
-find skills/op55/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
+find skills/resolve-op55-tools/scripts -name '*.mjs' -print0 | xargs -0 -n1 node --check
 bash -n tools/regress.sh
 bash -n tools/release-banks.sh
 python3 tools/test_regress.py
+python3 scripts/check.py .
+python3 scripts/selftest.py
 ```
 
 Read the workflows in `.github/workflows/` for CI-specific checks. Installation smoke tests use a new temporary destination outside the source tree and can require network access. Run only tests relevant to the change and report commands, runtime, results, and anything not run. Structural checks do not prove model behavior, audio quality, visual quality, or license clearance.

@@ -1,23 +1,23 @@
 # Third-party code and sounds
 
-The op55 code is MIT (see `LICENSE`). These parts come from elsewhere.
+The op55 code is MIT (see `LICENSE`). These parts come from elsewhere. The vendored code and the fonts ship inside the `resolve-op55-tools` skill, so installing the skillset brings their license files along.
 
 ## Vendored code
 
 | Component | Version | License | Where |
 | --- | --- | --- | --- |
-| [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus | 4.3.22 | Apache-2.0 | `skills/op55/scripts/vendor/spessasynth_core.mjs`, license in `spessasynth_core.LICENSE` |
-| [fflate](https://github.com/spessasus/spessasynth_core/tree/99f294d997dea0f2691738c97586c6a3d289fe7d/src/externals/fflate), Copyright (c) 2023 Arjun Barrett (embedded by spessasynth_core) | as included in spessasynth_core 4.3.22 | MIT | same bundle, full license in `skills/op55/scripts/vendor/fflate.LICENSE` |
+| [spessasynth_core](https://github.com/spessasus/spessasynth_core) by spessasus | 4.3.22 | Apache-2.0 | `skills/resolve-op55-tools/scripts/vendor/spessasynth_core.mjs`, license in `spessasynth_core.LICENSE` |
+| [fflate](https://github.com/spessasus/spessasynth_core/tree/99f294d997dea0f2691738c97586c6a3d289fe7d/src/externals/fflate), Copyright (c) 2023 Arjun Barrett (embedded by spessasynth_core) | as included in spessasynth_core 4.3.22 | MIT | same bundle, full license in `skills/resolve-op55-tools/scripts/vendor/fflate.LICENSE` |
 | [stb-vorbis](https://www.npmjs.com/package/stb-vorbis) (bundled inside the above, decodes SF3) | 0.0.6 | Apache-2.0 | same bundle, license in `stb-vorbis.LICENSE` |
 
-The bundle is an unmodified esbuild bundle of the npm package (see `skills/op55/scripts/vendor/README.md`).
+The bundle is an unmodified esbuild bundle of the npm package (see `skills/resolve-op55-tools/scripts/vendor/README.md`).
 
 ## Fonts (used by `preview.py`)
 
 | Font | License | Where |
 | --- | --- | --- |
-| [Instrument Serif](https://github.com/Instrument/instrument-serif) Italic | SIL Open Font License 1.1 | `skills/op55/assets/fonts/InstrumentSerif-Italic.ttf`, `OFL-InstrumentSerif.txt` |
-| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) (variable weight) | SIL Open Font License 1.1 | `skills/op55/assets/fonts/JetBrainsMono-wght.ttf`, `OFL-JetBrainsMono.txt` |
+| [Instrument Serif](https://github.com/Instrument/instrument-serif) Italic | SIL Open Font License 1.1 | `skills/resolve-op55-tools/assets/fonts/InstrumentSerif-Italic.ttf`, `OFL-InstrumentSerif.txt` |
+| [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) (variable weight) | SIL Open Font License 1.1 | `skills/resolve-op55-tools/assets/fonts/JetBrainsMono-wght.ttf`, `OFL-JetBrainsMono.txt` |
 
 ## SoundFont banks (downloaded by `setup.mjs`, never committed)
 

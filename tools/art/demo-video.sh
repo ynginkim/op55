@@ -6,4 +6,4 @@
 set -eu
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 OUT="${1:-$ROOT/.regress/demo/eroica-55s.mp4}"
-python3 "$ROOT/skills/op55/scripts/preview.py" "$ROOT/.regress/eroica.wav" --out "$OUT" --check
+python3 "$ROOT/skills/resolve-op55-tools/scripts/preview.py" "$ROOT/.regress/eroica.wav" --out "$OUT" --check

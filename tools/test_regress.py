@@ -15,9 +15,9 @@ class RegressTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         (self.root / 'tools').mkdir()
-        (self.root / 'skills/op55/scripts/examples').mkdir(parents=True)
+        (self.root / 'skills/resolve-op55-tools/scripts/examples').mkdir(parents=True)
         shutil.copyfile(Path(__file__).with_name('regress.sh'), self.root / 'tools/regress.sh')
-        (self.root / 'skills/op55/scripts/examples/demo.score.mjs').write_text('// fixture\n')
+        (self.root / 'skills/resolve-op55-tools/scripts/examples/demo.score.mjs').write_text('// fixture\n')
         self.approved = self.root / 'tools/regress.sha256'
         self.digest = hashlib.sha256(b'fixture audio').hexdigest()
         self.approved.write_text(self.digest + '  demo\n')
@@ -55,7 +55,7 @@ class RegressTests(unittest.TestCase):
         self.assertEqual(self.approved.read_bytes(), previous)
 
     def test_no_examples_fails(self):
-        (self.root / 'skills/op55/scripts/examples/demo.score.mjs').unlink()
+        (self.root / 'skills/resolve-op55-tools/scripts/examples/demo.score.mjs').unlink()
         self.assertNotEqual(self.run_regress().returncode, 0)
 
     def test_unrecognized_argument_fails(self):

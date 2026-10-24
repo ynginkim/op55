@@ -1,0 +1,6 @@
+interface:
+  display_name: "op55-verify"
+  short_description: "verify.py 수치와 그림으로 op55 렌더를 검수하고 항목별 상태를 돌려준다"
+  default_prompt: "$op55-verify로 audio/music/music.wav를 검수해 주세요."
+policy:
+  allow_implicit_invocation: false

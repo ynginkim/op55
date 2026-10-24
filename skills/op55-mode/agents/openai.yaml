@@ -1,0 +1,6 @@
+interface:
+  display_name: "op55-mode"
+  short_description: "영상 BGM을 코드로 작곡하고 렌더·마스터링·검수까지 끝내는 운영 방식"
+  default_prompt: "$op55-mode로 이 영상의 배경음악을 만들어 주세요."
+policy:
+  allow_implicit_invocation: true

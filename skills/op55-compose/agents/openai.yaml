@@ -1,0 +1,6 @@
+interface:
+  display_name: "op55-compose"
+  short_description: "cue sheet와 격자, 편곡을 정하고 op55 score.mjs를 작성한다"
+  default_prompt: "$op55-compose로 이 영상의 cue sheet와 score.mjs를 작성해 주세요."
+policy:
+  allow_implicit_invocation: false

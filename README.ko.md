@@ -2,7 +2,7 @@
 
 <p align="center">
 <b>영상 배경음악을 Claude가 코드로 작곡하고, 로컬에서 렌더하고, 숫자로 검증한다.</b><br>
-Claude 스킬. 음악 생성 API도, 루프도, 스톡 음원도 쓰지 않는다. 같은 악보면 같은 바이트.
+Claude 스킬 세트. 음악 생성 API도, 루프도, 스톡 음원도 쓰지 않는다. 같은 악보면 같은 바이트.
 </p>
 
 <p align="center">
@@ -73,11 +73,17 @@ https://github.com/user-attachments/assets/cb2ac109-c193-44be-9398-9627b86ca8a6
 npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
 ```
 
+스킬 여덟 개가 한 벌로 설치된다. 입구인 [`op55-mode`](skills/op55-mode/SKILL.md), 작업 스킬 넷, 판단 원칙 셋이다. 서로 형제 폴더로 읽고 렌더 스크립트는 그중 하나(`resolve-op55-tools`)에 들어 있으니 함께 둔다.
+
 그리고 이렇게 부탁한다.
 
 > 이 제품 영상에 60초짜리 배경음악 만들어줘. 따뜻하게, 피아노랑 현악기로. 0:12와 0:48에 히트, 나레이션은 0:05~0:40.
 
-처음 쓸 때 Claude가 `scripts/setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55/banks`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다.
+이런 요청이면 `op55-mode`가 알아서 시작된다. 이름으로 부르려면 Claude Code에서 `/op55-mode`, Codex에서 `$op55-mode`를 쓴다. 나머지 일곱 개는 mode나 showreel 같은 다른 스킬 세트가 부르며 혼자 부르지 않는다.
+
+처음 쓸 때 Claude가 `resolve-op55-tools`의 `setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55/banks`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다(선택 기능인 미리보기 영상에는 Pillow도 필요하다).
+
+**예전 단일 `op55` 스킬에서 옮겨 올 때.** 입구 이름이 `/op55`에서 `/op55-mode`로 바뀌었다. `add` 명령을 다시 실행해 새 세트를 받은 뒤, 예전 사본이 새 스킬을 가리지 않도록 지운다. 프로젝트에 설치했으면 `npx skills@1.7.4 remove op55`, 전역에 설치했으면 `npx skills@1.7.4 remove -g op55`다. 악보와 뱅크 캐시는 그대로 남는다.
 
 ## 동작 방식
 
@@ -128,7 +134,7 @@ export function compose({ bar, BEAT, ccRamp }) {
 }
 ```
 
-전체 예시: [`eroica.score.mjs`](skills/op55/scripts/examples/eroica.score.mjs). API: [`references/score.md`](skills/op55/references/score.md).
+전체 예시: [`eroica.score.mjs`](skills/resolve-op55-tools/scripts/examples/eroica.score.mjs). API: [`references/score.md`](skills/op55-compose/references/score.md).
 
 ### 검증
 
@@ -145,24 +151,34 @@ export function compose({ bar, BEAT, ccRamp }) {
 
 - op55는 [showreel](https://github.com/revfactory/showreel)의 음악 단계에서 출발했다. showreel은 한국어 모션그래픽 영상을 처음부터 끝까지 만드는 Claude 스킬이다.
 - showreel은 op55가 쓰는 두 파일을 이미 읽는다: `music.file`과 `timeline.py --music-analysis`.
-- 자세한 연결 방법은 [`references/showreel.md`](skills/op55/references/showreel.md)에 있다.
+- showreel의 음악 단계는 `op55-compose`, `op55-render`, `op55-verify`를 직접 읽고 스크립트 경로를 `OP55_SCRIPTS`로 넘긴다.
+- 자세한 파일 계약은 [`showreel-contract.md`](skills/resolve-op55-tools/references/showreel-contract.md)에 있다.
 
 ## 레포 구성
 
 ```
-skills/op55/
-  SKILL.md                    스킬 본문: 절차, 팔레트, 규칙
-  references/                 악보 API, 영상용 편곡, 검증, showreel 연결
-  scripts/
-    render.mjs  verify.py     악보 렌더, 측정
-    preview.py                요청할 때만: 음악과 함께 재생되는 스펙트로그램 영상
-    setup.mjs   banks.mjs     뱅크 받기(SHA-256 확인), 프리셋 찾기
-    lib/                      dsp, 격자, 합성 악기, 샘플러, 엔진, 분석
-    examples/                 starter(합성), eroica(샘플 + 합성), pstack-harness(300초, 합성)
-    vendor/                   spessasynth_core 4.3.22 번들(Apache-2.0)
-  assets/fonts/               미리보기용 Instrument Serif, JetBrains Mono(OFL)
+skills/
+  op55-mode/                  입구: 절차를 골라 납품까지 진행
+    playbooks/                create-cue(새 BGM), revise-cue(피드백, 나레이션 빈틈, 완성 영상의 음악 교체)
+  op55-compose/               큐 시트, 격자, score.mjs. references/에 악보 API, 영상용 편곡
+  op55-render/                WAV·분석·메타 렌더, 요청할 때만 미리보기 영상(references/preview.md)
+  op55-verify/                verify.py의 숫자와 그림 판독(references/verify.md)
+  resolve-op55-tools/         경로, 도구, 뱅크, 실행 명령, 라이선스. references/showreel-contract.md
+    scripts/
+      render.mjs  verify.py   악보 렌더, 측정
+      preview.py              요청할 때만: 음악과 함께 재생되는 스펙트로그램 영상
+      setup.mjs   banks.mjs   뱅크 받기(SHA-256 확인), 프리셋 찾기
+      lib/                    dsp, 격자, 합성 악기, 샘플러, 엔진, 분석
+      examples/               starter(합성), eroica(샘플 + 합성), pstack-harness(300초, 합성)
+      vendor/                 spessasynth_core 4.3.22 번들(Apache-2.0)
+    assets/fonts/             미리보기용 Instrument Serif, JetBrains Mono(OFL)
+  principle-*/                대사 먼저, 격자 고정, 영상에 맞춘 편곡
 tools/                        regress.sh(대조), regress.sha256(승인 해시), art/(README 그림: 프롬프트, 합성기, 데모 영상)
+scripts/                      스킬 세트 구조 검사(check.py, selftest.py, install_smoke.py). 설치되지 않는다
+DESIGN.md                     이렇게 나눈 이유와 검증 기록
 ```
+
+구성은 [meta-harness](https://github.com/ynginkim/meta-harness)의 형식을 따른다. playbook을 운용하는 mode, 일을 하는 skill, 판단을 맡는 principle이다. 구조 검사는 `python3 scripts/check.py .`로 한다.
 
 ## 로드맵
 
@@ -176,7 +192,7 @@ tools/                        regress.sh(대조), regress.sha256(승인 해시),
 ## 크레딧
 
 - **엔진:** [showreel 포크](https://github.com/ynginkim/showreel)에서 처음 만들어 이곳으로 옮겼다. 코드는 MIT다.
-- **샘플러:** spessasus의 [spessasynth_core](https://github.com/spessasus/spessasynth_core)(Apache-2.0). 라이선스와 함께 `scripts/vendor/`에 넣었다.
+- **샘플러:** spessasus의 [spessasynth_core](https://github.com/spessasus/spessasynth_core)(Apache-2.0). 라이선스와 함께 `skills/resolve-op55-tools/scripts/vendor/`에 넣었다.
 - **뱅크:**
   - GeneralUser GS: S. Christian Collins
   - Upright Piano KW: FreePats(CC0)
