@@ -1,0 +1,13 @@
+Upright Piano KW, version 2022-02-21, FreePats project
+
+Recorded by Gonzalo and Roberto in January 2017; edited and processed by Roberto.
+Source and licensing statement:
+https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html
+
+The source publishes this bank under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+Full legal code is also included in CC0-1.0.txt. Original: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+This provenance notice does not change the bank's license. The MIT license for
+op55's own code does not apply to this bank. The release asset is a gzip-compressed
+copy of UprightPianoKW-20220221.sf2; setup verifies the uncompressed SHA-256.

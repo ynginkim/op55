@@ -6,7 +6,7 @@ Claude 스킬. 음악 생성 API도, 루프도, 스톡 음원도 쓰지 않는�
 </p>
 
 <p align="center">
-<img alt="npx skills add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
+<img alt="npx skills@1.7.4 add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
 <img alt="Claude Opus 5.5" src="https://img.shields.io/badge/composed%20by-Claude%20Opus%205.5-efe6d6?style=for-the-badge&labelColor=0a0908">
 <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-a99d8a?style=for-the-badge&labelColor=0a0908">
 </p>
@@ -70,14 +70,14 @@ https://github.com/user-attachments/assets/cb2ac109-c193-44be-9398-9627b86ca8a6
 ## 설치
 
 ```bash
-npx skills add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
+npx skills@1.7.4 add ynginkim/op55        # Claude Code를 고른다(또는 -a claude-code, 모든 프로젝트에 쓰려면 -g)
 ```
 
 그리고 이렇게 부탁한다.
 
 > 이 제품 영상에 60초짜리 배경음악 만들어줘. 따뜻하게, 피아노랑 현악기로. 0:12와 0:48에 히트, 나레이션은 0:05~0:40.
 
-처음 쓸 때 Claude가 `scripts/setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다.
+처음 쓸 때 Claude가 `scripts/setup.mjs`를 돌려 사운드폰트 뱅크(88MB)를 `~/.cache/op55/banks`에 받는다. 필요한 것은 Node 18 이상, Python 3과 numpy, ffmpeg다.
 
 ## 동작 방식
 
@@ -185,3 +185,15 @@ tools/                        regress.sh(승인 해시), art/(README 그림: 프
   - Codex imagegen으로 생성했다. 프롬프트는 `tools/art/prompts`에 있다.
   - 글자는 코드로 합성했다(`tools/art/compose.mjs`).
 - **음악:** 루트비히 판 베토벤, 교향곡 3번 E♭장조 Op. 55(1804), 퍼블릭 도메인. 결국 "한 위대한 인물의 추억을 기리며" 헌정되었다.
+
+## License scope
+
+MIT covers original code, not third-party banks, fonts, or vendor code. Read [THIRD_PARTY.md](THIRD_PARTY.md) and the original notices in [licenses/banks](licenses/banks) before redistribution.
+
+## 기여와 버전
+
+[기여 안내](CONTRIBUTING.md) · [행동강령](CODE_OF_CONDUCT.md) · [보안 제보](SECURITY.md) · [도움받기](SUPPORT.md) · [변경 기록](CHANGELOG.md) · [버전·릴리스](RELEASING.md)
+
+현재 준비 버전은 `0.1.0-dev`이며 `v0.1.0` 코드 릴리스를 발행했다는 뜻이 아니다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
+
+[하네스 패밀리](https://github.com/ynginkim/harness-family) 공통 철학과 목록. 비공개 저장소는 접근 권한이 있는 계정에서만 열린다.

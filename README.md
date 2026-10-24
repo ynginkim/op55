@@ -6,7 +6,7 @@ A Claude skill. No music APIs, no loops, no stock tracks. Same score, same bytes
 </p>
 
 <p align="center">
-<img alt="npx skills add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
+<img alt="npx skills@1.7.4 add ynginkim/op55" src="https://img.shields.io/badge/npx%20skills%20add-ynginkim%2Fop55-ff3b1f?style=for-the-badge&labelColor=0a0908">
 <img alt="Claude Opus 5.5" src="https://img.shields.io/badge/composed%20by-Claude%20Opus%205.5-efe6d6?style=for-the-badge&labelColor=0a0908">
 <img alt="license MIT" src="https://img.shields.io/badge/license-MIT-a99d8a?style=for-the-badge&labelColor=0a0908">
 </p>
@@ -62,14 +62,14 @@ Ask for it and op55 turns any cue into a video like these (`preview.py`): the sp
 ## Install
 
 ```bash
-npx skills add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
+npx skills@1.7.4 add ynginkim/op55        # choose Claude Code (or: -a claude-code; -g for every project)
 ```
 
 Then ask:
 
 > Make a 60-second background track for this product video. Warm, piano and strings, hits at 0:12 and 0:48, narration from 0:05 to 0:40.
 
-On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg.
+On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont banks (88 MB) into `~/.cache/op55/banks`. Requirements: Node ≥ 18, Python 3 with numpy, and ffmpeg.
 
 ## How it works
 
@@ -90,7 +90,7 @@ On first use Claude runs `scripts/setup.mjs`, which downloads the SoundFont bank
 - **Deterministic.**
   - Every random choice comes from a named, seeded stream.
   - The same score, seed and banks give the same WAV byte for byte.
-  - `tools/regress.sh` holds the approved hashes.
+  - `tools/regress.sha256` holds the approved hashes.
 - **Verified, then heard.** `verify.py` writes the numbers and pictures, Claude fixes what they show, and a human listens last.
 
 ### The orchestra
@@ -174,3 +174,15 @@ tools/                        regress.sh (approved hashes), art/ (README art: pr
   - Generated with Codex's imagegen. The prompts are in `tools/art/prompts`.
   - Typography is composited in code (`tools/art/compose.mjs`).
 - **Music:** Ludwig van Beethoven, Symphony No. 3 in E-flat, Op. 55 (1804), public domain. Dedicated, eventually, to the memory of a great man.
+
+## License scope
+
+MIT covers original code, not third-party banks, fonts, or vendor code. Read [THIRD_PARTY.md](THIRD_PARTY.md) and the original notices in [licenses/banks](licenses/banks) before redistribution.
+
+## 기여와 버전
+
+[기여 안내](CONTRIBUTING.md) · [행동강령](CODE_OF_CONDUCT.md) · [보안 제보](SECURITY.md) · [도움받기](SUPPORT.md) · [변경 기록](CHANGELOG.md) · [버전·릴리스](RELEASING.md)
+
+현재 준비 버전은 `0.1.0-dev`이며 `v0.1.0` 코드 릴리스를 발행했다는 뜻이 아니다. 재현 가능한 설치에는 실제 존재하는 태그 또는 전체 40자리 커밋 SHA를 `#REF`로 지정한다. `@name`은 버전이 아니라 skill 선택이다. 비공개 저장소에는 기존 읽기 권한이 필요하다. 설치·구조 검사는 실제 모델 실행이나 산출물 품질 검증과 별개다.
+
+[하네스 패밀리](https://github.com/ynginkim/harness-family) 공통 철학과 목록. 비공개 저장소는 접근 권한이 있는 계정에서만 열린다.
