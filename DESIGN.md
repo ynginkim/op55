@@ -263,7 +263,7 @@ preview는 설치본 경로로 starter WAV에 `--check`를 한 번 돌렸다. 19
 | `node --test tools/test_engine.mjs tools/test_version.mjs` | 10 pass, 0 fail. VERSION, `metadata.version`, `render.mjs --version`이 같음 |
 | CI structural 단계의 문법 검사 | `node --check`(모든 .mjs), Python AST 모두 통과 |
 | `tools/regress.sh` | eroica, pstack-harness, starter 모두 ✓(44 s) |
-| `python3 scripts/install_smoke.py . --dest <새 폴더>` | 8개 설치, playbook 4건과 참조 114건 열림. 두 설치 경로 모두 `render.mjs --version`이 `op55 0.1.0` |
+| `python3 scripts/install_smoke.py . --dest <새 폴더>` | 8개 설치, playbook 4건과 참조 114건 열림. 두 설치 경로 모두 `render.mjs --version`이 `op55 0.2.0` |
 | starter 렌더 뒤 verify.py | loudness, grid, onset, energy 줄이 전과 같이 나옴. `--mix`는 알 수 없는 인자로 거부됨 |
 | skills/ 안 소비자 이름 | 문서에는 없음. 남은 곳은 lib 주석과 기본 seed 문자열 |
 
